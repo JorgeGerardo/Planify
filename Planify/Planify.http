@@ -1,0 +1,6 @@
+@Planify_HostAddress = http://localhost:5273
+
+GET {{Planify_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
