@@ -3,9 +3,9 @@ using System;
 
 namespace Planify.Models
 {
-    public abstract class BaseModel
+    public abstract class BaseModel<TId>
     {
-        public int Id { get; set; }
+        public TId? Id { get; set; }
         public required string Name { get; set; }
         public bool IsDeleted { get; set; } = false;
         public DateTime? DeletedTimeUTC { get; set; }

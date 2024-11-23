@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 namespace Planify.Models
 {
-    public class Employee : BaseModel
+    public class Employee : BaseModel<int>
     {
         public required User User { get; set; }
         public int UserId { get; set; }

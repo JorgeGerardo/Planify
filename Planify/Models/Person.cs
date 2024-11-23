@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Planify.Models
 {
-    public class Person : BaseModel
+    public class Person : BaseModel<int>
     {
         public DateOnly BornDate { get; set; }
         public required string FirstNames { get; set; }

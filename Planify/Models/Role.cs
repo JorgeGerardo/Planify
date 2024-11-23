@@ -2,7 +2,7 @@
 
 namespace Planify.Models
 {
-    public class Role : BaseModel
+    public class Role : BaseModel<int>
     {
         public ICollection<User> Users { get; set; } = new List<User>();
     }

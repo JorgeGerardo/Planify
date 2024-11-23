@@ -2,7 +2,7 @@
 
 namespace Planify.Models
 {
-    public class Department : BaseModel
+    public class Department : BaseModel<int>
     {
         ICollection<Employee> Employees { get; set; } = new List<Employee>();
     }

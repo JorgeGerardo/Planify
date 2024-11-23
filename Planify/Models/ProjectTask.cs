@@ -2,7 +2,7 @@
 
 namespace Planify.Models
 {
-    public class ProjectTask : BaseModel
+    public class ProjectTask : BaseModel<int>
     {
         public Priority Priority { get; set; }
         public required Project Project { get; set; }
