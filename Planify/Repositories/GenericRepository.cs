@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Planify.Repositories
 {
-    public abstract partial class GenericRepository<T, TID> : GenericCRUDRepository<T, TID>
+    public abstract partial class GenericRepository<T, TID> : IGenericCRUDRepository<T, TID>
         where T : BaseModel<TID>
     {
         private readonly ProjectContext _context;

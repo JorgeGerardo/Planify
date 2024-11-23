@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Planify.Repositories
 {
-    public interface GenericCRUDRepository<T, TID>
+    public interface IGenericCRUDRepository<T, TID>
     {
         Task<T> Create(T entity);
 
