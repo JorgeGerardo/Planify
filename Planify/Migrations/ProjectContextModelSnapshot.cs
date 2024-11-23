@@ -22,6 +22,21 @@ namespace Planify.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DepartmentEmployee", b =>
+                {
+                    b.Property<int>("DepartmentsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmployeesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DepartmentsId", "EmployeesId");
+
+                    b.HasIndex("EmployeesId");
+
+                    b.ToTable("DepartmentEmployee");
+                });
+
             modelBuilder.Entity("EmployeeProject", b =>
                 {
                     b.Property<int>("EmployeesId")
@@ -48,9 +63,6 @@ namespace Planify.Migrations
                     b.Property<DateTime?>("DeletedTimeUTC")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -63,8 +75,6 @@ namespace Planify.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Departments");
                 });
@@ -297,6 +307,21 @@ namespace Planify.Migrations
                     b.ToTable("RoleUser");
                 });
 
+            modelBuilder.Entity("DepartmentEmployee", b =>
+                {
+                    b.HasOne("Planify.Models.Department", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Planify.Models.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EmployeeProject", b =>
                 {
                     b.HasOne("Planify.Models.Employee", null)
@@ -310,13 +335,6 @@ namespace Planify.Migrations
                         .HasForeignKey("ProjectsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Planify.Models.Department", b =>
-                {
-                    b.HasOne("Planify.Models.Employee", null)
-                        .WithMany("Departments")
-                        .HasForeignKey("EmployeeId");
                 });
 
             modelBuilder.Entity("Planify.Models.Employee", b =>
@@ -370,8 +388,6 @@ namespace Planify.Migrations
 
             modelBuilder.Entity("Planify.Models.Employee", b =>
                 {
-                    b.Navigation("Departments");
-
                     b.Navigation("Tasks");
                 });
 

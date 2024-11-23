@@ -12,6 +12,22 @@ namespace Planify.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedTimeUTC = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Person",
                 columns: table => new
                 {
@@ -136,25 +152,27 @@ namespace Planify.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Departments",
+                name: "DepartmentEmployee",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedTimeUTC = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DepartmentsId = table.Column<int>(type: "int", nullable: false),
+                    EmployeesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Departments", x => x.Id);
+                    table.PrimaryKey("PK_DepartmentEmployee", x => new { x.DepartmentsId, x.EmployeesId });
                     table.ForeignKey(
-                        name: "FK_Departments_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
+                        name: "FK_DepartmentEmployee_Departments_DepartmentsId",
+                        column: x => x.DepartmentsId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DepartmentEmployee_Employees_EmployeesId",
+                        column: x => x.EmployeesId,
                         principalTable: "Employees",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -213,9 +231,9 @@ namespace Planify.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Departments_EmployeeId",
-                table: "Departments",
-                column: "EmployeeId");
+                name: "IX_DepartmentEmployee_EmployeesId",
+                table: "DepartmentEmployee",
+                column: "EmployeesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployeeProject_ProjectsId",
@@ -254,7 +272,7 @@ namespace Planify.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Departments");
+                name: "DepartmentEmployee");
 
             migrationBuilder.DropTable(
                 name: "EmployeeProject");
@@ -264,6 +282,9 @@ namespace Planify.Migrations
 
             migrationBuilder.DropTable(
                 name: "RoleUser");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
 
             migrationBuilder.DropTable(
                 name: "Employees");
