@@ -28,11 +28,13 @@ namespace Planify.Repositories
 
         public async Task<bool> HardDelete(TID id)
         {
-            var res = await Entities.IgnoreQueryFilters()
+            T? res = await Entities.IgnoreQueryFilters()
                 .FirstOrDefaultAsync(e => e.Id!.Equals(id));
 
             if (res is null)
                 return false;
+
+            Entities.Remove(res);
 
             return true;
         }
