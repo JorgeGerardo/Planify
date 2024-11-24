@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Planify.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Planify.Data
 {
@@ -22,6 +25,10 @@ namespace Planify.Data
             base.OnModelCreating(modelBuilder);
 
             SetEmployeeTable(modelBuilder);
+
+            //TODO: Agrega el mismo filtro a los demás modelos.
+            modelBuilder.Entity<Department>()
+                .HasQueryFilter(p => !p.IsDeleted);
         }
 
         private void SetEmployeeTable(ModelBuilder modelBuilder)
