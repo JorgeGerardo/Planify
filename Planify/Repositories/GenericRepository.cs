@@ -2,6 +2,7 @@
 using Planify.Data;
 using Planify.Models;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,6 +15,18 @@ namespace Planify.Repositories
         private readonly ProjectContext _context;
         protected DbSet<T> Entities => _context.Set<T>();
         protected GenericRepository(ProjectContext context) => _context = context;
+
+        public async Task<int> Save()
+        {
+            try
+            {
+                return await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+            }
+            return 0;
+        }
     }
 
     public abstract partial class GenericRepository<T, TID>
@@ -47,7 +60,7 @@ namespace Planify.Repositories
 
             existingEntity.IsDeleted = true;
             existingEntity.DeletedTimeUTC = DateTime.UtcNow;
-            
+
             return true;
         }
 

@@ -13,5 +13,7 @@ namespace Planify.Repositories
         void Updated(T entity);
         Task<bool> SoftDelete(TID id);
         Task<bool> HardDelete(TID id);
+
+        Task<int> Save();
     }
 }
