@@ -10,7 +10,7 @@ namespace Planify.Repositories
         IQueryable<T> GetAll();
         Task<T?> GetById(TID id);
 
-        Task<bool> Updated(T entity);
+        void Updated(T entity);
         Task<bool> SoftDelete(TID id);
         Task<bool> HardDelete(TID id);
     }

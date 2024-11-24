@@ -47,19 +47,20 @@ namespace Planify.Repositories
 
             existingEntity.IsDeleted = true;
             existingEntity.DeletedTimeUTC = DateTime.UtcNow;
-
+            
             return true;
         }
 
-        public async Task<bool> Updated(T entity)
+        public void Updated(T entity)
         {
-            var ExistingEntity = await GetById(entity.Id!);
-            if (ExistingEntity is null)
-                return false;
+            //T? ExistingEntity = await GetById(entity.Id!);
+            //if (ExistingEntity is null)
+            //    return false;
 
-            ExistingEntity.LastUpdatedUTC = DateTime.UtcNow;
+            //Entities.Attach(entity);
+
+            entity.LastUpdatedUTC = DateTime.UtcNow;
             Entities.Update(entity);
-            return true;
         }
     }
 
