@@ -84,7 +84,7 @@ namespace Planify.Controllers
         }
 
 
-        [HttpDelete("/hardDelete/{id}")]
+        [HttpDelete("hardDelete/{id}")]
         public async Task<IActionResult> HardDelete(int id)
         {
             bool res = await _department.HardDelete(id);
