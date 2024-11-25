@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Planify.Data;
 using Planify.Models;
+using Planify.Services;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -16,17 +18,8 @@ namespace Planify.Repositories
         protected DbSet<T> Entities => _context.Set<T>();
         protected GenericRepository(ProjectContext context) => _context = context;
 
-        public async Task<int> Save()
-        {
-            try
-            {
-                return await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-            }
-            return 0;
-        }
+        public async Task<int> Save() =>
+                await _context.SaveChangesAsync();
     }
 
     public abstract partial class GenericRepository<T, TID>
@@ -66,12 +59,6 @@ namespace Planify.Repositories
 
         public void Updated(T entity)
         {
-            //T? ExistingEntity = await GetById(entity.Id!);
-            //if (ExistingEntity is null)
-            //    return false;
-
-            //Entities.Attach(entity);
-
             entity.LastUpdatedUTC = DateTime.UtcNow;
             Entities.Update(entity);
         }
