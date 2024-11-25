@@ -6,4 +6,9 @@ namespace Planify.Models
     {
         public ICollection<User> Users { get; set; } = new List<User>();
     }
+
+    public class RoleDTO
+    {
+        public required string Name { get; set; }
+    }
 }
