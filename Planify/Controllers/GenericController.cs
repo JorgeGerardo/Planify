@@ -11,7 +11,7 @@ namespace Planify.Controllers
     //TODO: Creo que vas a tener que cambiar el modelo T BaseModel
     // por una interfaz que implemente eso en caso de que no funcione con
     // otros tipos
-    public abstract partial  class GenericController<T, TRepository> : ControllerBase
+    public abstract partial class GenericController<T, TRepository, TCreateDto> : ControllerBase
         where T : BaseModel<int>
         where TRepository : IGenericCRUDRepository<T, int>
     {
@@ -30,17 +30,31 @@ namespace Planify.Controllers
             return res is not null ? res : NotFound();
         }
 
+
+
     }
 
 
     //POST & PUT
-    public partial class GenericController<T, TRepository>
+    public abstract partial class GenericController<T, TRepository, TCreateDto>
     {
+        protected abstract T MapToEntity(TCreateDto dto);
 
+        [HttpPost]
+        public async Task<IActionResult> Add(TCreateDto createDto)
+        {
+            T newEntity = MapToEntity(createDto);  // Convertir DTO a entidad
+            await _Repository.Create(newEntity);
+            await _Repository.Save();
+            if (newEntity is null)
+                return StatusCode(500, "Error creating entity.");
+
+            return CreatedAtAction(nameof(GetById), new { newEntity.Id }, newEntity);
+        }
     }
 
     //DELETE:
-    public partial class GenericController<T, TRepository>
+    public partial class GenericController<T, TRepository, TCreateDto>
     {
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -62,9 +76,26 @@ namespace Planify.Controllers
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Implementación para los modelos que solo pueden cambiar su nombre
     // y su DTO solo tiene el nombre
-    public class GenericControllerOnlyChangeName<T, TRepository> : GenericController<T, TRepository>
+    public class GenericControllerOnlyChangeName<T, TRepository, TCreateDto> : GenericController<T, TRepository, TCreateDto>
         where T : BaseModel<int>
         where TRepository : IGenericCRUDRepository<T, int>
     {
@@ -90,5 +121,10 @@ namespace Planify.Controllers
             return NoContent();
         }
 
+        //TODO: check that
+        protected override T MapToEntity(TCreateDto dto)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
