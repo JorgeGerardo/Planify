@@ -23,12 +23,8 @@ namespace Planify.Controllers
 
 
         [HttpGet]
-        public async Task<IEnumerable<Department>> Get()
-        {
-            var res = await _department.GetAll().ToListAsync();
-
-            return res;
-        }
+        public async Task<IEnumerable<Department>> Get() =>
+            await _department.GetAll().ToListAsync();
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Department>> GetById(int id)
