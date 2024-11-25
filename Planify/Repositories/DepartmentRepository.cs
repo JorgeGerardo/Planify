@@ -11,8 +11,5 @@ namespace Planify.Repositories
         {
             _projectContext = context;
         }
-
-        public async Task<int> save() =>
-            await _projectContext.SaveChangesAsync();
     }
 }

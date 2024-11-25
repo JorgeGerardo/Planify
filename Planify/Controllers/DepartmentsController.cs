@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Planify.Data;
 using Planify.Models;
 using Planify.Repositories;
+using Planify.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using static Planify.Services.Concurrency;
 
 namespace Planify.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DepartmentsController : ControllerBase
+    // Get's:
+    public partial class DepartmentsController : ControllerBase
     {
         private readonly IGenericCRUDRepository<Department, int> _department;
 
@@ -22,39 +21,14 @@ namespace Planify.Controllers
             _department = department;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(DepartmentDTO newDeparment)
-        {
-            Department departmentToCreate = new Department
-            {
-                Name = newDeparment.Name
-            };
-
-            Department? NewDepartment = await _department.Create(departmentToCreate);
-
-            var x = (_department as DepartmentRepository);
-            if (x is not null)
-                await x.save();
-
-            if (NewDepartment is null)
-                return StatusCode(500);
-
-            return Ok(NewDepartment);
-
-        }
 
         [HttpGet]
         public async Task<IEnumerable<Department>> Get()
         {
             var res = await _department.GetAll().ToListAsync();
 
-            var x = (_department as DepartmentRepository);
-            if (x is not null)
-                await x.save();
-
             return res;
         }
-
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Department>> GetById(int id)
@@ -62,26 +36,23 @@ namespace Planify.Controllers
             Department? res = await _department.GetById(id);
             return res is not null ? res : NotFound();
         }
+    }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+    //POST & PUT
+    public partial class DepartmentsController
+    {
+        [HttpPost]
+        public async Task<IActionResult> Add(DepartmentDTO newDeparment)
         {
-            bool res = await _department.SoftDelete(id);
-            var x = (_department as DepartmentRepository);
-            if (x is not null)
-                await x.save();
+            Department? NewDepartment = await _department
+                .Create(new Department { Name = newDeparment.Name });
 
-            return res ? NoContent() : NotFound();
-        }
-        [HttpDelete("/hardDelete/{id}")]
-        public async Task<IActionResult> HardDelete(int id)
-        {
-            bool res = await _department.HardDelete(id);
-            var x = (_department as DepartmentRepository);
-            if (x is not null)
-                await x.save();
+            await _department.Save();
 
-            return res ? NoContent() : NotFound();
+            if (NewDepartment is null)
+                return StatusCode(500);
+
+            return CreatedAtAction(nameof(Get), new { NewDepartment.Id }, NewDepartment);
         }
 
         [HttpPut("{id}")]
@@ -94,12 +65,36 @@ namespace Planify.Controllers
             dep.Name = deparmentChanges.Name;
             _department.Updated(dep);
 
+            ConcurrencyState state = await Concurrency.Check(() => _department.Save());
 
-            var x = (_department as DepartmentRepository);
-            if (x is not null)
-                await x.save();
+            if (state == ConcurrencyState.ConcurrencyDetected)
+                return Conflict(new { message = ConflictMessage() });
 
             return NoContent();
+        }
+
+    }
+
+    //Delete:
+    public partial class DepartmentsController
+    {
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            bool res = await _department.SoftDelete(id);
+            await _department.Save();
+
+            return res ? NoContent() : NotFound();
+        }
+
+
+        [HttpDelete("/hardDelete/{id}")]
+        public async Task<IActionResult> HardDelete(int id)
+        {
+            bool res = await _department.HardDelete(id);
+            await _department.Save();
+
+            return res ? NoContent() : NotFound();
         }
 
     }
