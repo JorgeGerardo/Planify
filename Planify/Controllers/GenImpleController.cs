@@ -15,37 +15,6 @@ namespace Planify.Controllers
     //POST & PUT
     public partial class DepartmentsController2
     {
-        //[HttpPost]
-        //public async Task<IActionResult> Add(DepartmentDTO newDeparment)
-        //{
-        //    Department? NewDepartment = await _department
-        //        .Create(new Department { Name = newDeparment.Name });
-
-        //    await _department.Save();
-
-        //    if (NewDepartment is null)
-        //        return StatusCode(500);
-
-        //    return CreatedAtAction(nameof(Get), new { NewDepartment.Id }, NewDepartment);
-        //}
-
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> Update(int id, DepartmentDTO deparmentChanges)
-        //{
-        //    var dep = await _department.GetById(id);
-        //    if (dep is null)
-        //        return NotFound();
-
-        //    dep.Name = deparmentChanges.Name;
-        //    _department.Updated(dep);
-
-        //    ConcurrencyState state = await Concurrency.Check(() => _department.Save());
-
-        //    if (state == ConcurrencyState.ConcurrencyDetected)
-        //        return Conflict(new { message = ConflictMessage() });
-
-        //    return NoContent();
-        //}
 
     }
 
