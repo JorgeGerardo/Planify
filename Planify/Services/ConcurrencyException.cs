@@ -31,10 +31,11 @@ namespace Planify.Services
                     "Por favor, recargue la página y vuelva a intentarlo.";
         }
 
-        public enum ConcurrencyState
-        {
-            WithoutConcurrency,
-            ConcurrencyDetected
-        }
     }
+    public enum ConcurrencyState
+    {
+        WithoutConcurrency,
+        ConcurrencyDetected
+    }
+
 }
