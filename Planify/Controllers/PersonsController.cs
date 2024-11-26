@@ -30,18 +30,15 @@ namespace Planify.Controllers
 
         protected override Person MapToUpdateEntity(Person currentState, PersonUpdateDTO dto)
         {
-            //currentState.Name = dto.Name ?? currentState.Name;
-            //currentState.BornDate = dto.BornDate ?? currentState.BornDate;
-            //currentState.FirstNames = dto.FirstNames ?? currentState.FirstNames;
-            //currentState.LastNames = dto.LastNames ?? currentState.LastNames;
-            //currentState.City = dto.City ?? currentState.City;
-            //currentState.Sate = dto.Sate ?? currentState.Sate;
-            //currentState.Country = dto.Country ?? currentState.Country;
-            //currentState.PhoneNumber = dto.PhoneNumber ?? currentState.PhoneNumber;
+            currentState.Name = dto.Name ?? currentState.Name;
+            currentState.BornDate = dto.BornDate ?? currentState.BornDate;
+            currentState.LastNames = dto.LastNames ?? currentState.LastNames;
+            currentState.City = dto.City ?? currentState.City;
+            currentState.Sate = dto.Sate ?? currentState.Sate;
+            currentState.Country = dto.Country ?? currentState.Country;
+            currentState.PhoneNumber = dto.PhoneNumber ?? currentState.PhoneNumber;
 
-            //return currentState;
-
-            throw new System.NotImplementedException();
+            return currentState;
         }
 
     }
