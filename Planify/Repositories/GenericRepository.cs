@@ -59,6 +59,10 @@ namespace Planify.Repositories
             entity.LastUpdatedUTC = DateTime.UtcNow;
             Entities.Update(entity);
         }
+
+        public async Task<bool> Exist(TID id) =>
+            await Entities.AnyAsync(e => e.Id!.Equals(id));
+
     }
 
 }
