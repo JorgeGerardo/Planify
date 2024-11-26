@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Planify.Models;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 
 namespace Planify.Data
 {
@@ -25,11 +26,22 @@ namespace Planify.Data
             base.OnModelCreating(modelBuilder);
 
             SetEmployeeTable(modelBuilder);
+            SetRoleTable(modelBuilder);
+            SetQueryFilters(modelBuilder);
+        }
 
+        private void SetQueryFilters(ModelBuilder modelBuilder)
+        {
             //TODO: Agrega el mismo filtro a los demás modelos.
             modelBuilder.Entity<Department>()
                 .HasQueryFilter(p => !p.IsDeleted);
+
+            modelBuilder.Entity<Role>()
+                .HasQueryFilter(p => !p.IsDeleted);
+
         }
+
+        private void SetRoleTable(ModelBuilder modelBuilder) { }
 
         private void SetEmployeeTable(ModelBuilder modelBuilder)
         {
