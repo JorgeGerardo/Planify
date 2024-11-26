@@ -17,11 +17,11 @@ namespace Planify.Controllers
             _Repository = context;
 
         [HttpGet]
-        public async Task<IEnumerable<T>> Get() =>
+        public virtual async Task<IEnumerable<T>> Get() =>
             await _Repository.GetAll().ToListAsync();
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<T>> GetById(int id)
+        public virtual async Task<ActionResult<T>> GetById(int id)
         {
             T? res = await _Repository.GetById(id);
             return res is not null ? res : NotFound();
@@ -39,7 +39,7 @@ namespace Planify.Controllers
         protected abstract T MapToUpdateEntity(T currentState, TUpdateDTO dto);
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, TUpdateDTO createDto)
+        public virtual async Task<IActionResult> Update(int id, TUpdateDTO createDto)
         {
             var entity = await _Repository.GetById(id);
             if (entity is null)
@@ -58,7 +58,7 @@ namespace Planify.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] TCreateDto createDto)
+        public virtual async Task<IActionResult> Add([FromBody] TCreateDto createDto)
         {
             T newEntity = MapToEntity(createDto);
             await _Repository.Create(newEntity);
@@ -77,7 +77,7 @@ namespace Planify.Controllers
     public partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
     {
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public virtual async Task<IActionResult> Delete(int id)
         {
             bool res = await _Repository.SoftDelete(id);
             await _Repository.Save();
@@ -86,7 +86,7 @@ namespace Planify.Controllers
         }
 
         [HttpDelete("hardDelete/{id}")]
-        public async Task<IActionResult> HardDelete(int id)
+        public virtual async Task<IActionResult> HardDelete(int id)
         {
             bool res = await _Repository.HardDelete(id);
             await _Repository.Save();
