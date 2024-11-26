@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Planify.Controllers
 {
-    public abstract partial class GenericController<T, TRepository, TCreateDto> : ControllerBase
+    public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO> : ControllerBase
         where T : BaseModel<int>
         where TRepository : IGenericCRUDRepository<T, int>
     {
@@ -33,13 +33,13 @@ namespace Planify.Controllers
 
 
     //POST & PUT
-    public abstract partial class GenericController<T, TRepository, TCreateDto>
+    public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
     {
         protected abstract T MapToEntity(TCreateDto dto);
-        protected abstract T MapToUpdateEntity(T currentState, TCreateDto dto);
+        protected abstract T MapToUpdateEntity(T currentState, TUpdateDTO dto);
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, TCreateDto createDto)
+        public async Task<IActionResult> Update(int id, TUpdateDTO createDto)
         {
             var entity = await _Repository.GetById(id);
             if (entity is null)
@@ -58,7 +58,7 @@ namespace Planify.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Add(TCreateDto createDto)
+        public async Task<IActionResult> Add([FromBody] TCreateDto createDto)
         {
             T newEntity = MapToEntity(createDto);
             await _Repository.Create(newEntity);
@@ -74,7 +74,7 @@ namespace Planify.Controllers
     }
 
     //DELETE:
-    public partial class GenericController<T, TRepository, TCreateDto>
+    public partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
     {
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
