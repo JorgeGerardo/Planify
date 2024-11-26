@@ -7,7 +7,7 @@ namespace Planify.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class DepartmentsController :
-        GenericController<Department, DepartmentRepository, DepartmentDTO>
+        GenericController<Department, DepartmentRepository, DepartmentDTO, DepartmentDTO>
     {
         public DepartmentsController(IGenericCRUDRepository<Department, int> _Repository) :
             base(_Repository)
