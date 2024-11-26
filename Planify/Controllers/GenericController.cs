@@ -8,9 +8,6 @@ using System.Threading.Tasks;
 
 namespace Planify.Controllers
 {
-    //TODO: Creo que vas a tener que cambiar el modelo T BaseModel
-    // por una interfaz que implemente eso en caso de que no funcione con
-    // otros tipos
     public abstract partial class GenericController<T, TRepository, TCreateDto> : ControllerBase
         where T : BaseModel<int>
         where TRepository : IGenericCRUDRepository<T, int>
@@ -39,11 +36,31 @@ namespace Planify.Controllers
     public abstract partial class GenericController<T, TRepository, TCreateDto>
     {
         protected abstract T MapToEntity(TCreateDto dto);
+        protected abstract T MapToUpdateEntity(T currentState, TCreateDto dto);
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, TCreateDto createDto)
+        {
+            var entity = await _Repository.GetById(id);
+            if (entity is null)
+                return NotFound();
+
+            MapToUpdateEntity(entity, createDto);
+            _Repository.Updated(entity);
+
+            ConcurrencyState state = await Concurrency.Check(() => _Repository.Save());
+
+            if (state == ConcurrencyState.ConcurrencyDetected)
+                return Conflict(new { message = Concurrency.ConflictMessage() });
+
+            return NoContent();
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Add(TCreateDto createDto)
         {
-            T newEntity = MapToEntity(createDto);  // Convertir DTO a entidad
+            T newEntity = MapToEntity(createDto);
             await _Repository.Create(newEntity);
             await _Repository.Save();
             if (newEntity is null)
@@ -51,6 +68,9 @@ namespace Planify.Controllers
 
             return CreatedAtAction(nameof(GetById), new { newEntity.Id }, newEntity);
         }
+
+       
+
     }
 
     //DELETE:
@@ -95,36 +115,41 @@ namespace Planify.Controllers
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Implementación para los modelos que solo pueden cambiar su nombre
     // y su DTO solo tiene el nombre
-    public class GenericControllerOnlyChangeName<T, TRepository, TCreateDto> : GenericController<T, TRepository, TCreateDto>
-        where T : BaseModel<int>
-        where TRepository : IGenericCRUDRepository<T, int>
-    {
+    //public class GenericControllerOnlyChangeName<T, TRepository, TCreateDto> : GenericController<T, TRepository, TCreateDto>
+    //    where T : BaseModel<int>
+    //    where TRepository : IGenericCRUDRepository<T, int>
+    //{
 
-        public GenericControllerOnlyChangeName(IGenericCRUDRepository<T, int> _Repository) : base(_Repository) { }
+    //    public GenericControllerOnlyChangeName(IGenericCRUDRepository<T, int> _Repository) : base(_Repository) { }
 
 
-        [HttpPut("{id}")]
-        public virtual async Task<IActionResult> UpdateName(int id, T deparmentChanges)
-        {
-            var dep = await _Repository.GetById(id);
-            if (dep is null)
-                return NotFound();
+    //    [HttpPut("{id}")]
+    //    public virtual async Task<IActionResult> UpdateName(int id, T deparmentChanges)
+    //    {
+    //        var dep = await _Repository.GetById(id);
+    //        if (dep is null)
+    //            return NotFound();
 
-            dep.Name = deparmentChanges.Name;
-            _Repository.Updated(dep);
+    //        dep.Name = deparmentChanges.Name;
+    //        _Repository.Updated(dep);
 
-            ConcurrencyState state = await Concurrency.Check(() => _Repository.Save());
+    //        ConcurrencyState state = await Concurrency.Check(() => _Repository.Save());
 
-            if (state == ConcurrencyState.ConcurrencyDetected)
-                return Conflict(new { message = Concurrency.ConflictMessage() });
+    //        if (state == ConcurrencyState.ConcurrencyDetected)
+    //            return Conflict(new { message = Concurrency.ConflictMessage() });
 
-            return NoContent();
-        }
+    //        return NoContent();
+    //    }
 
-        //TODO: check that
-        protected override T MapToEntity(TCreateDto dto)
-        {
-            throw new System.NotImplementedException();
-        }
-    }
+    //    //TODO: check that
+    //    protected override T MapToEntity(TCreateDto dto)
+    //    {
+    //        throw new System.NotImplementedException();
+    //    }
+
+    //    protected override T MapToUpdateEntity(T currentState, TCreateDto dto)
+    //    {
+    //        throw new System.NotImplementedException();
+    //    }
+    //}
 }
