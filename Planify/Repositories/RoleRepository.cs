@@ -5,10 +5,6 @@ namespace Planify.Repositories
 {
     public class RoleRepository : GenericRepository<Role, int>
     {
-        private ProjectContext _projectContext;
-        public RoleRepository(ProjectContext context) : base(context)
-        {
-            _projectContext = context;
-        }
+        public RoleRepository(ProjectContext context) : base(context) { }
     }
 }
