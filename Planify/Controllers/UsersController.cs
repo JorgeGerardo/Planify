@@ -23,13 +23,16 @@ namespace Planify.Controllers
             _configuration = configuration;
         }
     }
+    //TODO:
+    //No tiene actualizar
+    // No tiene soft delete
 
 
     public partial class UsersController : ControllerBase
     {
 
         [HttpPost("/Login")]
-        public async Task<IActionResult> Login(UserDTO credentials)
+        public async Task<IActionResult> Login(UserCreateDTO credentials)
         {
             string hashPassword = AuthService.EncrypBySHA256(credentials.Password);
             User? existingUser = await _context.Users
@@ -95,7 +98,7 @@ namespace Planify.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(UserDTO user)
+        public async Task<ActionResult<User>> PostUser(UserCreateDTO user)
         {
             User newUser = new User()
             { Email = user.Email, HashPassword = AuthService.EncrypBySHA256(user.Password) };
