@@ -1,6 +1,5 @@
 ﻿using Planify.Data;
 using Planify.Models;
-using System.Threading.Tasks;
 
 namespace Planify.Repositories
 {
