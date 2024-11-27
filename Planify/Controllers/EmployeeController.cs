@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Planify.Models;
 using Planify.Repositories;
-using System.Threading.Tasks;
 using System;
-using Planify.Data;
+using System.Threading.Tasks;
 
 namespace Planify.Controllers
 {
@@ -12,18 +11,15 @@ namespace Planify.Controllers
     public class EmployeeController : GenericController<Employee, EmployeeRepository, EmployeeCreateDTO, EmployeeUpdateDTO>
     {
         private readonly IGenericCRUDRepository<Person, int> _PersonRepository;
-        //private readonly IGenericCRUDRepository<User, int> _UserRepository;
-        private readonly ProjectContext _Context;
+        private readonly IGenericCRUDRepository<User, int> _UserRepository;
         public EmployeeController(
-            IGenericCRUDRepository<Employee, int> employeeRep,
-            //IGenericCRUDRepository<User, int> userRep,
-            ProjectContext context,
-            IGenericCRUDRepository<Person, int> personRep
-        ) : base(employeeRep)
+            IGenericCRUDRepository<Employee, int> _employeRep,
+            IGenericCRUDRepository<User, int> _userRep,
+            IGenericCRUDRepository<Person, int> _personRep
+        ) : base(_employeRep)
         {
-            _Context = context;
-            //this._UserRepository = userRep;
-            this._PersonRepository = personRep;
+            _UserRepository = _userRep;
+            _PersonRepository = _personRep;
         }
 
         protected override Employee MapToEntity(EmployeeCreateDTO dto) =>
