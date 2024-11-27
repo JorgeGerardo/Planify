@@ -13,4 +13,22 @@ namespace Planify.Models
         public ICollection<Project> Projects { get; set; } = new List<Project>();
         public ICollection<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
     }
+
+    public class EmployeeCreateDTO
+    {
+        public required int UserId { get; set; }
+        public required int PersonId { get; set; }
+        public required DateOnly HireDate { get; set; }
+        public required string Name { get; set; }
+    }
+
+    public class EmployeeUpdateDTO
+    {
+        public int? UserId { get; set; }
+        public int? PersonId { get; set; }
+        public DateOnly? HireDate { get; set; }
+        public string? Name { get; set; }
+    }
+
+
 }
