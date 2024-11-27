@@ -16,6 +16,7 @@ namespace Planify.Services
             builder.Services.AddScoped<IGenericCRUDRepository<Role, int>, RoleRepository>();
             builder.Services.AddScoped<IGenericCRUDRepository<Employee, int>, EmployeeRepository>();
             builder.Services.AddScoped<IGenericCRUDRepository<Person, int>, PersonRepository>();
+            builder.Services.AddScoped<IGenericCRUDRepository<User, int>, UserRepository>();
         }
 
 

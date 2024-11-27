@@ -39,6 +39,9 @@ namespace Planify.Data
             modelBuilder.Entity<Role>()
                 .HasQueryFilter(p => !p.IsDeleted);
 
+            modelBuilder.Entity<User>()
+                .HasQueryFilter(p => !p.IsDeleted);
+
         }
 
         private void SetRoleTable(ModelBuilder modelBuilder) { }

@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations;
 namespace Planify.Models
 {
 
-    public class User
+    public class User : DbBaseModel<int>
     {
-        public int Id { get; set; }
 
         [EmailAddress]
         public required string Email { get; set; }

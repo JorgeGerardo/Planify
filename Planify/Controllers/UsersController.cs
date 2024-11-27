@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Planify.Data;
 using Planify.Models;
+using Planify.Repositories;
 using Planify.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,25 +14,72 @@ namespace Planify.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public partial class UsersController : ControllerBase
+    public partial class UsersController : GenericController<User, UserRepository, UserCreateDTO, UserUpdateDTO>
     {
-        private readonly ProjectContext _context;
+        private readonly IGenericCRUDRepository<User, int> _repository;
         private readonly IConfiguration _configuration;
+        private readonly ProjectContext _context;
 
-        public UsersController(ProjectContext context, IConfiguration configuration)
+        public UsersController(
+            IGenericCRUDRepository<User, int> _Repository,
+            IConfiguration configuration,
+            ProjectContext context)
+        : base(_Repository)
         {
-            _context = context;
+            _repository = _Repository;
             _configuration = configuration;
+            _context = context;
         }
     }
-    //TODO:
-    //No tiene actualizar
-    // No tiene soft delete
 
-
-    public partial class UsersController : ControllerBase
+    //Maps
+    public partial class UsersController : GenericController<User, UserRepository, UserCreateDTO, UserUpdateDTO>
     {
+        protected override User MapToEntity(UserCreateDTO dto)
+        {
+            return new User
+            {
+                Email = dto.Email,
+                HashPassword = AuthService.EncrypBySHA256(dto.Password)
+            };
+        }
 
+        protected override User MapToUpdateEntity(User currentState, UserUpdateDTO dto)
+        {
+            if (dto.Password is null || dto.NewPassword is null)
+                throw new Exception("Datos incompletos.");
+
+            bool CredentialsCorrect = CheckCredentials(dto).GetAwaiter().GetResult();
+
+            if (!CredentialsCorrect)
+                throw new Exception("Credenciales incorrectas");
+
+            currentState.HashPassword = AuthService.EncrypBySHA256(dto.NewPassword);
+            currentState.LastUpdatedUTC = DateTime.UtcNow;
+            currentState.Email = dto.Email ?? currentState.Email;
+
+            return currentState;
+        }
+
+        private async Task<bool> CheckCredentials(UserUpdateDTO dto)
+        {
+            if (dto.Password is null || dto.NewPassword is null)
+                return false;
+
+            string hashPassword = AuthService.EncrypBySHA256(dto.Password);
+
+            User? existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.HashPassword == hashPassword);
+
+            if (existingUser is null) return false;
+
+            return true;
+        }
+    }
+
+    //Login
+    public partial class UsersController : GenericController<User, UserRepository, UserCreateDTO, UserUpdateDTO>
+    {
         [HttpPost("/Login")]
         public async Task<IActionResult> Login(UserCreateDTO credentials)
         {
@@ -42,92 +91,12 @@ namespace Planify.Controllers
                 return NotFound();
 
             JWTConfig? jwt = _configuration.GetSection("JWT").Get<JWTConfig>();
-            if (jwt is null)
-                return StatusCode(500);
 
-            return Ok(AuthService.GenerateToken(existingUser, jwt));
-        }
-
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
-        {
-            return await _context.Users.ToListAsync();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
-        {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(UserCreateDTO user)
-        {
-            User newUser = new User()
-            { Email = user.Email, HashPassword = AuthService.EncrypBySHA256(user.Password) };
-
-            _context.Users.Add(newUser);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUser", new { newUser.Id }, user);
-        }
-
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
+            return jwt is not null ?
+                Ok(AuthService.GenerateToken(existingUser, jwt)) :
+                StatusCode(500);
         }
     }
+
+
 }

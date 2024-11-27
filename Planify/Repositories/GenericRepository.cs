@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Planify.Repositories
 {
     public abstract partial class GenericRepository<T, TID> : IGenericCRUDRepository<T, TID>
-        where T : BaseModel<TID>
+        where T : DbBaseModel<TID>
     {
         private readonly ProjectContext _context;
         protected DbSet<T> Entities => _context.Set<T>();
