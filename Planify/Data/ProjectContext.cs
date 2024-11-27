@@ -32,8 +32,19 @@ namespace Planify.Data
 
         private void SetQueryFilters(ModelBuilder modelBuilder)
         {
-            //TODO: Agrega el mismo filtro a los demás modelos.
             modelBuilder.Entity<Department>()
+                .HasQueryFilter(p => !p.IsDeleted);
+
+            modelBuilder.Entity<Employee>()
+                .HasQueryFilter(p => !p.IsDeleted);
+
+            modelBuilder.Entity<Person>()
+                .HasQueryFilter(p => !p.IsDeleted);
+
+            modelBuilder.Entity<Project>()
+                .HasQueryFilter(p => !p.IsDeleted);
+
+            modelBuilder.Entity<ProjectTask>()
                 .HasQueryFilter(p => !p.IsDeleted);
 
             modelBuilder.Entity<Role>()
