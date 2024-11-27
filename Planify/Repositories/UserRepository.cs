@@ -10,14 +10,14 @@ namespace Planify.Repositories
     }
 
     //TODO: Change name
-    public class UOW_Users : IUOW_Users_Employee
+    public class UserManagementUoW : IUserManagementUoW
     {
         private readonly ProjectContext _Context;
         private readonly IGenericCRUDRepository<User, int> _UserRepository;
         private readonly IGenericCRUDRepository<Employee, int> _EmployeRepository;
         private readonly IGenericCRUDRepository<Person, int> _PersonRepository;
 
-        public UOW_Users(
+        public UserManagementUoW(
             ProjectContext context,
             IGenericCRUDRepository<User, int> Users,
             IGenericCRUDRepository<Person, int> Persons,
@@ -38,7 +38,7 @@ namespace Planify.Repositories
             _Context.SaveChangesAsync();
     }
 
-    public interface IUOW_Users_Employee
+    public interface IUserManagementUoW
     {
         IGenericCRUDRepository<User, int> Users { get; }
         IGenericCRUDRepository<Employee, int> Employees { get; }

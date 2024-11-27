@@ -10,8 +10,8 @@ namespace Planify.Controllers
     [ApiController]
     public class NewEmployeesController : ControllerBase
     {
-        private readonly IUOW_Users_Employee UOW;
-        public NewEmployeesController(IUOW_Users_Employee uow)
+        private readonly IUserManagementUoW UOW;
+        public NewEmployeesController(IUserManagementUoW uow)
         {
             UOW = uow;
         }
