@@ -5,11 +5,12 @@ using Planify.Repositories;
 using Planify.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace Planify.Controllers
 {
     public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO> : ControllerBase
-        where T : BaseModel<int>
+        where T : DbBaseModel<int>
         where TRepository : IGenericCRUDRepository<T, int>
     {
         protected readonly IGenericCRUDRepository<T, int> _Repository;
@@ -58,7 +59,12 @@ namespace Planify.Controllers
             if (entity is null)
                 return NotFound();
 
-            MapToUpdateEntity(entity, createDto);
+            try { MapToUpdateEntity(entity, createDto); }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
             _Repository.Updated(entity);
 
             ConcurrencyState state = await Concurrency.Check(() => _Repository.Save());
@@ -82,7 +88,7 @@ namespace Planify.Controllers
             return CreatedAtAction(nameof(GetById), new { newEntity.Id }, newEntity);
         }
 
-       
+
 
     }
 
