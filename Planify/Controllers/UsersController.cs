@@ -46,30 +46,34 @@ namespace Planify.Controllers
 
         protected override User MapToUpdateEntity(User currentState, UserUpdateDTO dto)
         {
-            if (dto.Password is null || dto.NewPassword is null)
-                throw new Exception("Datos incompletos.");
+            if (dto.Password is null)
+                throw new Exception("Proporcione la contraseña.");
 
-            bool CredentialsCorrect = CheckCredentials(dto).GetAwaiter().GetResult();
+            bool CredentialsCorrect = CheckCredentials(currentState.Id, dto.Password).GetAwaiter().GetResult();
 
             if (!CredentialsCorrect)
-                throw new Exception("Credenciales incorrectas");
+                throw new Exception("Credenciales incorrectas.");
 
-            currentState.HashPassword = AuthService.EncrypBySHA256(dto.NewPassword);
-            currentState.LastUpdatedUTC = DateTime.UtcNow;
-            currentState.Email = dto.Email ?? currentState.Email;
+            if (dto.NewPassword is not null)
+                currentState.HashPassword = AuthService.EncrypBySHA256(dto.NewPassword);
+
+            if (dto.Email is null && dto.NewPassword is null)
+                throw new Exception("Proporcione el nuevo correo electrónico.");
+
+            if (dto.Email is not null)
+                currentState.Email = dto.Email;
 
             return currentState;
         }
 
-        private async Task<bool> CheckCredentials(UserUpdateDTO dto)
+        private async Task<bool> CheckCredentials(int id, string password)
         {
-            if (dto.Password is null || dto.NewPassword is null)
-                return false;
+            Console.WriteLine(AuthService.EncrypBySHA256(password));
 
-            string hashPassword = AuthService.EncrypBySHA256(dto.Password);
+            string hashPassword = AuthService.EncrypBySHA256(password);
 
             User? existingUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.HashPassword == hashPassword);
+                .FirstOrDefaultAsync(u => u.Id == id && u.HashPassword == hashPassword);
 
             if (existingUser is null) return false;
 
