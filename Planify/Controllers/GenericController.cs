@@ -32,11 +32,24 @@ namespace Planify.Controllers
     }
 
 
-    //POST & PUT
     public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
     {
+        //Post
         protected abstract T MapToEntity(TCreateDto dto);
+        protected virtual Task<T> MapToEntityAsync(TCreateDto dto) =>
+            Task.FromResult(MapToEntity(dto));
+
+        //Put
         protected abstract T MapToUpdateEntity(T currentState, TUpdateDTO dto);
+        protected virtual Task<T> MapToUpdateEntityAsync(T currentState, TUpdateDTO dto) =>
+            Task.FromResult(MapToUpdateEntity(currentState, dto));
+
+    }
+
+    //POST & PUT
+
+    public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
+    {
 
         [HttpPut("{id}")]
         public virtual async Task<IActionResult> Update(int id, TUpdateDTO createDto)
