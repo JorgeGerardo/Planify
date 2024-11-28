@@ -5,7 +5,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace Planify.Repositories
 {
     public abstract partial class GenericRepository<T, TID> : IGenericCRUDRepository<T, TID>
@@ -13,7 +12,19 @@ namespace Planify.Repositories
     {
         private readonly ProjectContext _context;
         protected DbSet<T> Entities => _context.Set<T>();
-        protected GenericRepository(ProjectContext context) => _context = context;
+        private IQueryable<T> _entitiesNav;
+
+        public virtual string[] _Inclues { get => Includes; set => Includes = value; }
+        private string[] Includes = Array.Empty<string>();
+
+        protected GenericRepository(ProjectContext context)
+        {
+            _context = context;
+            _entitiesNav = Entities;
+
+            foreach (var include in _Inclues)
+                _entitiesNav = _entitiesNav.Include(include);
+        }
 
         public async Task<int> Save() =>
                 await _context.SaveChangesAsync();
@@ -24,10 +35,10 @@ namespace Planify.Repositories
         public async Task<T> Create(T entity) =>
             (await Entities.AddAsync(entity)).Entity;
 
-        public IQueryable<T> GetAll() => Entities;
+        public IQueryable<T> GetAll() => _entitiesNav;
 
         public Task<T?> GetById(TID id) =>
-            Entities.FirstOrDefaultAsync(e => e.Id!.Equals(id));
+            _entitiesNav.FirstOrDefaultAsync(e => e.Id!.Equals(id));
 
         public async Task<bool> HardDelete(TID id)
         {
