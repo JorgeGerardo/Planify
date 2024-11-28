@@ -5,7 +5,7 @@ namespace Planify.Repositories
 {
     public interface IGenericCRUDRepository<T, TID>
     {
-        public string[] _Inclues { get; set; }
+        public string[] _NavigationProperties { get; set; }
         Task<T> Create(T entity);
 
         IQueryable<T> GetAll();

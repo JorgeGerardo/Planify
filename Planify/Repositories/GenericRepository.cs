@@ -14,15 +14,15 @@ namespace Planify.Repositories
         protected DbSet<T> Entities => _context.Set<T>();
         private IQueryable<T> _entitiesNav;
 
-        public virtual string[] _Inclues { get => Includes; set => Includes = value; }
-        private string[] Includes = Array.Empty<string>();
+        public virtual string[] _NavigationProperties { get => NavProp; set => NavProp = value; }
+        private string[] NavProp = Array.Empty<string>();
 
         protected GenericRepository(ProjectContext context)
         {
             _context = context;
             _entitiesNav = Entities;
 
-            foreach (var include in _Inclues)
+            foreach (var include in _NavigationProperties)
                 _entitiesNav = _entitiesNav.Include(include);
         }
 
