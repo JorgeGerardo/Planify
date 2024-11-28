@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Planify.Models;
 using Planify.Repositories;
 using System;
@@ -8,53 +9,58 @@ namespace Planify.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeController : GenericController<Employee, EmployeeRepository, EmployeeCreateDTO, EmployeeUpdateDTO>
+    public partial class EmployeeController : GenericController<Employee, EmployeeRepository, EmployeeCreateDTO, EmployeeUpdateDTO>
     {
-        private readonly IGenericCRUDRepository<Person, int> _PersonRepository;
-        private readonly IGenericCRUDRepository<User, int> _UserRepository;
-        public EmployeeController(
-            IGenericCRUDRepository<Employee, int> _employeRep,
-            IGenericCRUDRepository<User, int> _userRep,
-            IGenericCRUDRepository<Person, int> _personRep
-        ) : base(_employeRep)
-        {
-            _UserRepository = _userRep;
-            _PersonRepository = _personRep;
-        }
+        private readonly IUserManagementUoW UOW;
+        public EmployeeController(IUserManagementUoW uow) : base(uow.Employees) =>
+            UOW = uow;
+    }
 
+    public partial class EmployeeController : GenericController<Employee, EmployeeRepository, EmployeeCreateDTO, EmployeeUpdateDTO>
+    {
         protected override Employee MapToEntity(EmployeeCreateDTO dto) =>
             MapToEntityAsync(dto).GetAwaiter().GetResult();
 
         protected async override Task<Employee> MapToEntityAsync(EmployeeCreateDTO dto)
         {
-            //TODO: No se si tengo que consultarlo o solamente poner el campo:
-            Person? person = await _PersonRepository.GetById(dto.PersonId);
-            //User? user = await _UserRepository.GetById(dto.PersonId);
-
-            //TODO: Implementa un try catch en el controlador generico
-            //justo al mapear la entidad
+            Person? person = await UOW.Persons.GetById(dto.PersonId);
             if (person is null)
                 throw new Exception("Persons not found");
-            //if (user is null)
-            //    throw new Exception("User not found");
 
-            //Employee res = new Employee()
-            //{
-            //    Name = dto.Name,
-            //    PersonId = dto.PersonId,
-            //    Person = person,
-            //    User = user,
+            if (person.Employee is not null)
+                throw new Exception("Esta persona ya esta asignada a un empleado");
 
 
-            //};
+            User? user = await UOW.Users.GetById(dto.UserId);
+            if (user is null)
+                throw new Exception("El usuario indicado no existe.");
 
-            throw new NotImplementedException();
-            //return res;
+            if (user.Employee is not null)
+                throw new Exception("El usuario ya esta asigando a un empleado.");
+
+            return new Employee()
+            {
+                Name = dto.Name,
+                PersonId = dto.PersonId,
+                Person = person,
+                User = user,
+                HireDate = dto.HireDate,
+                UserId = dto.UserId,
+            };
         }
 
-        protected override Employee MapToUpdateEntity(Employee currentState, EmployeeUpdateDTO dto)
+        protected override Task<Employee> MapToUpdateEntityAsync(Employee currentState, EmployeeUpdateDTO dto)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        protected  override Employee MapToUpdateEntity(Employee currentState, EmployeeUpdateDTO dto) =>
+            MapToUpdateEntityAsync(currentState, dto).GetAwaiter().GetResult();
+
+        [HttpGet]
+        public void sd()
+        {
+            var x = UOW.Employees.GetAll().Include(p => p.User);
         }
     }
 }
