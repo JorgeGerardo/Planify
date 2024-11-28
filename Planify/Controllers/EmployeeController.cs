@@ -57,10 +57,5 @@ namespace Planify.Controllers
         protected  override Employee MapToUpdateEntity(Employee currentState, EmployeeUpdateDTO dto) =>
             MapToUpdateEntityAsync(currentState, dto).GetAwaiter().GetResult();
 
-        [HttpGet]
-        public void sd()
-        {
-            var x = UOW.Employees.GetAll().Include(p => p.User);
-        }
     }
 }
