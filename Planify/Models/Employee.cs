@@ -24,8 +24,8 @@ namespace Planify.Models
 
     public class EmployeeUpdateDTO
     {
-        public int? UserId { get; set; }
-        public int? PersonId { get; set; }
+        public int UserId { get; set; }
+        public int PersonId { get; set; }
         public DateOnly? HireDate { get; set; }
         public string? Name { get; set; }
     }

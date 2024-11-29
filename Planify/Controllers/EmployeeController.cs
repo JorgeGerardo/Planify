@@ -49,12 +49,41 @@ namespace Planify.Controllers
             };
         }
 
-        protected override Task<Employee> MapToUpdateEntityAsync(Employee currentState, EmployeeUpdateDTO dto)
+        protected async override Task<Employee> MapToUpdateEntityAsync(Employee currentState, EmployeeUpdateDTO dto)
         {
-            throw new NotImplementedException();
+            if (currentState.PersonId != dto.PersonId)
+            {
+                Person? person = await UOW.Persons.GetById(dto.PersonId);
+                if (person is null)
+                    throw new Exception($"La persona no existe. Id: {dto.PersonId}.");
+
+                if (person.Employee is not null)
+                    throw new Exception("Esta persona ya esta asignado a un empleado.");
+
+                currentState.Person = person;
+                currentState.PersonId = dto.PersonId;
+            }
+
+            if (currentState.UserId != dto.UserId)
+            {
+                User? user = await UOW.Users.GetById(dto.UserId);
+                if (user is null)
+                    throw new Exception($"El usuario proporcionado no existe. Id : {dto.UserId}.");
+
+                if (user.Employee is not null)
+                    throw new Exception("Este usuario ya esta asignado a un empleado.");
+
+                currentState.UserId = dto.UserId;
+                currentState.User = user;
+            }
+
+            currentState.Name = dto.Name ?? currentState.Name;
+            currentState.HireDate = dto.HireDate ?? currentState.HireDate;
+
+            return currentState;
         }
 
-        protected  override Employee MapToUpdateEntity(Employee currentState, EmployeeUpdateDTO dto) =>
+        protected override Employee MapToUpdateEntity(Employee currentState, EmployeeUpdateDTO dto) =>
             MapToUpdateEntityAsync(currentState, dto).GetAwaiter().GetResult();
 
     }
