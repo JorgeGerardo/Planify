@@ -3,6 +3,7 @@ using Planify.Data;
 using Planify.Models;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Planify.Repositories
@@ -28,6 +29,7 @@ namespace Planify.Repositories
 
         public async Task<int> Save() =>
                 await _context.SaveChangesAsync();
+
     }
 
     public abstract partial class GenericRepository<T, TID>
@@ -76,4 +78,14 @@ namespace Planify.Repositories
 
     }
 
+
+    public abstract partial class GenericRepository<T, TID>
+    {
+        public async Task<bool> ExistAsync(Expression<Func<T, bool>> condition)
+        {
+            return await _entitiesNav.AnyAsync(condition);
+        }
+
+
+    }
 }
