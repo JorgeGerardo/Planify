@@ -2,6 +2,7 @@
 using Planify.Data;
 using Planify.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -78,14 +79,16 @@ namespace Planify.Repositories
 
     }
 
-
+    //Filters:
     public abstract partial class GenericRepository<T, TID>
     {
-        public async Task<bool> ExistAsync(Expression<Func<T, bool>> condition)
-        {
-            return await _entitiesNav.AnyAsync(condition);
-        }
+        public async Task<bool> ExistAsync(Expression<Func<T, bool>> condition) =>
+            await _entitiesNav.AnyAsync(condition);
 
+        public async Task<T?> EntityWithAsync(Expression<Func<T, bool>> condition) =>
+            await _entitiesNav.FirstOrDefaultAsync(condition);
 
+        public async Task<IEnumerable<T>> EntitiesWithAsync(Expression<Func<T, bool>> condition) =>
+            await _entitiesNav.Where(condition).ToListAsync();
     }
 }
