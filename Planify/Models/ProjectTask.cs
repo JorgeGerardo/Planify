@@ -7,6 +7,7 @@ namespace Planify.Models
         public Priority Priority { get; set; }
         public required Project Project { get; set; }
         public DateTime LastUpdateUTC { get; set; }
+        //TODO: Falta un ICollection<Employee>
     }
 
     public enum Priority
