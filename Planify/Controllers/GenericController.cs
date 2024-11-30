@@ -21,6 +21,16 @@ namespace Planify.Controllers
         public virtual async Task<IEnumerable<T>> Get() =>
             await _Repository.GetAll().ToListAsync();
 
+        [HttpGet("No-filtters")]
+        public virtual async Task<IEnumerable<T>> GetWithoutFiltters() =>
+            await _Repository.GetAllWithoutFiltters().ToListAsync();
+
+        [HttpGet("deleted")]
+        public virtual async Task<IEnumerable<T>> GetEntitiesDeleted() =>
+            await _Repository.GetDeletedEntities().ToListAsync();
+
+
+
         [HttpGet("{id}")]
         public virtual async Task<ActionResult<T>> GetById(int id)
         {
@@ -99,6 +109,15 @@ namespace Planify.Controllers
         public virtual async Task<IActionResult> Delete(int id)
         {
             bool res = await _Repository.SoftDelete(id);
+            await _Repository.Save();
+
+            return res ? NoContent() : NotFound();
+        }
+
+        [HttpDelete("remove-soft-delete/{id}")]
+        public virtual async Task<IActionResult> RemoveSoftDelete(int id)
+        {
+            bool res = await _Repository.RemoveSoftDelete(id);
             await _Repository.Save();
 
             return res ? NoContent() : NotFound();

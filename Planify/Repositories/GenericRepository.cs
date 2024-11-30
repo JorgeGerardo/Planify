@@ -33,6 +33,7 @@ namespace Planify.Repositories
 
     }
 
+    //Basic CRUD
     public abstract partial class GenericRepository<T, TID>
     {
         public async Task<T> Create(T entity) =>
@@ -68,6 +69,19 @@ namespace Planify.Repositories
             return true;
         }
 
+        public async Task<bool> RemoveSoftDelete(TID id)
+        {
+            T? existingEntity =
+                await _entitiesNav.IgnoreQueryFilters().FirstOrDefaultAsync(e => e.Id!.Equals(id));
+            if (existingEntity is null)
+                return false;
+
+            existingEntity.IsDeleted = false;
+            existingEntity.LastUpdatedUTC = DateTime.UtcNow;
+
+            return true;
+        }
+
         public void Updated(T entity)
         {
             entity.LastUpdatedUTC = DateTime.UtcNow;
@@ -90,5 +104,12 @@ namespace Planify.Repositories
 
         public async Task<IEnumerable<T>> EntitiesWithAsync(Expression<Func<T, bool>> condition) =>
             await _entitiesNav.Where(condition).ToListAsync();
+
+        public IQueryable<T> GetAllWithoutFiltters() => 
+            _entitiesNav.IgnoreQueryFilters();
+
+        public IQueryable<T> GetDeletedEntities() => 
+            _entitiesNav.IgnoreQueryFilters().Where(e => e.IsDeleted);
+
     }
 }
