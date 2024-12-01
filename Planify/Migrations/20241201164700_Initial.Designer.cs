@@ -12,7 +12,7 @@ using Planify.Data;
 namespace Planify.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    [Migration("20241123072040_Initial")]
+    [Migration("20241201164700_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -53,6 +53,21 @@ namespace Planify.Migrations
                     b.HasIndex("ProjectsId");
 
                     b.ToTable("EmployeeProject");
+                });
+
+            modelBuilder.Entity("EmployeeProjectTask", b =>
+                {
+                    b.Property<int>("EmployeesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TasksId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EmployeesId", "TasksId");
+
+                    b.HasIndex("TasksId");
+
+                    b.ToTable("EmployeeProjectTask");
                 });
 
             modelBuilder.Entity("Planify.Models.Department", b =>
@@ -146,10 +161,6 @@ namespace Planify.Migrations
                     b.Property<DateTime?>("DeletedTimeUTC")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FirstNames")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -165,8 +176,8 @@ namespace Planify.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sate")
                         .IsRequired()
@@ -195,11 +206,16 @@ namespace Planify.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ManagerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ManagerId");
 
                     b.ToTable("Projects");
                 });
@@ -212,16 +228,33 @@ namespace Planify.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly?>("CompleteDate")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("CreatedDateUTC")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("DeletedTimeUTC")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EstimatedEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastUpdateUTC")
+                    b.Property<DateTime?>("LastUpdateUTC")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastUpdatedUTC")
@@ -232,15 +265,21 @@ namespace Planify.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("EmployeeId");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
 
@@ -282,6 +321,9 @@ namespace Planify.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("DeletedTimeUTC")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -289,6 +331,13 @@ namespace Planify.Migrations
                     b.Property<string>("HashPassword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastUpdatedUTC")
+                        .IsConcurrencyToken()
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -340,6 +389,21 @@ namespace Planify.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EmployeeProjectTask", b =>
+                {
+                    b.HasOne("Planify.Models.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Planify.Models.ProjectTask", null)
+                        .WithMany()
+                        .HasForeignKey("TasksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Planify.Models.Employee", b =>
                 {
                     b.HasOne("Planify.Models.Person", "Person")
@@ -359,12 +423,19 @@ namespace Planify.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Planify.Models.Project", b =>
+                {
+                    b.HasOne("Planify.Models.Employee", "Manager")
+                        .WithMany()
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Manager");
+                });
+
             modelBuilder.Entity("Planify.Models.ProjectTask", b =>
                 {
-                    b.HasOne("Planify.Models.Employee", null)
-                        .WithMany("Tasks")
-                        .HasForeignKey("EmployeeId");
-
                     b.HasOne("Planify.Models.Project", "Project")
                         .WithMany("Tasks")
                         .HasForeignKey("ProjectId")
@@ -389,15 +460,9 @@ namespace Planify.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Planify.Models.Employee", b =>
-                {
-                    b.Navigation("Tasks");
-                });
-
             modelBuilder.Entity("Planify.Models.Person", b =>
                 {
-                    b.Navigation("Employee")
-                        .IsRequired();
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Planify.Models.Project", b =>

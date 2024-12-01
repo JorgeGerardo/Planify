@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Planify.Models;
-using System;
-using System.Collections.Generic;
-using System.Reflection.Emit;
 
 namespace Planify.Data
 {
@@ -27,6 +23,8 @@ namespace Planify.Data
 
             SetEmployeeTable(modelBuilder);
             SetRoleTable(modelBuilder);
+            SetProjectTable(modelBuilder);
+            SetProjectTaskTable(modelBuilder);
             SetQueryFilters(modelBuilder);
         }
 
@@ -53,6 +51,28 @@ namespace Planify.Data
             modelBuilder.Entity<User>()
                 .HasQueryFilter(p => !p.IsDeleted);
 
+        }
+
+        private void SetProjectTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Project>(entity =>
+            {
+                entity
+                    .HasOne(p => p.Manager)
+                    .WithMany()
+                    .HasForeignKey(e => e.ManagerId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+        }
+
+        private void SetProjectTaskTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProjectTask>(entity =>
+            {
+                entity.Property(p => p.Priority).HasConversion<string>();
+                entity.Property(p => p.Status).HasConversion<string>();
+
+            });
         }
 
         private void SetRoleTable(ModelBuilder modelBuilder) { }

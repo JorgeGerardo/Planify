@@ -21,10 +21,13 @@ namespace Planify.Controllers
 
         protected override Models.Project MapToEntity(ProjectDTO dto)
         {
-            return new Models.Project
-            {
-                Name = dto.Name,
-            };
+            throw new NotImplementedException();
+            //return new Models.Project
+            //{
+            //    Name = dto.Name,
+            //    //TODO: Prueba sin hacer esto:
+            //    //ManagerId = dto.ManagerId,
+            //};
         }
 
         protected override Models.Project MapToUpdateEntity(Models.Project currentState, ProjectDTO dto)

@@ -17,10 +17,10 @@ namespace Planify.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeletedTimeUTC = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,36 +34,19 @@ namespace Planify.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BornDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    FirstNames = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastNames = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Sate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeletedTimeUTC = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Person", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Projects",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedTimeUTC = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Projects", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,10 +55,10 @@ namespace Planify.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeletedTimeUTC = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,7 +72,10 @@ namespace Planify.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HashPassword = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    HashPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedTimeUTC = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -105,10 +91,10 @@ namespace Planify.Migrations
                     UserId = table.Column<int>(type: "int", nullable: false),
                     HireDate = table.Column<DateOnly>(type: "date", nullable: false),
                     PersonId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeletedTimeUTC = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -176,6 +162,29 @@ namespace Planify.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Projects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ManagerId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedTimeUTC = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projects", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Projects_Employees_ManagerId",
+                        column: x => x.ManagerId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EmployeeProject",
                 columns: table => new
                 {
@@ -205,27 +214,53 @@ namespace Planify.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Priority = table.Column<int>(type: "int", nullable: false),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
-                    LastUpdateUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastUpdateUTC = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDateUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EstimatedEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CompleteDate = table.Column<TimeOnly>(type: "time", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Priority = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DeletedTimeUTC = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastUpdatedUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProjectTasks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProjectTasks_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_ProjectTasks_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmployeeProjectTask",
+                columns: table => new
+                {
+                    EmployeesId = table.Column<int>(type: "int", nullable: false),
+                    TasksId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeeProjectTask", x => new { x.EmployeesId, x.TasksId });
+                    table.ForeignKey(
+                        name: "FK_EmployeeProjectTask_Employees_EmployeesId",
+                        column: x => x.EmployeesId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EmployeeProjectTask_ProjectTasks_TasksId",
+                        column: x => x.TasksId,
+                        principalTable: "ProjectTasks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -241,6 +276,11 @@ namespace Planify.Migrations
                 column: "ProjectsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EmployeeProjectTask_TasksId",
+                table: "EmployeeProjectTask",
+                column: "TasksId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Employees_PersonId",
                 table: "Employees",
                 column: "PersonId",
@@ -253,9 +293,9 @@ namespace Planify.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectTasks_EmployeeId",
-                table: "ProjectTasks",
-                column: "EmployeeId");
+                name: "IX_Projects_ManagerId",
+                table: "Projects",
+                column: "ManagerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectTasks_ProjectId",
@@ -278,7 +318,7 @@ namespace Planify.Migrations
                 name: "EmployeeProject");
 
             migrationBuilder.DropTable(
-                name: "ProjectTasks");
+                name: "EmployeeProjectTask");
 
             migrationBuilder.DropTable(
                 name: "RoleUser");
@@ -287,13 +327,16 @@ namespace Planify.Migrations
                 name: "Departments");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "ProjectTasks");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Projects");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "Person");

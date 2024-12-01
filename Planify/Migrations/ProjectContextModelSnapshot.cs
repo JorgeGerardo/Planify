@@ -203,11 +203,16 @@ namespace Planify.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ManagerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ManagerId");
 
                     b.ToTable("Projects");
                 });
@@ -220,13 +225,33 @@ namespace Planify.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeOnly?>("CompleteDate")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("CreatedDateUTC")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("DeletedTimeUTC")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EstimatedEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastUpdateUTC")
+                    b.Property<DateTime?>("LastUpdateUTC")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastUpdatedUTC")
@@ -237,11 +262,19 @@ namespace Planify.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -385,6 +418,17 @@ namespace Planify.Migrations
                     b.Navigation("Person");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Planify.Models.Project", b =>
+                {
+                    b.HasOne("Planify.Models.Employee", "Manager")
+                        .WithMany()
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Manager");
                 });
 
             modelBuilder.Entity("Planify.Models.ProjectTask", b =>
