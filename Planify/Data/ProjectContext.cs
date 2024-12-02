@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Planify.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Planify.Data
 {
@@ -21,7 +23,9 @@ namespace Planify.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            SetPersonTable(modelBuilder);
             SetEmployeeTable(modelBuilder);
+            
             SetRoleTable(modelBuilder);
             SetProjectTable(modelBuilder);
             SetProjectTaskTable(modelBuilder);
@@ -53,6 +57,25 @@ namespace Planify.Data
 
         }
 
+        private void SetPersonTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Person>(entity =>
+            {
+                entity.HasData(
+                    new Person()
+                    {
+                        Id = 1,
+                        Name = "Jorguito",
+                        City = "Guadalajara",
+                        Country = "México",
+                        LastNames = "Gerardo Rojo",
+                        Sate = "Sinaloa"
+                    }
+                );
+            });
+        }
+
+
         private void SetProjectTable(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Project>(entity =>
@@ -62,16 +85,51 @@ namespace Planify.Data
                     .WithMany()
                     .HasForeignKey(e => e.ManagerId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+
+                entity.HasData(
+                    new Project()
+                    {
+                        Id = 1,
+                        Name = "Loheed Martin Communication Software",
+                        ManagerId = 1
+                    }
+                );
             });
         }
 
         private void SetProjectTaskTable(ModelBuilder modelBuilder)
         {
+            //Foreign key:
+            modelBuilder.Entity<ProjectTask>()
+                .HasOne(pt => pt.Project)
+                .WithMany(p => p.Tasks)
+                .HasForeignKey(pt => pt.ProjectId);
+
             modelBuilder.Entity<ProjectTask>(entity =>
             {
                 entity.Property(p => p.Priority).HasConversion<string>();
                 entity.Property(p => p.Status).HasConversion<string>();
 
+
+
+                entity.HasData(
+                    new ProjectTask()
+                    {
+                        Id = 1,
+                        ProjectId = 1,
+                        Name = "Actividad 1",
+                        Priority = Priority.Critical,
+                        Description = "Realizar ...",
+                        Comments = new List<string>{
+                            "Comentario 1",
+                            "Comentario 2",
+                            "Comentario 3",
+                            "Comentario 4"
+                        },
+
+                    }
+                );
             });
         }
 
@@ -82,7 +140,42 @@ namespace Planify.Data
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Employee)
                 .WithOne(e => e.User)
-                .HasForeignKey<Employee>(e => e.UserId);
+                .HasForeignKey<Employee>(e => e.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<Employee>()
+                .HasOne(p => p.Person)
+                .WithOne(p => p.Employee)
+                .HasForeignKey<Employee>(e => e.PersonId);
+
+
+            modelBuilder.Entity<Employee>(entity =>
+            {
+                entity.HasData(
+                    new Employee()
+                    {
+                        Id = 1,
+                        Name = "Jorguito",
+                        PersonId = 1,
+                        UserId = 1
+                    }
+                );
+            });
+
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasData(
+                    new User()
+                    {
+                        Id = 1,
+                        Email = "Jorguito@hotmail.com",
+                        //jorguito
+                        HashPassword = "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce"
+                    }
+                );
+            });
         }
+    
     }
 }

@@ -5,11 +5,12 @@ namespace Planify.Models
 {
     public class ProjectTask : BaseModel<int>
     {
-        public required Project Project { get; set; }
+        public Project? Project { get; set; }
+        public int ProjectId { get; set; }
         public DateTime? LastUpdateUTC { get; set; }
         public ICollection<Employee> Employees { get; set; } = new List<Employee>();
         public bool IsCompleted { get; set; } = false;
-        public string Description { get; set; } = "¡Sin descripción!";
+        public required string Description { get; set; }
 
         //Dates:
         public DateTime CreatedDateUTC { get; set; } = DateTime.UtcNow;

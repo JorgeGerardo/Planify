@@ -265,6 +265,31 @@ namespace Planify.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Person",
+                columns: new[] { "Id", "BornDate", "City", "Country", "DeletedTimeUTC", "IsDeleted", "LastNames", "LastUpdatedUTC", "Name", "PhoneNumber", "Sate" },
+                values: new object[] { 1, new DateOnly(1, 1, 1), "Guadalajara", "México", null, false, "Gerardo Rojo", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jorguito", null, "Sinaloa" });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "DeletedTimeUTC", "Email", "HashPassword", "IsDeleted", "LastUpdatedUTC" },
+                values: new object[] { 1, null, "Jorguito@hotmail.com", "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "DeletedTimeUTC", "HireDate", "IsDeleted", "LastUpdatedUTC", "Name", "PersonId", "UserId" },
+                values: new object[] { 1, null, new DateOnly(1, 1, 1), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jorguito", 1, 1 });
+
+            migrationBuilder.InsertData(
+                table: "Projects",
+                columns: new[] { "Id", "DeletedTimeUTC", "IsDeleted", "LastUpdatedUTC", "ManagerId", "Name" },
+                values: new object[] { 1, null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Loheed Martin Communication Software" });
+
+            migrationBuilder.InsertData(
+                table: "ProjectTasks",
+                columns: new[] { "Id", "Comments", "CompleteDate", "CreatedDateUTC", "DeletedTimeUTC", "Description", "EstimatedEndDate", "IsCompleted", "IsDeleted", "LastUpdateUTC", "LastUpdatedUTC", "Name", "Priority", "ProjectId", "StartDate", "Status" },
+                values: new object[] { 1, "[\"Comentario 1\",\"Comentario 2\",\"Comentario 3\",\"Comentario 4\"]", null, new DateTime(2024, 12, 2, 6, 24, 3, 939, DateTimeKind.Utc).AddTicks(7236), null, "Realizar ...", null, false, false, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Actividad 1", "Critical", 1, null, "Pending" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_DepartmentEmployee_EmployeesId",
                 table: "DepartmentEmployee",

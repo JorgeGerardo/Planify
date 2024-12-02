@@ -12,7 +12,7 @@ using Planify.Data;
 namespace Planify.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    [Migration("20241201164700_Initial")]
+    [Migration("20241202062404_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -137,6 +137,18 @@ namespace Planify.Migrations
                         .IsUnique();
 
                     b.ToTable("Employees");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            HireDate = new DateOnly(1, 1, 1),
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Jorguito",
+                            PersonId = 1,
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("Planify.Models.Person", b =>
@@ -186,6 +198,20 @@ namespace Planify.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Person");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BornDate = new DateOnly(1, 1, 1),
+                            City = "Guadalajara",
+                            Country = "México",
+                            IsDeleted = false,
+                            LastNames = "Gerardo Rojo",
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Jorguito",
+                            Sate = "Sinaloa"
+                        });
                 });
 
             modelBuilder.Entity("Planify.Models.Project", b =>
@@ -218,6 +244,16 @@ namespace Planify.Migrations
                     b.HasIndex("ManagerId");
 
                     b.ToTable("Projects");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ManagerId = 1,
+                            Name = "Loheed Martin Communication Software"
+                        });
                 });
 
             modelBuilder.Entity("Planify.Models.ProjectTask", b =>
@@ -284,6 +320,22 @@ namespace Planify.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectTasks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Comments = "[\"Comentario 1\",\"Comentario 2\",\"Comentario 3\",\"Comentario 4\"]",
+                            CreatedDateUTC = new DateTime(2024, 12, 2, 6, 24, 3, 939, DateTimeKind.Utc).AddTicks(7236),
+                            Description = "Realizar ...",
+                            IsCompleted = false,
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Actividad 1",
+                            Priority = "Critical",
+                            ProjectId = 1,
+                            Status = "Pending"
+                        });
                 });
 
             modelBuilder.Entity("Planify.Models.Role", b =>
@@ -342,6 +394,16 @@ namespace Planify.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "Jorguito@hotmail.com",
+                            HashPassword = "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce",
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("RoleUser", b =>

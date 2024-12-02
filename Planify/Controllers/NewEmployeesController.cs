@@ -19,39 +19,62 @@ namespace Planify.Controllers
         [HttpPost("trywe")]
         public async Task<object> Publicar()
         {
-            var user = new User
-            {
-                Email = "55tierra@gmail.com",
-                HashPassword = "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce",
-            };
+            //person id 3:
+            //User id 4:
 
-            var person = new Person
-            {
-                City = "55tierra",
-                Country = "Mex",
-                LastNames = "Lopez Dorigan",
-                Name = "lejos",
-                Sate = "Sinaloa",
-                BornDate = DateOnly.FromDateTime(new DateTime(2001, 5, 1)),
-                PhoneNumber = "1234567890",
-            };
+            //TODO: Prueba con el debuger si se asigana automaticamente la propiedad UserId
+            User? user4 = await UOW.Users.GetById(4);
+            Person? person3 = await UOW.Persons.GetById(3);
+
+            if (user4 == null || person3 is null)
+                return "Valio verga";
+
 
             var employee = new Employee
             {
                 Name = "Carlitos",
-                Person = person,
-                User = user,
             };
 
-            user.Employee = employee;
-            employee.Person = person;
+            //employee.Person = person3;
+            employee.PersonId = person3.Id;
+            //employee.User = user4;
+            employee.UserId = user4.Id;
 
-            await UOW.Users.Create(user);
+
+
+            //var user = new User
+            //{
+            //    Email = "carlitosfeliz@gmail.com",
+            //    HashPassword = "67274c77b1d97147090cac43704024931a434bd1d4618c436115b691b99548f8",
+            //};
+
+            //var person = new Person
+            //{
+            //    City = "Monterrey",
+            //    Country = "Mexico",
+            //    LastNames = "Lopez Lopez",
+            //    Name = "Carlos",
+            //    Sate = "Nuevo Leon",
+            //    BornDate = DateOnly.FromDateTime(new DateTime(2001, 5, 1)),
+            //    PhoneNumber = "1234567890",
+            //};
+
+            //var employee = new Employee
+            //{
+            //    Name = "Carlitos",
+            //    Person = person,
+            //    User = user,
+            //};
+
+            //user.Employee = employee;
+            //employee.Person = person;
+
+            //await UOW.Users.Create(user);
             await UOW.Employees.Create(employee);
-            await UOW.Persons.Create(person);
+            //await UOW.Persons.Create(person);
 
 
-            return await UOW.Employees.Save();
+            return await UOW.SaveAsync();
             //return await UOW.SaveAsync();
 
             //TODO: Cómo creo el action sin el nombre del método?
