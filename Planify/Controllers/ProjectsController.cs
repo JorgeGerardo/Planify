@@ -3,44 +3,81 @@ using Microsoft.EntityFrameworkCore;
 using Planify.Models;
 using Planify.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Planify.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public partial class ProjectsController : GenericController<Models.Project, ProjectRepository, ProjectDTO, ProjectDTO>
+    public partial class ProjectsController : GenericController<Project, ProjectRepository, ProjectCreateDTO, ProjectUpdateDTO>
     {
-        private readonly IGenericCRUDRepository<Models.Project, int> _repository;
-        public ProjectsController(IGenericCRUDRepository<Models.Project, int> repository) : base(repository) 
+        private readonly IGenericCRUDRepository<Project, int> _repository;
+        private readonly IGenericCRUDRepository<Employee, int> _employeeRepository;
+        public ProjectsController(
+            IGenericCRUDRepository<Project, int> repository,
+            IGenericCRUDRepository<Employee, int> employeeRepository
+        ) : base(repository)
         {
             _repository = repository;
+            _employeeRepository = employeeRepository;
         }
 
 
+    }
 
-        protected override Models.Project MapToEntity(ProjectDTO dto)
+    public partial class ProjectsController
+    {
+        //Create:
+        protected override Project MapToEntity(ProjectCreateDTO dto) =>
+            MapToEntityAsync(dto).GetAwaiter().GetResult();
+
+        protected override async Task<Project> MapToEntityAsync(ProjectCreateDTO dto)
         {
-            throw new NotImplementedException();
-            //return new Models.Project
-            //{
-            //    Name = dto.Name,
-            //    //TODO: Prueba sin hacer esto:
-            //    //ManagerId = dto.ManagerId,
-            //};
+            bool existEmployee = await _employeeRepository.ExistAsync(e => e.Id.Equals(dto.ManagerId));
+
+            if (!existEmployee)
+                throw new Exception("El adminsitrador asignado no existe. Consulte la información.");
+
+            return new Project
+            {
+                Name = dto.Name,
+                ManagerId = dto.ManagerId,
+            };
         }
 
-        protected override Models.Project MapToUpdateEntity(Models.Project currentState, ProjectDTO dto)
+        //Update:
+        protected override Project MapToUpdateEntity(Project currentState, ProjectUpdateDTO dto) =>
+            MapToUpdateEntityAsync(currentState, dto).GetAwaiter().GetResult();
+
+        protected async override Task<Project> MapToUpdateEntityAsync(Project currentState, ProjectUpdateDTO dto)
         {
+            if (dto.ManagerId is not null && dto.ManagerId != currentState.ManagerId)
+            {
+                bool EmployeeExist = await _employeeRepository.ExistAsync(e => e.Id.Equals(dto.ManagerId));
+
+                if (!EmployeeExist)
+                    throw new Exception("El nuevo administrador proporcionado no existe.");
+
+                currentState.ManagerId = dto.ManagerId.Value;
+            }
             currentState.Name = dto.Name;
+
             return currentState;
         }
     }
 
-    public partial class ProjectsController : GenericController<Models.Project, ProjectRepository, ProjectDTO, ProjectDTO>
+    //TODO: Deberías hacer un endpoint especifico para eliminar o agregar empleados a un proyecto
+    public partial class ProjectsController
     {
         [HttpGet("Prueba")]
         public async Task<Object> getprueba()
+        {
+            return await _repository.GetAll().Include(p => p.Employees).ToListAsync();
+        }
+
+        [HttpGet("Add-Employee/{id}")]
+        public async Task<Object> addEmployee(int id, List<int> EmployeesIds)
         {
             return await _repository.GetAll().Include(p => p.Employees).ToListAsync();
         }

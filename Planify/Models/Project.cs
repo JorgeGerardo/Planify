@@ -12,9 +12,16 @@ namespace Planify.Models
         public ICollection<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
     }
 
-    public class ProjectDTO
+    public class ProjectCreateDTO
     {
         public required string Name { get; set; }
-        public int ManagerId { get; set; }
+        public required int ManagerId { get; set; }
+    }
+
+    public class ProjectUpdateDTO
+    {
+        public required string Name { get; set; }
+        public int? ManagerId { get; set; }
+
     }
 }
