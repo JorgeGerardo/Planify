@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Planify.Data;
 using Planify.Models;
 using Planify.Repositories;
+using Planify.Repositories.UoW;
 
 namespace Planify.Services
 {

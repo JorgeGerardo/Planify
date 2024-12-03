@@ -1,7 +1,7 @@
 ﻿using Planify.Models;
 using System.Threading.Tasks;
 
-namespace Planify.Repositories
+namespace Planify.Repositories.UoW
 {
     public interface IUserManagementUoW
     {

@@ -5,6 +5,8 @@ namespace Planify.Models
 {
     public class ProjectTask : BaseModel<int>
     {
+        //TODO: Creo que no se debería poder cambiar la tarea a asignarla a otro proyecto
+        // tampoco la fecha de creación
         public Project? Project { get; set; }
         public int ProjectId { get; set; }
         public DateTime? LastUpdateUTC { get; set; }
@@ -38,6 +40,27 @@ namespace Planify.Models
     public enum Priority
     {
         None, Low, Medium, High, Critical
+    }
+
+    public class ProjectTaskCreateDTO
+    {
+        public int ProjectId { get; set; }
+
+        public required Priority Priority { get; set; }
+
+        //Dates:
+        public DateTime? StartDate { get; set; }
+        public DateTime? EstimatedEndDate { get; set; }
+
+        public required string Description { get; set; }
+
+        public ICollection<Employee>? Employees { get; set; } = new List<Employee>();
+    }
+
+
+    public class ProjectTaskUpdateDTO
+    {
+        
     }
 
 }

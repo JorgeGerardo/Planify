@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Planify.Models;
-using Planify.Repositories;
+using Planify.Repositories.UoW;
 using System;
 using System.Threading.Tasks;
 
