@@ -89,13 +89,20 @@ namespace Planify.Controllers
         [HttpPost]
         public virtual async Task<IActionResult> Add([FromBody] TCreateDto createDto)
         {
-            T newEntity = MapToEntity(createDto);
-            await _Repository.Create(newEntity);
-            await _Repository.Save();
-            if (newEntity is null)
-                return StatusCode(500, "Error creating entity.");
+            try {
+                T newEntity = MapToEntity(createDto);
+                await _Repository.Create(newEntity);
+                await _Repository.Save();
 
-            return CreatedAtAction(nameof(GetById), new { newEntity.Id }, newEntity);
+                if (newEntity is null)
+                    return StatusCode(500, "Error creating entity.");
+
+                return CreatedAtAction(nameof(GetById), new { newEntity.Id }, newEntity);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
 
