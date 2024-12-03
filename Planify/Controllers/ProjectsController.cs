@@ -22,10 +22,9 @@ namespace Planify.Controllers
             _repository = repository;
             _employeeRepository = employeeRepository;
         }
-
-
     }
 
+    //Create-Update:
     public partial class ProjectsController
     {
         //Create:
@@ -67,19 +66,54 @@ namespace Planify.Controllers
         }
     }
 
-    //TODO: Deberías hacer un endpoint especifico para eliminar o agregar empleados a un proyecto
+    //Add-remove employees
     public partial class ProjectsController
     {
-        [HttpGet("Prueba")]
-        public async Task<Object> getprueba()
+        [HttpPost("Add-Employee/{id}")]
+        public async Task<ActionResult> AddEmployee(int id, List<int> EmployeesIds)
         {
-            return await _repository.GetAll().Include(p => p.Employees).ToListAsync();
+            Project? project = await _repository.GetById(id);
+
+            if (project is null)
+                return NotFound("El proyecto no existe");
+
+            List<Employee> employees = new List<Employee>();
+            foreach (var employeeId in EmployeesIds)
+            {
+                Employee? employee = await _employeeRepository.GetById(employeeId);
+
+                if (employee is null)
+                    return BadRequest($"El empleado con el id {employeeId} no existe.");
+
+                project.Employees.Add(employee);
+            }
+
+            await _employeeRepository.Save();
+            return NoContent();
         }
 
-        [HttpGet("Add-Employee/{id}")]
-        public async Task<Object> addEmployee(int id, List<int> EmployeesIds)
+        [HttpDelete("Remove-Employee/{id}")]
+        public async Task<ActionResult> RemoveEmployee(int id, List<int> EmployeesIds)
         {
-            return await _repository.GetAll().Include(p => p.Employees).ToListAsync();
+            Project? project = await _repository.GetById(id);
+
+            if (project is null)
+                return NotFound("El proyecto no existe");
+
+            List<Employee> employees = new List<Employee>();
+            foreach (var employeeId in EmployeesIds)
+            {
+                Employee? employee = await _employeeRepository.GetById(employeeId);
+
+                if (employee is null)
+                    return BadRequest($"El empleado con el id {employeeId} no existe.");
+
+                project.Employees.Remove(employee);
+            }
+
+            await _employeeRepository.Save();
+            return NoContent();
         }
+
     }
 }
