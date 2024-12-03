@@ -25,7 +25,7 @@ namespace Planify.Data
 
             SetPersonTable(modelBuilder);
             SetEmployeeTable(modelBuilder);
-            
+
             SetRoleTable(modelBuilder);
             SetProjectTable(modelBuilder);
             SetProjectTaskTable(modelBuilder);
@@ -61,6 +61,9 @@ namespace Planify.Data
         {
             modelBuilder.Entity<Person>(entity =>
             {
+                entity.Property(p => p.Id).HasColumnOrder(0);
+                entity.Property(p => p.Name).HasColumnOrder(1);
+
                 entity.HasData(
                     new Person()
                     {
@@ -72,9 +75,9 @@ namespace Planify.Data
                         Sate = "Sinaloa"
                     }
                 );
+
             });
         }
-
 
         private void SetProjectTable(ModelBuilder modelBuilder)
         {
@@ -86,6 +89,9 @@ namespace Planify.Data
                     .HasForeignKey(e => e.ManagerId)
                     .OnDelete(DeleteBehavior.Restrict);
 
+                entity.Property(p => p.Id).HasColumnOrder(0);
+                entity.Property(p => p.Name).HasColumnOrder(1);
+                entity.Property(p => p.ManagerId).HasColumnOrder(2);
 
                 entity.HasData(
                     new Project()
@@ -111,7 +117,13 @@ namespace Planify.Data
                 entity.Property(p => p.Priority).HasConversion<string>();
                 entity.Property(p => p.Status).HasConversion<string>();
 
-
+                //Order
+                entity.Property(p => p.Id).HasColumnOrder(0);
+                entity.Property(p => p.Name).HasColumnOrder(1);
+                entity.Property(p => p.Priority).HasColumnOrder(2);
+                entity.Property(p => p.Status).HasColumnOrder(3);
+                entity.Property(p => p.Description).HasColumnOrder(4);
+                entity.Property(p => p.Comments).HasColumnOrder(5);
 
                 entity.HasData(
                     new ProjectTask()
@@ -133,7 +145,14 @@ namespace Planify.Data
             });
         }
 
-        private void SetRoleTable(ModelBuilder modelBuilder) { }
+        private void SetRoleTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Role>(roles =>
+            {
+                roles.Property(p => p.Id).HasColumnOrder(0);
+                roles.Property(p => p.Name).HasColumnOrder(1);
+            });
+        }
 
         private void SetEmployeeTable(ModelBuilder modelBuilder)
         {
@@ -151,6 +170,12 @@ namespace Planify.Data
 
             modelBuilder.Entity<Employee>(entity =>
             {
+                entity.Property(p => p.Id).HasColumnOrder(0);
+                entity.Property(p => p.Name).HasColumnOrder(1);
+                entity.Property(p => p.UserId).HasColumnOrder(2);
+                entity.Property(p => p.PersonId).HasColumnOrder(3);
+                entity.Property(p => p.HireDate).HasColumnOrder(4);
+
                 entity.HasData(
                     new Employee()
                     {
@@ -176,6 +201,6 @@ namespace Planify.Data
                 );
             });
         }
-    
+
     }
 }
