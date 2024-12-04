@@ -6,6 +6,7 @@ using Planify.Data;
 using Planify.Models;
 using Planify.Repositories;
 using Planify.Repositories.UoW;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace Planify.Services
 {
@@ -18,9 +19,12 @@ namespace Planify.Services
             builder.Services.AddScoped<IGenericCRUDRepository<Employee, int>, EmployeeRepository>();
             builder.Services.AddScoped<IGenericCRUDRepository<Person, int>, PersonRepository>();
             builder.Services.AddScoped<IGenericCRUDRepository<User, int>, UserRepository>();
-            builder.Services.AddScoped<IGenericCRUDRepository<Models.Project, int>, ProjectRepository>();
+            builder.Services.AddScoped<IGenericCRUDRepository<Project, int>, ProjectRepository>();
+            builder.Services.AddScoped<IGenericCRUDRepository<ProjectTask, int>, ProjectTaskRepository>();
+
             //Unit of work:
             builder.Services.AddScoped<IUserManagementUoW, UserManagementUoW>();
+            builder.Services.AddScoped<IProjectManagement_UoW, ProjectManagement_UoW>();
         }
 
 
@@ -28,6 +32,15 @@ namespace Planify.Services
         {
             var SqlConnection = builder.Configuration.GetConnectionString("SqlServerCon");
             builder.Services.AddDbContext<ProjectContext>(option => option.UseSqlServer(SqlConnection));
+        }
+
+        public static void SetSwagger(WebApplication? app)
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.DocExpansion(DocExpansion.None); // Colapsa los endpoints
+            });
         }
     }
 }
