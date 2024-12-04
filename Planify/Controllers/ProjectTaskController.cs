@@ -68,4 +68,22 @@ namespace Planify.Controllers
         }
     }
 
+    public partial class ProjectTaskController
+    {
+        [HttpGet("Sarampionloco")]
+        public async Task<Object> met()
+        {
+            ProjectTaskComentary v = new ProjectTaskComentary()
+            {
+                Comentary = "Hola a todos",
+                EmployeeId = 1,
+                ProjectTaskId = 1
+                
+
+            };
+            await UoW.projectTasksComentaries.Create(v);
+            return await UoW.SaveAsync();
+        }
+    }
+
 }

@@ -5,9 +5,6 @@ namespace Planify.Models
 {
     public class ProjectTask : BaseModel<int>
     {
-        //TODO: Creo que no se debería poder cambiar la tarea a asignarla a otro proyecto
-        // tampoco la fecha de creación
-
         //Nav properties
         public Project? Project { get; set; }
         public int ProjectId { get; set; }
@@ -27,6 +24,8 @@ namespace Planify.Models
 
         public TaskStatus Status { get; set; } = TaskStatus.Pending;
         public required Priority Priority { get; set; }
+
+        public ICollection<ProjectTaskComentary> Comentaries { get; set; } = new List<ProjectTaskComentary>();
 
     }
 
@@ -56,6 +55,7 @@ namespace Planify.Models
         public DateOnly EstimatedEndDate { get; set; }
 
         public required string Description { get; set; }
+
     }
 
 

@@ -15,6 +15,7 @@ namespace Planify.Data
         public DbSet<ProjectTask> ProjectTasks { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<ProjectTaskComentary> Comentaries { get; set; }
     }
 
     public partial class ProjectContext : DbContext
@@ -30,6 +31,7 @@ namespace Planify.Data
             SetProjectTable(modelBuilder);
             SetProjectTaskTable(modelBuilder);
             SetQueryFilters(modelBuilder);
+            SetProjectTaskComentaryTable(modelBuilder);
         }
 
         private void SetQueryFilters(ModelBuilder modelBuilder)
@@ -53,6 +55,9 @@ namespace Planify.Data
                 .HasQueryFilter(p => !p.IsDeleted);
 
             modelBuilder.Entity<User>()
+                .HasQueryFilter(p => !p.IsDeleted);
+
+            modelBuilder.Entity<ProjectTaskComentary>()
                 .HasQueryFilter(p => !p.IsDeleted);
 
         }
@@ -133,6 +138,7 @@ namespace Planify.Data
                         Name = "Actividad 1",
                         Priority = Priority.Critical,
                         Description = "Realizar ...",
+                        //TODO: Falta quitar esto del modelo:
                         Comments = new List<string>{
                             "Comentario 1",
                             "Comentario 2",
@@ -202,5 +208,30 @@ namespace Planify.Data
             });
         }
 
+        private void SetProjectTaskComentaryTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProjectTaskComentary>().ToTable("ProjectTaskComentaries");
+
+            modelBuilder.Entity<ProjectTaskComentary>()
+                .HasOne(ptc => ptc.ProjectTask)
+                .WithMany(pt => pt.Comentaries)
+                .HasForeignKey(ptc => ptc.ProjectTaskId);
+
+            modelBuilder.Entity<ProjectTaskComentary>()
+                .HasOne(ptc => ptc.Author)
+                .WithMany()
+                .HasForeignKey(ptc => ptc.EmployeeId);
+
+            modelBuilder.Entity<ProjectTaskComentary>(entity =>
+            {
+                entity.Property(p => p.Comentary).HasMaxLength(255);
+
+                entity.Property(p => p.Id).HasColumnOrder(0);
+                entity.Property(p => p.ProjectTaskId).HasColumnOrder(1);
+                entity.Property(p => p.EmployeeId).HasColumnOrder(2);
+                entity.Property(p => p.Comentary).HasColumnOrder(3);
+            });
+
+        }
     }
 }
