@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Planify.Models;
 using Planify.Repositories;
 using Planify.Repositories.UoW;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Planify.Controllers
@@ -68,22 +70,49 @@ namespace Planify.Controllers
         }
     }
 
+    //Assign-Unassign employees
     public partial class ProjectTaskController
     {
-        [HttpGet("Sarampionloco")]
-        public async Task<Object> met()
+        [HttpPatch("assign-employees/{id}")]
+        public async Task<ActionResult> AssignEmployees(int id, List<int> EmployeesIds)
         {
-            ProjectTaskComentary v = new ProjectTaskComentary()
-            {
-                Comentary = "Hola a todos",
-                EmployeeId = 1,
-                ProjectTaskId = 1
-                
+            var task = await UoW.projectTasks.GetById(id);
+            if (task == null) return NotFound("La tarea no se encontró.");
 
-            };
-            await UoW.projectTasksComentaries.Create(v);
-            return await UoW.SaveAsync();
+            foreach (var employeeId in EmployeesIds)
+            {
+                Employee? e = await UoW.Employees.GetById(employeeId);
+                if (e is null)
+                    return NotFound($"El usuario con el id {employeeId} no existe. " +
+                        $"Ningún cambio fue realizado.");
+                task.Employees.Add(e);
+            }
+
+            await UoW.SaveAsync();
+            return NoContent();
         }
+
+        [HttpDelete("unassign-employees/{id}")]
+        public async Task<ActionResult> UnassignEmployees(int id, List<int> EmployeesIds)
+        {
+            var task = await UoW.projectTasks.GetById(id);
+            if (task is null) return NotFound("La tarea no se encontró.");
+
+            foreach (var employeeId in EmployeesIds)
+            {
+                Employee? e = await UoW.Employees.GetById(employeeId);
+                if (e == null)
+                    return NotFound($"El usuario con el id {employeeId} no existe. " +
+                        $"Ningún cambio fue realizado.");
+                task.Employees.Remove(e);
+            }
+
+            await UoW.SaveAsync();
+            return NoContent();
+        }
+
+
+
     }
 
 }

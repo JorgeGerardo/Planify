@@ -7,6 +7,8 @@ namespace Planify.Repositories
     {
         //private string[] NavProperties = [nameof(ProjectTask.Employees), nameof(ProjectTask.Project)];
         //public override string[] _NavigationProperties { get => NavProperties; }
+        private string[] NavProperties = [nameof(ProjectTask.Employees), nameof(ProjectTask.Project), nameof(ProjectTask.Comentaries)];
+        public override string[] _NavigationProperties { get => NavProperties; }
 
         public ProjectTaskRepository(ProjectContext context) : base(context) { }
     }
