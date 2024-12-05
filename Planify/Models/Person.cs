@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Planify.Models
 {
@@ -10,6 +11,7 @@ namespace Planify.Models
         public required string City { get; set; }
         public required string Sate { get; set; }
         public required string Country { get; set; }
+        [JsonIgnore]
         public Employee? Employee { get; set; }
 
         [RegularExpression(@"^\+?[0-9]{10,15}$", ErrorMessage = "Invalid phone number format.")]

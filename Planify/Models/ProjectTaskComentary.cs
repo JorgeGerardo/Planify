@@ -1,13 +1,15 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Planify.Models
 {
     public class ProjectTaskComentary : DbBaseModel<int>
     {
+        [JsonIgnore]
         public ProjectTask? ProjectTask { get; set; }
         public int ProjectTaskId { get; set; }
-
+        [JsonIgnore]
         public Employee? Author { get; set; }
         public int EmployeeId { get; set; }
 

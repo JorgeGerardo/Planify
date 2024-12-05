@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Planify.Models
 {
@@ -10,7 +11,9 @@ namespace Planify.Models
         [EmailAddress]
         public required string Email { get; set; }
         public required string HashPassword { get; set; }
+        [JsonIgnore]
         public Employee? Employee { get; set; }
+        [JsonIgnore]
         public ICollection<Role> Roles { get; set; } = new List<Role>();
     }
 

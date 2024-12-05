@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Planify.Models
 {
     public class ProjectTask : BaseModel<int>
     {
         //Nav properties
+        [JsonIgnore]
         public Project? Project { get; set; }
         public int ProjectId { get; set; }
+        [JsonIgnore]
         public ICollection<Employee> Employees { get; set; } = new List<Employee>();
 
         public bool IsCompleted { get; set; } = false;
         public required string Description { get; set; }
+        //TODO: Remueve esto del modelo
         public List<string> Comments { get; set; } = new List<string>();
 
 
@@ -25,6 +29,7 @@ namespace Planify.Models
         public TaskStatus Status { get; set; } = TaskStatus.Pending;
         public required Priority Priority { get; set; }
 
+        [JsonIgnore]
         public ICollection<ProjectTaskComentary> Comentaries { get; set; } = new List<ProjectTaskComentary>();
 
     }
