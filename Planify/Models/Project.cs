@@ -5,8 +5,6 @@ namespace Planify.Models
 {
     public class Project : BaseModel<int>
     {
-        //TODO: Deberías cambiarlo a Required dado que deberías verificar si
-        // existe el Employee y en otros modelos si no esta asignado a otros modelos.
         [JsonIgnore]
         public Employee? Manager { get; set; }
         public int ManagerId { get; set; }

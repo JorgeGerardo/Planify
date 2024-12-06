@@ -5,7 +5,6 @@ namespace Planify.Models
 {
     public class Employee : BaseModel<int>
     {
-        //TODO: Deberías agregar required? no lo se, averigualo
         [JsonIgnore]
         public User? User { get; set; }
         public int UserId { get; set; }
@@ -13,7 +12,6 @@ namespace Planify.Models
         [JsonIgnore]
         public Person? Person { get; set; }
         public int PersonId { get; set; }
-        //TODO: Ignora todas las propiedades de navegación y verifica la API
         [JsonIgnore]
         public ICollection<Department> Departments { get; set; } = new List<Department>();
         [JsonIgnore]
