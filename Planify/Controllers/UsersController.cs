@@ -14,7 +14,6 @@ namespace Planify.Controllers
     [ApiController]
     public partial class UsersController : GenericController<User, UserRepository, UserCreateDTO, UserUpdateDTO>
     {
-        //private readonly IGenericCRUDRepository<User, int> _repository;
         private readonly IConfiguration _configuration;
         private readonly ProjectContext _context;
 
@@ -24,13 +23,12 @@ namespace Planify.Controllers
             ProjectContext context)
         : base(_Repository)
         {
-            //_repository = _Repository;
             _configuration = configuration;
             _context = context;
         }
     }
 
-    //Maps
+    //Map models
     public partial class UsersController : GenericController<User, UserRepository, UserCreateDTO, UserUpdateDTO>
     {
         //Create:
@@ -79,17 +77,6 @@ namespace Planify.Controllers
             return currentState;
         }
 
-        private async Task<bool> CheckCredentials(int id, string password)
-        {
-            Console.WriteLine(AuthService.EncrypBySHA256(password));
-
-            string hashPassword = AuthService.EncrypBySHA256(password);
-
-            User? existingUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == id && u.HashPassword == hashPassword);
-
-            return existingUser is null ? false : true;
-        }
     }
 
     //Login
@@ -112,6 +99,23 @@ namespace Planify.Controllers
                 StatusCode(500);
         }
     }
+
+    //Extra tools
+    public partial class UsersController
+    {
+        private async Task<bool> CheckCredentials(int id, string password)
+        {
+            Console.WriteLine(AuthService.EncrypBySHA256(password));
+
+            string hashPassword = AuthService.EncrypBySHA256(password);
+
+            User? existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id && u.HashPassword == hashPassword);
+
+            return existingUser is null ? false : true;
+        }
+    }
+
 
 
 }
