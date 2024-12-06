@@ -15,8 +15,6 @@ namespace Planify.Models
 
         public bool IsCompleted { get; set; } = false;
         public required string Description { get; set; }
-        //TODO: Remueve esto del modelo
-        public List<string> Comments { get; set; } = new List<string>();
 
 
         //Dates:

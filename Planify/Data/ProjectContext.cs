@@ -128,7 +128,6 @@ namespace Planify.Data
                 entity.Property(p => p.Priority).HasColumnOrder(2);
                 entity.Property(p => p.Status).HasColumnOrder(3);
                 entity.Property(p => p.Description).HasColumnOrder(4);
-                entity.Property(p => p.Comments).HasColumnOrder(5);
 
                 entity.HasData(
                     new ProjectTask()
@@ -138,14 +137,6 @@ namespace Planify.Data
                         Name = "Actividad 1",
                         Priority = Priority.Critical,
                         Description = "Realizar ...",
-                        //TODO: Falta quitar esto del modelo:
-                        Comments = new List<string>{
-                            "Comentario 1",
-                            "Comentario 2",
-                            "Comentario 3",
-                            "Comentario 4"
-                        },
-
                     }
                 );
             });
