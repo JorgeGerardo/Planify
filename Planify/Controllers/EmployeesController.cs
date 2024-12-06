@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Planify.Models;
 using Planify.Repositories;
 using Planify.Repositories.UoW;
@@ -10,14 +9,14 @@ namespace Planify.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public partial class EmployeeController : GenericController<Employee, EmployeeRepository, EmployeeCreateDTO, EmployeeUpdateDTO>
+    public partial class EmployeesController : GenericController<Employee, EmployeeRepository, EmployeeCreateDTO, EmployeeUpdateDTO>
     {
         private readonly IUserManagementUoW UOW;
-        public EmployeeController(IUserManagementUoW uow) : base(uow.Employees) =>
+        public EmployeesController(IUserManagementUoW uow) : base(uow.Employees) =>
             UOW = uow;
     }
 
-    public partial class EmployeeController : GenericController<Employee, EmployeeRepository, EmployeeCreateDTO, EmployeeUpdateDTO>
+    public partial class EmployeesController : GenericController<Employee, EmployeeRepository, EmployeeCreateDTO, EmployeeUpdateDTO>
     {
         protected override Employee MapToEntity(EmployeeCreateDTO dto) =>
             MapToEntityAsync(dto).GetAwaiter().GetResult();

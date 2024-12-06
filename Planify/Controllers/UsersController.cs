@@ -6,8 +6,6 @@ using Planify.Models;
 using Planify.Repositories;
 using Planify.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Planify.Controllers
