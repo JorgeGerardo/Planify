@@ -8,7 +8,7 @@ namespace Planify.Controllers
     [ApiController]
     public class ExperimentalController : ControllerBase
     {
-        [HttpGet("Ijuesuchingadamadre")]
+        [HttpGet("experiments")]
         [Authorize]
         public void get()
         {
