@@ -16,14 +16,20 @@ builder.Services.AddControllers()
     });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
+BuilderConfigurationService.SetSwaggerGen(builder);
 
 //Scopes:
 BuilderConfigurationService.SetScopes(builder);
 
+//Auth
+BuilderConfigurationService.SetAuthentication(builder);
+
 BuilderConfigurationService.AddSqlServer(builder);
 
 var app = builder.Build();
+app.UseAuthentication();
+app.UseAuthentication();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

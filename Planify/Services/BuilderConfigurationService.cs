@@ -1,12 +1,18 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Planify.Data;
 using Planify.Models;
 using Planify.Repositories;
 using Planify.Repositories.UoW;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System;
+using System.Security.Claims;
+using System.Text;
 
 namespace Planify.Services
 {
@@ -35,6 +41,38 @@ namespace Planify.Services
             builder.Services.AddDbContext<ProjectContext>(option => option.UseSqlServer(SqlConnection));
         }
 
+        public static void SetSwaggerGen(WebApplicationBuilder builder)
+        {
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Jorguito API", Version = "v1" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
+            });
+
+        }
         public static void SetSwagger(WebApplication? app)
         {
             app.UseSwagger();
@@ -42,6 +80,30 @@ namespace Planify.Services
             {
                 c.DocExpansion(DocExpansion.None); // Colapsa los endpoints
             });
+        }
+
+        public static void SetAuthentication(WebApplicationBuilder builder)
+        {
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+
+                        ValidIssuer = builder.Configuration["JWT:Issuer"],
+                        ValidAudience = builder.Configuration["JWT:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                                Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)
+                        ),
+
+                        ClockSkew = TimeSpan.Zero,
+                        NameClaimType = "UserId",
+                        RoleClaimType = ClaimTypes.Role,
+                    }
+                );
         }
     }
 }
