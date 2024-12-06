@@ -35,11 +35,8 @@ namespace Planify.Models
 
         [MinLength(8, ErrorMessage = "The password must be 8 characters or more.")]
         [MaxLength(32, ErrorMessage = "Password must be 32 characters maximum.")]
-        public string? Password { get; set; }
+        public required string Password { get; set; }
         public string? NewPassword { get; set; }
-
-        public int? EmployeeId { get; set; }
-
     }
 
 }

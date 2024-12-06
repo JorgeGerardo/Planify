@@ -14,7 +14,7 @@ namespace Planify.Controllers
     [ApiController]
     public partial class UsersController : GenericController<User, UserRepository, UserCreateDTO, UserUpdateDTO>
     {
-        private readonly IGenericCRUDRepository<User, int> _repository;
+        //private readonly IGenericCRUDRepository<User, int> _repository;
         private readonly IConfiguration _configuration;
         private readonly ProjectContext _context;
 
@@ -24,7 +24,7 @@ namespace Planify.Controllers
             ProjectContext context)
         : base(_Repository)
         {
-            _repository = _Repository;
+            //_repository = _Repository;
             _configuration = configuration;
             _context = context;
         }
@@ -33,8 +33,17 @@ namespace Planify.Controllers
     //Maps
     public partial class UsersController : GenericController<User, UserRepository, UserCreateDTO, UserUpdateDTO>
     {
-        protected override User MapToEntity(UserCreateDTO dto)
+        //Create:
+        protected override User MapToEntity(UserCreateDTO dto) =>
+            MapToEntityAsync(dto).GetAwaiter().GetResult();
+
+        protected async override Task<User> MapToEntityAsync(UserCreateDTO dto)
         {
+            bool emailIsRegistered = await _Repository.ExistAsync(u => u.Email.Equals(dto.Email));
+
+            if (emailIsRegistered)
+                throw new Exception("El email ya ha sido registrado en otra cuenta.");
+
             return new User
             {
                 Email = dto.Email,
@@ -42,12 +51,14 @@ namespace Planify.Controllers
             };
         }
 
-        protected override User MapToUpdateEntity(User currentState, UserUpdateDTO dto)
-        {
-            if (dto.Password is null)
-                throw new Exception("Proporcione la contraseña.");
 
-            bool CredentialsCorrect = CheckCredentials(currentState.Id, dto.Password).GetAwaiter().GetResult();
+        //Update:
+        protected override User MapToUpdateEntity(User currentState, UserUpdateDTO dto) =>
+            MapToUpdateEntityAsync(currentState, dto).GetAwaiter().GetResult();
+
+        protected async override Task<User> MapToUpdateEntityAsync(User currentState, UserUpdateDTO dto)
+        {
+            bool CredentialsCorrect = await CheckCredentials(currentState.Id, dto.Password);
 
             if (!CredentialsCorrect)
                 throw new Exception("Credenciales incorrectas.");
@@ -55,11 +66,15 @@ namespace Planify.Controllers
             if (dto.NewPassword is not null)
                 currentState.HashPassword = AuthService.EncrypBySHA256(dto.NewPassword);
 
-            if (dto.Email is null && dto.NewPassword is null)
-                throw new Exception("Proporcione el nuevo correo electrónico.");
-
             if (dto.Email is not null)
+            {
+                bool emailIsRegistered = await _Repository.ExistAsync(u => u.Email.Equals(dto.Email));
+
+                if (emailIsRegistered)
+                    throw new Exception("El email ya ha sido registrado en otra cuenta.");
+
                 currentState.Email = dto.Email;
+            }
 
             return currentState;
         }
@@ -73,9 +88,7 @@ namespace Planify.Controllers
             User? existingUser = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id && u.HashPassword == hashPassword);
 
-            if (existingUser is null) return false;
-
-            return true;
+            return existingUser is null ? false : true;
         }
     }
 
