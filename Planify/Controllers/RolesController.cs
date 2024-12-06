@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Planify.Models;
 using Planify.Repositories;
 using System.Collections.Generic;
@@ -8,15 +9,14 @@ namespace Planify.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //GET's
+    [Authorize]
     public partial class RolesController : GenericController<Role, RoleRepository, RoleDTO, RoleDTO>
     {
         private readonly IGenericCRUDRepository<User, int> _UsersRepository;
         public RolesController(IGenericCRUDRepository<Role, int> _Repository,
             IGenericCRUDRepository<User, int> userRepository) : base(_Repository) {
-            this._UsersRepository = userRepository;
+            _UsersRepository = userRepository;
         }
-        //public RolesController(IGenericCRUDRepository<Role, int> _Repository) : base(_Repository) { }
 
 
         protected override Role MapToEntity(RoleDTO dto) =>
@@ -32,7 +32,7 @@ namespace Planify.Controllers
         public async Task<ActionResult> AsignRole(int userId, List<int> rolesId)
         {
             User? user = await _UsersRepository.GetById(userId);
-
+            
             if (user is null)
                 return NotFound("El usuario no existe.");
 

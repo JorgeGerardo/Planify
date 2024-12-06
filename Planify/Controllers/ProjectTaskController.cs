@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Planify.Models;
 using Planify.Repositories;
 using Planify.Repositories.UoW;
@@ -10,6 +11,7 @@ namespace Planify.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public partial class ProjectTaskController : GenericController<ProjectTask, ProjectTaskRepository, ProjectTaskCreateDTO, ProjectTaskUpdateDTO>
     {
         private readonly IProjectManagement_UoW UoW;
@@ -18,6 +20,7 @@ namespace Planify.Controllers
         { UoW = uow; }
     }
 
+    //Mpas
     public partial class ProjectTaskController
     {
         //Create:

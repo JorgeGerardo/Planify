@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Planify.Models;
 using Planify.Repositories;
 
@@ -6,6 +7,7 @@ namespace Planify.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PersonsController : GenericController<Person, PersonRepository, PersonDTO, PersonUpdateDTO>
     {
         public PersonsController(IGenericCRUDRepository<Person, int> _Repository) :
