@@ -99,13 +99,13 @@ namespace Planify.Repositories
         public async Task<bool> ExistAsync(Expression<Func<T, bool>> condition) =>
             await _entitiesNav.AnyAsync(condition);
 
-        public async Task<T?> EntityWithAsync(Expression<Func<T, bool>> condition) =>
+        public async Task<T?> GetFirstByConditionAsync(Expression<Func<T, bool>> condition) =>
             await _entitiesNav.FirstOrDefaultAsync(condition);
 
-        public async Task<IEnumerable<T>> EntitiesWithAsync(Expression<Func<T, bool>> condition) =>
+        public async Task<IEnumerable<T>> GetByConditionAsync(Expression<Func<T, bool>> condition) =>
             await _entitiesNav.Where(condition).ToListAsync();
 
-        public IQueryable<T> GetAllWithoutFiltters() => 
+        public IQueryable<T> GetAllNoFilters() => 
             _entitiesNav.IgnoreQueryFilters();
 
         public IQueryable<T> GetDeletedEntities() => 

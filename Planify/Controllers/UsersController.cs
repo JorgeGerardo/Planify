@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Planify.Data;
@@ -83,6 +84,7 @@ namespace Planify.Controllers
     public partial class UsersController : GenericController<User, UserRepository, UserCreateDTO, UserUpdateDTO>
     {
         [HttpPost("/Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(UserCreateDTO credentials)
         {
             string hashPassword = AuthService.EncrypBySHA256(credentials.Password);

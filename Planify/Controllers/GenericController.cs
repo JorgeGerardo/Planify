@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Planify.Models;
 using Planify.Repositories;
 using Planify.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
 
 namespace Planify.Controllers
 {
+    [Authorize]
     public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO> : ControllerBase
         where T : DbBaseModel<int>
         where TRepository : IGenericCRUDRepository<T, int>
@@ -23,9 +25,9 @@ namespace Planify.Controllers
 
         [HttpGet("No-filtters")]
         public virtual async Task<IEnumerable<T>> GetWithoutFiltters() =>
-            await _Repository.GetAllWithoutFiltters().ToListAsync();
+            await _Repository.GetAllNoFilters().ToListAsync();
 
-        [HttpGet("deleted")]
+        [HttpGet("delete")]
         public virtual async Task<IEnumerable<T>> GetEntitiesDeleted() =>
             await _Repository.GetDeletedEntities().ToListAsync();
 
@@ -38,19 +40,18 @@ namespace Planify.Controllers
             return res is not null ? res : NotFound();
         }
 
-
-
     }
 
 
+    //Map entity
     public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
     {
-        //Post
+        //Create
         protected abstract T MapToEntity(TCreateDto dto);
         protected virtual Task<T> MapToEntityAsync(TCreateDto dto) =>
             Task.FromResult(MapToEntity(dto));
 
-        //Put
+        //Update
         protected abstract T MapToUpdateEntity(T currentState, TUpdateDTO dto);
         protected virtual Task<T> MapToUpdateEntityAsync(T currentState, TUpdateDTO dto) =>
             Task.FromResult(MapToUpdateEntity(currentState, dto));
@@ -121,7 +122,7 @@ namespace Planify.Controllers
             return res ? NoContent() : NotFound();
         }
 
-        [HttpDelete("remove-soft-delete/{id}")]
+        [HttpPut("restore/{id}")]
         public virtual async Task<IActionResult> RemoveSoftDelete(int id)
         {
             bool res = await _Repository.RemoveSoftDelete(id);
@@ -130,7 +131,7 @@ namespace Planify.Controllers
             return res ? NoContent() : NotFound();
         }
 
-        [HttpDelete("hardDelete/{id}")]
+        [HttpDelete("hard/{id}")]
         public virtual async Task<IActionResult> HardDelete(int id)
         {
             bool res = await _Repository.HardDelete(id);

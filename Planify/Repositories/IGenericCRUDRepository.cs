@@ -12,13 +12,13 @@ namespace Planify.Repositories
         Task<T> Create(T entity);
 
         IQueryable<T> GetAll();
-        IQueryable<T> GetAllWithoutFiltters();
+        IQueryable<T> GetAllNoFilters();
         IQueryable<T> GetDeletedEntities();
         Task<T?> GetById(TID id);
         Task<bool> Exist(TID id);
         Task<bool> ExistAsync(Expression<Func<T, bool>> condition);
-        Task<T?> EntityWithAsync(Expression<Func<T, bool>> condition);
-        Task<IEnumerable<T>> EntitiesWithAsync(Expression<Func<T, bool>> condition);
+        Task<T?> GetFirstByConditionAsync(Expression<Func<T, bool>> condition);
+        Task<IEnumerable<T>> GetByConditionAsync(Expression<Func<T, bool>> condition);
 
         void Updated(T entity);
         Task<bool> SoftDelete(TID id);
