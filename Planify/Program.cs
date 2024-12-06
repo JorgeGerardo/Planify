@@ -22,16 +22,13 @@ BuilderConfigurationService.AddSqlServer(builder);
 
 var app = builder.Build();
 app.UseAuthentication();
-app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
     BuilderConfigurationService.SetSwaggerConfig(app);
 
+
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
