@@ -16,7 +16,9 @@ using System.Text;
 
 namespace Planify.Services
 {
-    public static class BuilderConfigurationService
+
+    //DI Config and DB connection
+    public static partial class BuilderConfigurationService
     {
         public static void SetScopes(WebApplicationBuilder builder)
         {
@@ -41,11 +43,46 @@ namespace Planify.Services
             builder.Services.AddDbContext<ProjectContext>(option => option.UseSqlServer(SqlConnection));
         }
 
+    }
+
+    //Authentication Scheme Config
+    public static partial class BuilderConfigurationService
+    {
+        public static void SetAuthenticationScheme(WebApplicationBuilder builder)
+        {
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+
+                        ValidIssuer = builder.Configuration["JWT:Issuer"],
+                        ValidAudience = builder.Configuration["JWT:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                                Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)
+                        ),
+
+                        ClockSkew = TimeSpan.Zero,
+                        NameClaimType = "UserId",
+                        RoleClaimType = ClaimTypes.Role,
+                    }
+                );
+        }
+
+
+    }
+
+    //Swagger config
+    public static partial class BuilderConfigurationService
+    {
         public static void SetSwaggerGen(WebApplicationBuilder builder)
         {
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Jorguito API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Planify", Version = "v1" });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -73,7 +110,8 @@ namespace Planify.Services
             });
 
         }
-        public static void SetSwagger(WebApplication? app)
+
+        public static void SetSwaggerConfig(WebApplication? app)
         {
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -81,29 +119,7 @@ namespace Planify.Services
                 c.DocExpansion(DocExpansion.None); // Colapsa los endpoints
             });
         }
-
-        public static void SetAuthentication(WebApplicationBuilder builder)
-        {
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-
-                        ValidIssuer = builder.Configuration["JWT:Issuer"],
-                        ValidAudience = builder.Configuration["JWT:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                                Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]!)
-                        ),
-
-                        ClockSkew = TimeSpan.Zero,
-                        NameClaimType = "UserId",
-                        RoleClaimType = ClaimTypes.Role,
-                    }
-                );
-        }
     }
+
+
 }

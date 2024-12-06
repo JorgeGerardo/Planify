@@ -16,7 +16,7 @@ BuilderConfigurationService.SetSwaggerGen(builder);
 BuilderConfigurationService.SetScopes(builder);
 
 //Auth
-BuilderConfigurationService.SetAuthentication(builder);
+BuilderConfigurationService.SetAuthenticationScheme(builder);
 
 BuilderConfigurationService.AddSqlServer(builder);
 
@@ -26,7 +26,7 @@ app.UseAuthentication();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-    BuilderConfigurationService.SetSwagger(app);
+    BuilderConfigurationService.SetSwaggerConfig(app);
 
 app.UseHttpsRedirection();
 
