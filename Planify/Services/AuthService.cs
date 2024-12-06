@@ -35,7 +35,8 @@ namespace Planify.Services
         {
             return new List<Claim>()
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim("UserId", user.Id.ToString()),
+                //new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, EpochTime.GetIntDate(DateTime.UtcNow).ToString()),
             };
