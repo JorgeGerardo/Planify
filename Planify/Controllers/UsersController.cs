@@ -88,7 +88,7 @@ namespace Planify.Controllers
         public async Task<IActionResult> Login(UserCreateDTO credentials)
         {
             string hashPassword = AuthService.EncrypBySHA256(credentials.Password);
-            User? existingUser = await _context.Users.Include(p => p.Roles)
+            User? existingUser = await _context.Users.Include(p => p.Roles).Include(p => p.Permisions)
                 .FirstOrDefaultAsync(u => u.Email == credentials.Email && u.HashPassword == hashPassword);
 
             if (existingUser is null)
