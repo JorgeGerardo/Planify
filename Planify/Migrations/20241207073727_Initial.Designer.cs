@@ -12,7 +12,7 @@ using Planify.Data;
 namespace Planify.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    [Migration("20241204062855_Initial")]
+    [Migration("20241207073727_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -68,6 +68,48 @@ namespace Planify.Migrations
                     b.HasIndex("TasksId");
 
                     b.ToTable("EmployeeProjectTask");
+                });
+
+            modelBuilder.Entity("PermisionsUser", b =>
+                {
+                    b.Property<int>("PermisionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PermisionsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("PermisionsUser");
+
+                    b.HasData(
+                        new
+                        {
+                            PermisionsId = 1,
+                            UsersId = 1
+                        },
+                        new
+                        {
+                            PermisionsId = 2,
+                            UsersId = 1
+                        },
+                        new
+                        {
+                            PermisionsId = 3,
+                            UsersId = 1
+                        },
+                        new
+                        {
+                            PermisionsId = 4,
+                            UsersId = 1
+                        },
+                        new
+                        {
+                            PermisionsId = 2,
+                            UsersId = 2
+                        });
                 });
 
             modelBuilder.Entity("Planify.Models.Department", b =>
@@ -147,12 +189,69 @@ namespace Planify.Migrations
                         new
                         {
                             Id = 1,
-                            HireDate = new DateOnly(1, 1, 1),
+                            HireDate = new DateOnly(2022, 5, 1),
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Jorguito",
                             PersonId = 1,
                             UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            HireDate = new DateOnly(2020, 11, 1),
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Anita",
+                            PersonId = 2,
+                            UserId = 2
+                        });
+                });
+
+            modelBuilder.Entity("Planify.Models.Permisions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permisions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Permiso para crear.",
+                            Name = "create"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Permiso para leer.",
+                            Name = "read"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Permiso para editar.",
+                            Name = "edit"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Permiso para eliminar.",
+                            Name = "delete"
                         });
                 });
 
@@ -218,6 +317,18 @@ namespace Planify.Migrations
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Jorguito",
                             Sate = "Sinaloa"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BornDate = new DateOnly(1, 1, 1),
+                            City = "Culiacan",
+                            Country = "México",
+                            IsDeleted = false,
+                            LastNames = "Argon Lazaro",
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Ana",
+                            Sate = "Sinaloa"
                         });
                 });
 
@@ -274,11 +385,6 @@ namespace Planify.Migrations
                         .HasColumnOrder(0);
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Comments")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(5);
 
                     b.Property<TimeOnly?>("CompleteDate")
                         .HasColumnType("time");
@@ -338,8 +444,7 @@ namespace Planify.Migrations
                         new
                         {
                             Id = 1,
-                            Comments = "[\"Comentario 1\",\"Comentario 2\",\"Comentario 3\",\"Comentario 4\"]",
-                            CreatedDateUTC = new DateTime(2024, 12, 4, 6, 28, 54, 399, DateTimeKind.Utc).AddTicks(3315),
+                            CreatedDateUTC = new DateTime(2024, 12, 7, 7, 37, 26, 439, DateTimeKind.Utc).AddTicks(89),
                             Description = "Realizar ...",
                             EstimatedEndDate = new DateOnly(1, 1, 1),
                             IsCompleted = false,
@@ -468,6 +573,14 @@ namespace Planify.Migrations
                             HashPassword = "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce",
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "anitaanita@hotmail.com",
+                            HashPassword = "f0e50d441e11ee6fe5d8724d0e530e57df21f51d283009f7899b1ea47a26240e",
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -527,6 +640,21 @@ namespace Planify.Migrations
                     b.HasOne("Planify.Models.ProjectTask", null)
                         .WithMany()
                         .HasForeignKey("TasksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PermisionsUser", b =>
+                {
+                    b.HasOne("Planify.Models.Permisions", null)
+                        .WithMany()
+                        .HasForeignKey("PermisionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Planify.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -16,6 +16,7 @@ namespace Planify.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<ProjectTaskComentary> Comentaries { get; set; }
+        public DbSet<Permisions> Permisions { get; set; }
     }
 
     public partial class ProjectContext : DbContext
@@ -25,6 +26,7 @@ namespace Planify.Data
             base.OnModelCreating(modelBuilder);
 
             SetPersonTable(modelBuilder);
+            SetUserTable(modelBuilder);
             SetEmployeeTable(modelBuilder);
 
             SetRoleTable(modelBuilder);
@@ -32,6 +34,19 @@ namespace Planify.Data
             SetProjectTaskTable(modelBuilder);
             SetQueryFilters(modelBuilder);
             SetProjectTaskComentaryTable(modelBuilder);
+            SetPermisionsTable(modelBuilder);
+
+            //modelBuilder.Entity<User>()
+            //    .HasMany(u => u.Permisions)
+            //    .WithMany(p => p.Users)
+            //    .UsingEntity(j => j.HasData(
+            //        new { UsersId = 1, PermisionsId = 1 },
+            //        new { UsersId = 1, PermisionsId = 2 },
+            //        new { UsersId = 1, PermisionsId = 3 },
+            //        new { UsersId = 1, PermisionsId = 4 },
+            //        new { UsersId = 2, PermisionsId = 2 }
+            //    ));
+
         }
 
         private void SetQueryFilters(ModelBuilder modelBuilder)
@@ -78,10 +93,44 @@ namespace Planify.Data
                         Country = "México",
                         LastNames = "Gerardo Rojo",
                         Sate = "Sinaloa"
+                    },
+                    new Person()
+                    {
+                        Id = 2,
+                        Name = "Ana",
+                        City = "Culiacan",
+                        Country = "México",
+                        LastNames = "Argon Lazaro",
+                        Sate = "Sinaloa"
                     }
                 );
 
             });
+        }
+
+        private void SetUserTable(ModelBuilder modelBuilder)
+        {
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasData(
+                    new User()
+                    {
+                        Id = 1,
+                        Email = "Jorguito@hotmail.com",
+                        //jorguito
+                        HashPassword = "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce"
+                    },
+                    new User()
+                    {
+                        Id = 2,
+                        Email = "anitaanita@hotmail.com",
+                        //anitaanita
+                        HashPassword = "f0e50d441e11ee6fe5d8724d0e530e57df21f51d283009f7899b1ea47a26240e"
+                    }
+                );
+            });
+
         }
 
         private void SetProjectTable(ModelBuilder modelBuilder)
@@ -179,24 +228,20 @@ namespace Planify.Data
                         Id = 1,
                         Name = "Jorguito",
                         PersonId = 1,
-                        UserId = 1
-                    }
-                );
-            });
-
-
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.HasData(
-                    new User()
+                        UserId = 1,
+                        HireDate = DateOnly.FromDateTime(new DateTime(2022,5,1))
+                    },
+                    new Employee()
                     {
-                        Id = 1,
-                        Email = "Jorguito@hotmail.com",
-                        //jorguito
-                        HashPassword = "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce"
+                        Id = 2,
+                        Name = "Anita",
+                        PersonId = 2,
+                        UserId = 2,
+                        HireDate = DateOnly.FromDateTime(new DateTime(2020, 11, 1))
                     }
                 );
             });
+
         }
 
         private void SetProjectTaskComentaryTable(ModelBuilder modelBuilder)
@@ -223,6 +268,28 @@ namespace Planify.Data
                 entity.Property(p => p.Comentary).HasColumnOrder(3);
             });
 
+        }
+
+        private void SetPermisionsTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Permisions>().HasData(
+                    new Permisions { Id = 1, Name = "create", Description = "Permiso para crear." },
+                    new Permisions { Id = 2, Name = "read", Description = "Permiso para leer." },
+                    new Permisions { Id = 3, Name = "edit", Description = "Permiso para editar." },
+                    new Permisions { Id = 4, Name = "delete", Description = "Permiso para eliminar." }
+                );
+
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Permisions)
+                .WithMany(p => p.Users)
+                .UsingEntity(j => j.HasData(
+                    new { UsersId = 1, PermisionsId = 1 },
+                    new { UsersId = 1, PermisionsId = 2 },
+                    new { UsersId = 1, PermisionsId = 3 },
+                    new { UsersId = 1, PermisionsId = 4 },
+                    new { UsersId = 2, PermisionsId = 2 }
+                ));
         }
     }
 }

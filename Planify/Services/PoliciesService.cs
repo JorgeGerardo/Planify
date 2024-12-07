@@ -27,6 +27,7 @@ namespace Planify.Services
             new AuthorizationPolicyBuilder()
                 .RequireRole("recursos-humanos")
                 .RequireClaim("create", "read", "edit", "delete")
+                //Claim:value
                 .RequireAuthenticatedUser()
                 .Build();
 

@@ -8,6 +8,7 @@ namespace Planify.Models
         [JsonIgnore]
         public User? User { get; set; }
         public int UserId { get; set; }
+        //TODO: Hazlo nullable
         public DateOnly HireDate { get; set; }
         [JsonIgnore]
         public Person? Person { get; set; }

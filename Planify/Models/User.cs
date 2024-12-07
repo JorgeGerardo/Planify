@@ -13,8 +13,12 @@ namespace Planify.Models
         public required string HashPassword { get; set; }
         [JsonIgnore]
         public Employee? Employee { get; set; }
+
         [JsonIgnore]
         public ICollection<Role> Roles { get; set; } = new List<Role>();
+
+        [JsonIgnore]
+        public ICollection<Permisions> Permisions { get; set; } = new List<Permisions>();
     }
 
 

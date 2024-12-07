@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Planify.Migrations
 {
     /// <inheritdoc />
@@ -25,6 +27,20 @@ namespace Planify.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Departments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Permisions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Permisions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,6 +124,30 @@ namespace Planify.Migrations
                     table.ForeignKey(
                         name: "FK_Employees_Users_UserId",
                         column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PermisionsUser",
+                columns: table => new
+                {
+                    PermisionsId = table.Column<int>(type: "int", nullable: false),
+                    UsersId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PermisionsUser", x => new { x.PermisionsId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_PermisionsUser_Permisions_PermisionsId",
+                        column: x => x.PermisionsId,
+                        principalTable: "Permisions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PermisionsUser_Users_UsersId",
+                        column: x => x.UsersId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -218,7 +258,6 @@ namespace Planify.Migrations
                     Priority = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedDateUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -297,19 +336,54 @@ namespace Planify.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Permisions",
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Permiso para crear.", "create" },
+                    { 2, "Permiso para leer.", "read" },
+                    { 3, "Permiso para editar.", "edit" },
+                    { 4, "Permiso para eliminar.", "delete" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Person",
                 columns: new[] { "Id", "BornDate", "City", "Country", "DeletedTimeUTC", "IsDeleted", "LastNames", "LastUpdatedUTC", "Name", "PhoneNumber", "Sate" },
-                values: new object[] { 1, new DateOnly(1, 1, 1), "Guadalajara", "México", null, false, "Gerardo Rojo", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jorguito", null, "Sinaloa" });
+                values: new object[,]
+                {
+                    { 1, new DateOnly(1, 1, 1), "Guadalajara", "México", null, false, "Gerardo Rojo", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jorguito", null, "Sinaloa" },
+                    { 2, new DateOnly(1, 1, 1), "Culiacan", "México", null, false, "Argon Lazaro", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ana", null, "Sinaloa" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "DeletedTimeUTC", "Email", "HashPassword", "IsDeleted", "LastUpdatedUTC" },
-                values: new object[] { 1, null, "Jorguito@hotmail.com", "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
+                values: new object[,]
+                {
+                    { 1, null, "Jorguito@hotmail.com", "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, null, "anitaanita@hotmail.com", "f0e50d441e11ee6fe5d8724d0e530e57df21f51d283009f7899b1ea47a26240e", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                });
 
             migrationBuilder.InsertData(
                 table: "Employees",
                 columns: new[] { "Id", "DeletedTimeUTC", "HireDate", "IsDeleted", "LastUpdatedUTC", "Name", "PersonId", "UserId" },
-                values: new object[] { 1, null, new DateOnly(1, 1, 1), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jorguito", 1, 1 });
+                values: new object[,]
+                {
+                    { 1, null, new DateOnly(2022, 5, 1), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Jorguito", 1, 1 },
+                    { 2, null, new DateOnly(2020, 11, 1), false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Anita", 2, 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PermisionsUser",
+                columns: new[] { "PermisionsId", "UsersId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 1 },
+                    { 2, 2 },
+                    { 3, 1 },
+                    { 4, 1 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Projects",
@@ -318,8 +392,8 @@ namespace Planify.Migrations
 
             migrationBuilder.InsertData(
                 table: "ProjectTasks",
-                columns: new[] { "Id", "Comments", "CompleteDate", "CreatedDateUTC", "DeletedTimeUTC", "Description", "EstimatedEndDate", "IsCompleted", "IsDeleted", "LastUpdatedUTC", "Name", "Priority", "ProjectId", "StartDate", "Status" },
-                values: new object[] { 1, "[\"Comentario 1\",\"Comentario 2\",\"Comentario 3\",\"Comentario 4\"]", null, new DateTime(2024, 12, 4, 6, 28, 54, 399, DateTimeKind.Utc).AddTicks(3315), null, "Realizar ...", new DateOnly(1, 1, 1), false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Actividad 1", "Critical", 1, new DateOnly(1, 1, 1), "Pending" });
+                columns: new[] { "Id", "CompleteDate", "CreatedDateUTC", "DeletedTimeUTC", "Description", "EstimatedEndDate", "IsCompleted", "IsDeleted", "LastUpdatedUTC", "Name", "Priority", "ProjectId", "StartDate", "Status" },
+                values: new object[] { 1, null, new DateTime(2024, 12, 7, 7, 37, 26, 439, DateTimeKind.Utc).AddTicks(89), null, "Realizar ...", new DateOnly(1, 1, 1), false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Actividad 1", "Critical", 1, new DateOnly(1, 1, 1), "Pending" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_DepartmentEmployee_EmployeesId",
@@ -347,6 +421,11 @@ namespace Planify.Migrations
                 table: "Employees",
                 column: "UserId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PermisionsUser_UsersId",
+                table: "PermisionsUser",
+                column: "UsersId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_ManagerId",
@@ -387,6 +466,9 @@ namespace Planify.Migrations
                 name: "EmployeeProjectTask");
 
             migrationBuilder.DropTable(
+                name: "PermisionsUser");
+
+            migrationBuilder.DropTable(
                 name: "ProjectTaskComentaries");
 
             migrationBuilder.DropTable(
@@ -394,6 +476,9 @@ namespace Planify.Migrations
 
             migrationBuilder.DropTable(
                 name: "Departments");
+
+            migrationBuilder.DropTable(
+                name: "Permisions");
 
             migrationBuilder.DropTable(
                 name: "ProjectTasks");
