@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -72,6 +73,20 @@ namespace Planify.Services
                 );
         }
 
+
+    }
+
+    public static partial class BuilderConfigurationService
+    {
+        public static void SetAuthorizationPolicies(WebApplicationBuilder builder)
+        {
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("rh", PoliciesService.GetHumanResources());
+                options.AddPolicy("sa", PoliciesService.GetSystemAdmin());
+                options.AddPolicy("rh-admin", PoliciesService.GetRhAdmin());
+            });
+        }
 
     }
 

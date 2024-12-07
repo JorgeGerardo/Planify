@@ -17,6 +17,7 @@ BuilderConfigurationService.SetScopes(builder);
 
 //Auth
 BuilderConfigurationService.SetAuthenticationScheme(builder);
+BuilderConfigurationService.SetAuthorizationPolicies(builder);
 
 BuilderConfigurationService.AddSqlServer(builder);
 
