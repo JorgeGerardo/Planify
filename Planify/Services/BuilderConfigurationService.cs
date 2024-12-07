@@ -82,9 +82,10 @@ namespace Planify.Services
         {
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("rh", PoliciesService.GetHumanResources());
-                options.AddPolicy("sa", PoliciesService.GetSystemAdmin());
+                options.AddPolicy("rh", PoliciesService.GetHumanResourcesPolicy());
+                options.AddPolicy("sa", PoliciesService.GetSystemAdminPolicy());
                 options.AddPolicy("rh-admin", PoliciesService.GetRhAdmin());
+                options.AddPolicy("viewer", PoliciesService.GetViewerPolicy());
             });
         }
 

@@ -4,28 +4,48 @@ namespace Planify.Services
 {
     public static class PoliciesService
     {
-
+        // [rh-admin]
         public static AuthorizationPolicy GetRhAdmin() =>
             new AuthorizationPolicyBuilder()
-                .RequireClaim("finanzas", "recursos-humanos", "admin", "edit", "delete", "read", "create")
+                .RequireRole("recursos-humanos", "admin")
+                .RequireClaim("edit", "delete", "read", "create")
+                .RequireAuthenticatedUser()
                 .Build();
 
 
-        public static AuthorizationPolicy GetHumanResources() =>
+        // [pj-manager]
+        public static AuthorizationPolicy GetPjManager() =>
             new AuthorizationPolicyBuilder()
-                .RequireClaim("recursos-humanos", "create", "read", "edit")
+                .RequireRole("manager")
+                .RequireClaim("edit", "delete", "read", "create")
+                .RequireAuthenticatedUser()
                 .Build();
 
 
-        public static AuthorizationPolicy GetSystemAdmin() =>
+        //[rh]
+        public static AuthorizationPolicy GetHumanResourcesPolicy() =>
+            new AuthorizationPolicyBuilder()
+                .RequireRole("recursos-humanos")
+                .RequireClaim("create", "read", "edit", "delete")
+                .RequireAuthenticatedUser()
+                .Build();
+
+
+        //[sa]
+        public static AuthorizationPolicy GetSystemAdminPolicy() =>
             new AuthorizationPolicyBuilder()
                 .RequireRole("sa")
+                .RequireAuthenticatedUser()
                 .Build();
 
-        public static AuthorizationPolicy GetViewerAdmin() =>
+
+        //[viewer]
+        public static AuthorizationPolicy GetViewerPolicy() =>
             new AuthorizationPolicyBuilder()
-                .RequireRole("read")
+                .RequireClaim("read")
+                .RequireAuthenticatedUser()
                 .Build();
+
 
     }
 }
