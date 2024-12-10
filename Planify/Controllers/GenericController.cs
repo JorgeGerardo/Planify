@@ -24,6 +24,7 @@ namespace Planify.Controllers
             await _Repository.GetAll().ToListAsync();
 
         [HttpGet("No-filtters")]
+        [Authorize(Policy = PolicyNames.SAorAdmin)]
         public virtual async Task<IEnumerable<T>> GetWithoutFiltters() =>
             await _Repository.GetAllNoFilters().ToListAsync();
 
@@ -132,6 +133,7 @@ namespace Planify.Controllers
         }
 
         [HttpDelete("hard/{id}")]
+        [Authorize(Policy = PolicyNames.SA)]
         public virtual async Task<IActionResult> HardDelete(int id)
         {
             bool res = await _Repository.HardDelete(id);
