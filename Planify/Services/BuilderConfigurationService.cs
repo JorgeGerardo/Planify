@@ -76,16 +76,23 @@ namespace Planify.Services
 
     }
 
+
+    //Policies
     public static partial class BuilderConfigurationService
     {
         public static void SetAuthorizationPolicies(WebApplicationBuilder builder)
         {
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("rh", PoliciesService.GetHumanResourcesPolicy());
-                options.AddPolicy("sa", PoliciesService.GetSystemAdminPolicy());
+                options.AddPolicy("sa", PoliciesService.GetSA());
+                options.AddPolicy("admin", PoliciesService.GetAdmin());
+                options.AddPolicy("manager", PoliciesService.GetPjManager());
                 options.AddPolicy("rh-admin", PoliciesService.GetRhAdmin());
-                options.AddPolicy("viewer", PoliciesService.GetViewerPolicy());
+                options.AddPolicy("rh", PoliciesService.GetHumanResources());
+                options.AddPolicy("viewer", PoliciesService.GetViewer());
+
+                //Combinaciones
+                options.AddPolicy("SAorAdmin", PoliciesService.GetSAorAdmin());
             });
         }
 

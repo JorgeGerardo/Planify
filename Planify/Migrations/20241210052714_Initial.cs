@@ -343,7 +343,8 @@ namespace Planify.Migrations
                     { 1, "Permiso para crear.", "create" },
                     { 2, "Permiso para leer.", "read" },
                     { 3, "Permiso para editar.", "edit" },
-                    { 4, "Permiso para eliminar.", "delete" }
+                    { 4, "Permiso para eliminar.", "soft-delete" },
+                    { 5, "Permiso para quitar eliminación lógica.", "restore" }
                 });
 
             migrationBuilder.InsertData(
@@ -356,12 +357,29 @@ namespace Planify.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "DeletedTimeUTC", "IsDeleted", "LastUpdatedUTC", "Name" },
+                values: new object[,]
+                {
+                    { 1, null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sa" },
+                    { 2, null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin" },
+                    { 3, null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "manager" },
+                    { 4, null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "rh-admin" },
+                    { 5, null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "rh" },
+                    { 6, null, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "viewer" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "DeletedTimeUTC", "Email", "HashPassword", "IsDeleted", "LastUpdatedUTC" },
                 values: new object[,]
                 {
-                    { 1, null, "Jorguito@hotmail.com", "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, null, "anitaanita@hotmail.com", "f0e50d441e11ee6fe5d8724d0e530e57df21f51d283009f7899b1ea47a26240e", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, null, "Jorguito@example.com", "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, null, "anitaanita@example.com", "f0e50d441e11ee6fe5d8724d0e530e57df21f51d283009f7899b1ea47a26240e", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, null, "marianita@example.com", "97f7ae522f40518794e1c7d2f0399f931a911b0f007f66fa2a24c65a262a9229", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, null, "antonella@example.com", "6d2debd249a866cf0d19274260c7012b52725a404807dc8c5ef7e86d00ce8c03", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 5, null, "carlosmario@example.com", "934f00dc360f0b00ba471007863910c1266f76244f136885715bce48334daaf7", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 6, null, "samueljuan@example.com", "67a0978030e50d8f060cc216bc9ae8ea0e3fa38f0951cc412e5b41744f548add", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -378,11 +396,36 @@ namespace Planify.Migrations
                 columns: new[] { "PermisionsId", "UsersId" },
                 values: new object[,]
                 {
-                    { 1, 1 },
-                    { 2, 1 },
+                    { 1, 2 },
+                    { 1, 3 },
+                    { 1, 4 },
+                    { 1, 5 },
                     { 2, 2 },
-                    { 3, 1 },
-                    { 4, 1 }
+                    { 2, 3 },
+                    { 2, 4 },
+                    { 2, 5 },
+                    { 2, 6 },
+                    { 3, 2 },
+                    { 3, 3 },
+                    { 3, 4 },
+                    { 4, 2 },
+                    { 4, 3 },
+                    { 4, 4 },
+                    { 5, 2 },
+                    { 5, 4 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "RoleUser",
+                columns: new[] { "RolesId", "UsersId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 2, 2 },
+                    { 3, 3 },
+                    { 4, 4 },
+                    { 5, 5 },
+                    { 6, 6 }
                 });
 
             migrationBuilder.InsertData(
@@ -393,7 +436,7 @@ namespace Planify.Migrations
             migrationBuilder.InsertData(
                 table: "ProjectTasks",
                 columns: new[] { "Id", "CompleteDate", "CreatedDateUTC", "DeletedTimeUTC", "Description", "EstimatedEndDate", "IsCompleted", "IsDeleted", "LastUpdatedUTC", "Name", "Priority", "ProjectId", "StartDate", "Status" },
-                values: new object[] { 1, null, new DateTime(2024, 12, 7, 7, 37, 26, 439, DateTimeKind.Utc).AddTicks(89), null, "Realizar ...", new DateOnly(1, 1, 1), false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Actividad 1", "Critical", 1, new DateOnly(1, 1, 1), "Pending" });
+                values: new object[] { 1, null, new DateTime(2024, 12, 10, 5, 27, 13, 887, DateTimeKind.Utc).AddTicks(6918), null, "Realizar ...", new DateOnly(1, 1, 1), false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Actividad 1", "Critical", 1, new DateOnly(1, 1, 1), "Pending" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_DepartmentEmployee_EmployeesId",

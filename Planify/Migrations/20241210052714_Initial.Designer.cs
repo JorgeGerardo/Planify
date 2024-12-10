@@ -12,7 +12,7 @@ using Planify.Data;
 namespace Planify.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    [Migration("20241207073727_Initial")]
+    [Migration("20241210052714_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -88,27 +88,87 @@ namespace Planify.Migrations
                         new
                         {
                             PermisionsId = 1,
-                            UsersId = 1
-                        },
-                        new
-                        {
-                            PermisionsId = 2,
-                            UsersId = 1
-                        },
-                        new
-                        {
-                            PermisionsId = 3,
-                            UsersId = 1
-                        },
-                        new
-                        {
-                            PermisionsId = 4,
-                            UsersId = 1
+                            UsersId = 2
                         },
                         new
                         {
                             PermisionsId = 2,
                             UsersId = 2
+                        },
+                        new
+                        {
+                            PermisionsId = 3,
+                            UsersId = 2
+                        },
+                        new
+                        {
+                            PermisionsId = 4,
+                            UsersId = 2
+                        },
+                        new
+                        {
+                            PermisionsId = 5,
+                            UsersId = 2
+                        },
+                        new
+                        {
+                            PermisionsId = 1,
+                            UsersId = 3
+                        },
+                        new
+                        {
+                            PermisionsId = 2,
+                            UsersId = 3
+                        },
+                        new
+                        {
+                            PermisionsId = 3,
+                            UsersId = 3
+                        },
+                        new
+                        {
+                            PermisionsId = 4,
+                            UsersId = 3
+                        },
+                        new
+                        {
+                            PermisionsId = 1,
+                            UsersId = 4
+                        },
+                        new
+                        {
+                            PermisionsId = 2,
+                            UsersId = 4
+                        },
+                        new
+                        {
+                            PermisionsId = 3,
+                            UsersId = 4
+                        },
+                        new
+                        {
+                            PermisionsId = 4,
+                            UsersId = 4
+                        },
+                        new
+                        {
+                            PermisionsId = 5,
+                            UsersId = 4
+                        },
+                        new
+                        {
+                            PermisionsId = 1,
+                            UsersId = 5
+                        },
+                        new
+                        {
+                            PermisionsId = 2,
+                            UsersId = 5
+                        },
+                        new
+                        {
+                            PermisionsId = 2,
+                            UsersId = 6
                         });
                 });
 
@@ -251,7 +311,13 @@ namespace Planify.Migrations
                         {
                             Id = 4,
                             Description = "Permiso para eliminar.",
-                            Name = "delete"
+                            Name = "soft-delete"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Permiso para quitar eliminación lógica.",
+                            Name = "restore"
                         });
                 });
 
@@ -444,7 +510,7 @@ namespace Planify.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDateUTC = new DateTime(2024, 12, 7, 7, 37, 26, 439, DateTimeKind.Utc).AddTicks(89),
+                            CreatedDateUTC = new DateTime(2024, 12, 10, 5, 27, 13, 887, DateTimeKind.Utc).AddTicks(6918),
                             Description = "Realizar ...",
                             EstimatedEndDate = new DateOnly(1, 1, 1),
                             IsCompleted = false,
@@ -533,6 +599,50 @@ namespace Planify.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "sa"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "admin"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "manager"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "rh-admin"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "rh"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "viewer"
+                        });
                 });
 
             modelBuilder.Entity("Planify.Models.User", b =>
@@ -569,7 +679,7 @@ namespace Planify.Migrations
                         new
                         {
                             Id = 1,
-                            Email = "Jorguito@hotmail.com",
+                            Email = "Jorguito@example.com",
                             HashPassword = "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce",
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -577,8 +687,40 @@ namespace Planify.Migrations
                         new
                         {
                             Id = 2,
-                            Email = "anitaanita@hotmail.com",
+                            Email = "anitaanita@example.com",
                             HashPassword = "f0e50d441e11ee6fe5d8724d0e530e57df21f51d283009f7899b1ea47a26240e",
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "marianita@example.com",
+                            HashPassword = "97f7ae522f40518794e1c7d2f0399f931a911b0f007f66fa2a24c65a262a9229",
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "antonella@example.com",
+                            HashPassword = "6d2debd249a866cf0d19274260c7012b52725a404807dc8c5ef7e86d00ce8c03",
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Email = "carlosmario@example.com",
+                            HashPassword = "934f00dc360f0b00ba471007863910c1266f76244f136885715bce48334daaf7",
+                            IsDeleted = false,
+                            LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Email = "samueljuan@example.com",
+                            HashPassword = "67a0978030e50d8f060cc216bc9ae8ea0e3fa38f0951cc412e5b41744f548add",
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -597,6 +739,38 @@ namespace Planify.Migrations
                     b.HasIndex("UsersId");
 
                     b.ToTable("RoleUser");
+
+                    b.HasData(
+                        new
+                        {
+                            RolesId = 1,
+                            UsersId = 1
+                        },
+                        new
+                        {
+                            RolesId = 2,
+                            UsersId = 2
+                        },
+                        new
+                        {
+                            RolesId = 3,
+                            UsersId = 3
+                        },
+                        new
+                        {
+                            RolesId = 4,
+                            UsersId = 4
+                        },
+                        new
+                        {
+                            RolesId = 5,
+                            UsersId = 5
+                        },
+                        new
+                        {
+                            RolesId = 6,
+                            UsersId = 6
+                        });
                 });
 
             modelBuilder.Entity("DepartmentEmployee", b =>

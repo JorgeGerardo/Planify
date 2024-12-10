@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Planify.Models;
+using Planify.Services;
 using System;
 using System.Collections.Generic;
 
@@ -35,18 +36,6 @@ namespace Planify.Data
             SetQueryFilters(modelBuilder);
             SetProjectTaskComentaryTable(modelBuilder);
             SetPermisionsTable(modelBuilder);
-
-            //modelBuilder.Entity<User>()
-            //    .HasMany(u => u.Permisions)
-            //    .WithMany(p => p.Users)
-            //    .UsingEntity(j => j.HasData(
-            //        new { UsersId = 1, PermisionsId = 1 },
-            //        new { UsersId = 1, PermisionsId = 2 },
-            //        new { UsersId = 1, PermisionsId = 3 },
-            //        new { UsersId = 1, PermisionsId = 4 },
-            //        new { UsersId = 2, PermisionsId = 2 }
-            //    ));
-
         }
 
         private void SetQueryFilters(ModelBuilder modelBuilder)
@@ -113,20 +102,43 @@ namespace Planify.Data
 
             modelBuilder.Entity<User>(entity =>
             {
+
                 entity.HasData(
-                    new User()
+                    new User() //sa
                     {
                         Id = 1,
-                        Email = "Jorguito@hotmail.com",
-                        //jorguito
-                        HashPassword = "b88b88cd87cf54d08aabf61b73023cf35551850dc8da5a9d8ae410ef243f74ce"
+                        Email = "Jorguito@example.com",
+                        HashPassword = AuthService.EncrypBySHA256("jorguito")
                     },
-                    new User()
+                    new User() //admin
                     {
                         Id = 2,
-                        Email = "anitaanita@hotmail.com",
-                        //anitaanita
-                        HashPassword = "f0e50d441e11ee6fe5d8724d0e530e57df21f51d283009f7899b1ea47a26240e"
+                        Email = "anitaanita@example.com",
+                        HashPassword = AuthService.EncrypBySHA256("anitaanita")
+                    },
+                    new User() //manager
+                    {
+                        Id = 3,
+                        Email = "marianita@example.com",
+                        HashPassword = AuthService.EncrypBySHA256("marianita")
+                    },
+                    new User() //rh-admin
+                    {
+                        Id = 4,
+                        Email = "antonella@example.com",
+                        HashPassword = AuthService.EncrypBySHA256("antonella")
+                    },
+                    new User() //rh
+                    {
+                        Id = 5,
+                        Email = "carlosmario@example.com",
+                        HashPassword = AuthService.EncrypBySHA256("carlosmario")
+                    },
+                    new User() //viewer
+                    {
+                        Id = 6,
+                        Email = "samueljuan@example.com",
+                        HashPassword = AuthService.EncrypBySHA256("samueljuan")
                     }
                 );
             });
@@ -197,6 +209,28 @@ namespace Planify.Data
             {
                 roles.Property(p => p.Id).HasColumnOrder(0);
                 roles.Property(p => p.Name).HasColumnOrder(1);
+
+                roles.HasData(
+                    new Role { Id = 1, Name = "sa" },
+                    new Role { Id = 2, Name = "admin" },
+                    new Role { Id = 3, Name = "manager" },
+                    new Role { Id = 4, Name = "rh-admin" },
+                    new Role { Id = 5, Name = "rh" },
+                    new Role { Id = 6, Name = "viewer" }
+                );
+
+                modelBuilder.Entity<Role>()
+                    .HasMany(u => u.Users)
+                    .WithMany(u => u.Roles)
+                    .UsingEntity(d => d.HasData(
+                        new { UsersId = 1, RolesId = 1},
+                        new { UsersId = 2, RolesId = 2 },
+                        new { UsersId = 3, RolesId = 3 },
+                        new { UsersId = 4, RolesId = 4 },
+                        new { UsersId = 5, RolesId = 5 },
+                        new { UsersId = 6, RolesId = 6 }
+                    ));
+
             });
         }
 
@@ -229,7 +263,7 @@ namespace Planify.Data
                         Name = "Jorguito",
                         PersonId = 1,
                         UserId = 1,
-                        HireDate = DateOnly.FromDateTime(new DateTime(2022,5,1))
+                        HireDate = DateOnly.FromDateTime(new DateTime(2022, 5, 1))
                     },
                     new Employee()
                     {
@@ -276,19 +310,42 @@ namespace Planify.Data
                     new Permisions { Id = 1, Name = "create", Description = "Permiso para crear." },
                     new Permisions { Id = 2, Name = "read", Description = "Permiso para leer." },
                     new Permisions { Id = 3, Name = "edit", Description = "Permiso para editar." },
-                    new Permisions { Id = 4, Name = "delete", Description = "Permiso para eliminar." }
-                );
+                    new Permisions { Id = 4, Name = "soft-delete", Description = "Permiso para eliminar." },
+                    new Permisions { Id = 5, Name = "restore", Description = "Permiso para quitar eliminación lógica." }
+            );
 
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Permisions)
                 .WithMany(p => p.Users)
                 .UsingEntity(j => j.HasData(
-                    new { UsersId = 1, PermisionsId = 1 },
-                    new { UsersId = 1, PermisionsId = 2 },
-                    new { UsersId = 1, PermisionsId = 3 },
-                    new { UsersId = 1, PermisionsId = 4 },
-                    new { UsersId = 2, PermisionsId = 2 }
+                    new { UsersId = 2, PermisionsId = 1 },
+                    new { UsersId = 2, PermisionsId = 2 },
+                    new { UsersId = 2, PermisionsId = 3 },
+                    new { UsersId = 2, PermisionsId = 4 },
+                    new { UsersId = 2, PermisionsId = 5 },
+
+
+                    new { UsersId = 3, PermisionsId = 1 },
+                    new { UsersId = 3, PermisionsId = 2 },
+                    new { UsersId = 3, PermisionsId = 3 },
+                    new { UsersId = 3, PermisionsId = 4 },
+
+
+                    new { UsersId = 4, PermisionsId = 1 },
+                    new { UsersId = 4, PermisionsId = 2 },
+                    new { UsersId = 4, PermisionsId = 3 },
+                    new { UsersId = 4, PermisionsId = 4 },
+                    new { UsersId = 4, PermisionsId = 5 },
+
+
+                    new { UsersId = 5, PermisionsId = 1 },
+                    new { UsersId = 5, PermisionsId = 2 },
+
+
+                    new { UsersId = 6, PermisionsId = 2 }
+
+
                 ));
         }
     }

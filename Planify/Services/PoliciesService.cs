@@ -1,14 +1,27 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Planify.Services
 {
     public static class PoliciesService
     {
-        // [rh-admin]
-        public static AuthorizationPolicy GetRhAdmin() =>
+        //[sa]
+        public static AuthorizationPolicy GetSA() =>
             new AuthorizationPolicyBuilder()
-                .RequireRole("recursos-humanos", "admin")
-                .RequireClaim("edit", "delete", "read", "create")
+                .RequireRole("sa")
+                .RequireAuthenticatedUser()
+                .Build();
+
+
+        //[admin]
+        public static AuthorizationPolicy GetAdmin() =>
+            new AuthorizationPolicyBuilder()
+                .RequireRole("admin")
+                .RequireClaim("edit", "true")
+                .RequireClaim("soft-delete", "true")
+                .RequireClaim("read", "true")
+                .RequireClaim("create", "true")
+                .RequireClaim("restore", "true")
                 .RequireAuthenticatedUser()
                 .Build();
 
@@ -17,34 +30,56 @@ namespace Planify.Services
         public static AuthorizationPolicy GetPjManager() =>
             new AuthorizationPolicyBuilder()
                 .RequireRole("manager")
-                .RequireClaim("edit", "delete", "read", "create")
+                .RequireClaim("edit", "true")
+                .RequireClaim("soft-delete", "true")
+                .RequireClaim("read", "true")
+                .RequireClaim("create", "true")
                 .RequireAuthenticatedUser()
                 .Build();
+
+
+
+        // [rh-admin]
+        public static AuthorizationPolicy GetRhAdmin() =>
+            new AuthorizationPolicyBuilder()
+                .RequireRole("rh-admin")
+                .RequireClaim("edit", "true")
+                .RequireClaim("soft-delete", "true")
+                .RequireClaim("read", "true")
+                .RequireClaim("create", "true")
+                .RequireClaim("restore", "true")
+                .RequireAuthenticatedUser()
+                .Build();
+
 
 
         //[rh]
-        public static AuthorizationPolicy GetHumanResourcesPolicy() =>
+        public static AuthorizationPolicy GetHumanResources() =>
             new AuthorizationPolicyBuilder()
-                .RequireRole("recursos-humanos")
-                .RequireClaim("create", "read", "edit", "delete")
-                //Claim:value
-                .RequireAuthenticatedUser()
-                .Build();
-
-
-        //[sa]
-        public static AuthorizationPolicy GetSystemAdminPolicy() =>
-            new AuthorizationPolicyBuilder()
-                .RequireRole("sa")
+                .RequireRole("rh")
+                .RequireClaim("create", "true")
+                .RequireClaim("read", "true")
                 .RequireAuthenticatedUser()
                 .Build();
 
 
         //[viewer]
-        public static AuthorizationPolicy GetViewerPolicy() =>
+        public static AuthorizationPolicy GetViewer() =>
             new AuthorizationPolicyBuilder()
-                .RequireClaim("read")
+                .RequireRole("viewer")
+                .RequireClaim("read", "true")
                 .RequireAuthenticatedUser()
+                .Build();
+
+        //TODO: falta modificar para añadir los claims especificos
+        // Combinated
+        public static AuthorizationPolicy GetSAorAdmin() =>
+            new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireAssertion(context =>
+                    context.User.HasClaim(c => c.Type is ClaimTypes.Role && c.Value is "sa") ||
+                    context.User.HasClaim(c => c.Type is ClaimTypes.Role && c.Value is "admin")
+                )
                 .Build();
 
 
