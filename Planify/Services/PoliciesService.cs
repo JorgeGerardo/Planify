@@ -71,17 +71,32 @@ namespace Planify.Services
                 .RequireAuthenticatedUser()
                 .Build();
 
-        //TODO: falta modificar para añadir los claims especificos
-        // Combinated
+        // [Combinated]
         public static AuthorizationPolicy GetSAorAdmin() =>
             new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .RequireAssertion(context =>
-                    context.User.HasClaim(c => c.Type is ClaimTypes.Role && c.Value is "sa") ||
-                    context.User.HasClaim(c => c.Type is ClaimTypes.Role && c.Value is "admin")
-                )
+                {
+                    if (context.User.HasClaim(c => c.Type is ClaimTypes.Role && c.Value is PolicyNames.SA))
+                        return true;
+                    return IsAdmin(context);
+                })
                 .Build();
 
+        private static bool IsAdmin(AuthorizationHandlerContext context)
+        {
+            if (!context.User.HasClaim(c => c.Type is ClaimTypes.Role && c.Value is PolicyNames.Admin))
+                return false;
+
+            if (context.User.HasClaim(c => c.Type is "edit" && c.Value is "true") &&
+                context.User.HasClaim(c => c.Type is "soft-delete" && c.Value is "true") &&
+                context.User.HasClaim(c => c.Type is "read" && c.Value is "true") &&
+                context.User.HasClaim(c => c.Type is "create" && c.Value is "true") &&
+                context.User.HasClaim(c => c.Type is "restore" && c.Value is "true"))
+                return true;
+
+            return false;
+        }
 
     }
 }
