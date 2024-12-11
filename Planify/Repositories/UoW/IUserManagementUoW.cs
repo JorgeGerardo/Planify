@@ -8,6 +8,7 @@ namespace Planify.Repositories.UoW
         IGenericCRUDRepository<User, int> Users { get; }
         IGenericCRUDRepository<Employee, int> Employees { get; }
         IGenericCRUDRepository<Person, int> Persons { get; }
+        IGenericCRUDRepository<Department, int> Departmens { get; }
 
         Task<int> SaveAsync();
     }
