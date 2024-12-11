@@ -51,11 +51,16 @@ namespace Planify.Controllers
             return NoContent();
         }
 
+        /* TODO: Incluso aunque no cargue las propiedades se elimina, wow
+        //Deberías buscar una forma de implementar las propiedades de navegación cuando se necesiten.
+        //quiza cada repositorio deberia tener un metodo que las active y
+        //cada UoW deberia tener un metodo que llame a ese metodo de todos sus repositorios
+        //que por defecto esten activadas o desactivas
+        */
         [HttpPut("remove-employees/{departmentId}")]
         public async Task<ActionResult> RemoveEmployeesofDeparment(List<int> employeesId, int departmentId)
         {
-            Department? dep = await _uow.Departmens.GetAll().Include(p => p.Employees)
-                .FirstOrDefaultAsync( d => d.Id.Equals(departmentId));
+            Department? dep = await _uow.Departmens.GetById(departmentId);
 
             if (dep is null)
                 return NotFound("El departamento seleccionado no existe");
