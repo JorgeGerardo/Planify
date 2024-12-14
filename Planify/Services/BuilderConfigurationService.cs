@@ -84,15 +84,17 @@ namespace Planify.Services
         {
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("sa", PoliciesService.GetSA());
-                options.AddPolicy("admin", PoliciesService.GetAdmin());
-                options.AddPolicy("manager", PoliciesService.GetPjManager());
-                options.AddPolicy("rh-admin", PoliciesService.GetRhAdmin());
-                options.AddPolicy("rh", PoliciesService.GetHumanResources());
-                options.AddPolicy("viewer", PoliciesService.GetViewer());
+                options.AddPolicy(PolicyNames.SA, PoliciesService.GetSA());
+                options.AddPolicy(PolicyNames.Admin, PoliciesService.GetAdmin());
+                options.AddPolicy(PolicyNames.Manager, PoliciesService.GetPjManager());
+                options.AddPolicy(PolicyNames.RhAdmin, PoliciesService.GetRhAdmin());
+                options.AddPolicy(PolicyNames.Rh, PoliciesService.GetHumanResources());
+                options.AddPolicy(PolicyNames.Viewer, PoliciesService.GetViewer());
 
                 //Combinaciones
-                options.AddPolicy("SAorAdmin", PoliciesService.GetSAorAdmin());
+                options.AddPolicy(PolicyNames.SAorAdmin, PoliciesService.GetSAorAdmin());
+                options.AddPolicy(PolicyNames.RhAdmin_Admin_SA, PoliciesService.GetRhAdmin_Admin_SA());
+                options.AddPolicy(PolicyNames.Rh_RhAdmin_Admin_SA, PoliciesService.Get_Rh_RhAdmin_Admin_SA());
             });
         }
 

@@ -1,18 +1,40 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Planify.Data;
+using Planify.Models;
+using Planify.Repositories;
+using Planify.Services;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Planify.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExperimentalController : ControllerBase
+    public partial class ExperimentalController : ControllerBase
     {
         ProjectContext _context;
-        public ExperimentalController(ProjectContext context) =>
+        IGenericCRUDRepository<Person, int> _personContext;
+        public ExperimentalController(ProjectContext context, IGenericCRUDRepository<Person, int> personscontext)
+        {
             _context = context;
+            _personContext = personscontext;
+        }
+            //_context = context;
 
+        [HttpGet("[action]")]
+        public async Task sssssssss()
+        {
+            var x = await _personContext.GetById(1);
+        }
+
+
+    }
+
+
+    public partial class ExperimentalController
+    {
         //sa works
         [HttpGet("sa")]
         [Authorize(Policy = "sa")]
@@ -51,7 +73,9 @@ namespace Planify.Controllers
         public string show() => "SAorAdmin";
 
 
+        [HttpGet("SA_ADMIN_RH-ADMIN")]
+        [Authorize(Policy = PolicyNames.RhAdmin_Admin_SA)]
+        public string SA_ADMIN_RHADMIN() => "SA_ADMIN_RH-ADMIN";
 
     }
-
 }

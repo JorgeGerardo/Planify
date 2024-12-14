@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 using System.Security.Claims;
 
 namespace Planify.Services
@@ -77,9 +78,38 @@ namespace Planify.Services
                 .RequireAuthenticatedUser()
                 .RequireAssertion(context =>
                 {
+                    //TODO:Creo que se deberían eliminar los permisos y trabajar solo con roles
                     if (context.User.HasClaim(c => c.Type is ClaimTypes.Role && c.Value is PolicyNames.SA))
                         return true;
                     return IsAdmin(context);
+                })
+                .Build();
+
+        public static AuthorizationPolicy GetRhAdmin_Admin_SA() =>
+            new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireAssertion(context =>
+                {
+                    string[] validRoles =
+                    { PolicyNames.RhAdmin, PolicyNames.Admin, PolicyNames.SA };
+
+                    return context.User.Claims
+                        .Where(c => c.Type is ClaimTypes.Role)
+                        .Any(c => validRoles.Contains(c.Value));
+                })
+                .Build();
+
+        public static AuthorizationPolicy Get_Rh_RhAdmin_Admin_SA() =>
+            new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireAssertion(context =>
+                {
+                    string[] validRoles =
+                        { PolicyNames.SA, PolicyNames.Rh, PolicyNames.Admin, PolicyNames.RhAdmin };
+
+                    return context.User.Claims
+                    .Where(c => c.Type is ClaimTypes.Role)
+                    .Any(c => validRoles.Contains(c.Value));
                 })
                 .Build();
 

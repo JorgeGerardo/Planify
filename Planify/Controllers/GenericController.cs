@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Planify.Controllers
 {
-    [Authorize]
     public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO> : ControllerBase
         where T : DbBaseModel<int>
         where TRepository : IGenericCRUDRepository<T, int>
@@ -19,7 +18,7 @@ namespace Planify.Controllers
         public GenericController(IGenericCRUDRepository<T, int> context) =>
             _Repository = context;
 
-        [HttpGet]
+        [HttpGet()]
         public virtual async Task<IEnumerable<T>> Get() =>
             await _Repository.GetAll().ToListAsync();
 
@@ -28,7 +27,8 @@ namespace Planify.Controllers
         public virtual async Task<IEnumerable<T>> GetWithoutFiltters() =>
             await _Repository.GetAllNoFilters().ToListAsync();
 
-        [HttpGet("delete")]
+        [HttpGet("deleted")]
+        [Authorize(Policy = PolicyNames.SAorAdmin)]
         public virtual async Task<IEnumerable<T>> GetEntitiesDeleted() =>
             await _Repository.GetDeletedEntities().ToListAsync();
 
@@ -107,8 +107,6 @@ namespace Planify.Controllers
             }
         }
 
-
-
     }
 
     //DELETE:
@@ -124,6 +122,7 @@ namespace Planify.Controllers
         }
 
         [HttpPut("restore/{id}")]
+        [Authorize(Policy = PolicyNames.SA)]
         public virtual async Task<IActionResult> RemoveSoftDelete(int id)
         {
             bool res = await _Repository.RemoveSoftDelete(id);
