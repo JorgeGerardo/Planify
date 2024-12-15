@@ -51,7 +51,7 @@ namespace Planify.Controllers
         public virtual async Task<IEnumerable<T>> GetWithoutFiltters() =>
             await _Repository.GetAllNoFilters().ToListAsync();
 
-        [HttpGet("deleted")]
+        [HttpGet("deleted-entities")]
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
         public virtual async Task<IEnumerable<T>> GetEntitiesDeleted() =>
             await _Repository.GetDeletedEntities().ToListAsync();

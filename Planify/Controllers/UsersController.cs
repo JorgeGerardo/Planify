@@ -7,6 +7,7 @@ using Planify.Models;
 using Planify.Repositories;
 using Planify.Services;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Planify.Controllers
@@ -101,6 +102,36 @@ namespace Planify.Controllers
                 StatusCode(500);
         }
     }
+
+    public partial class UsersController
+    {
+        [AllowAnonymous]
+        public override Task<IActionResult> Add([FromBody] UserCreateDTO createDto) =>
+            base.Add(createDto);
+
+        [Authorize]
+        public override Task<IActionResult> Update(int id, UserUpdateDTO createDto) =>
+            base.Update(id, createDto);
+
+        [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        public override Task<IEnumerable<User>> Get() =>
+            base.Get();
+
+        [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        public override Task<ActionResult<User>> GetById(int id) =>
+            base.GetById(id);
+
+        [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        public override Task<IEnumerable<User>> GetWithoutFiltters() =>
+            base.GetWithoutFiltters();
+
+        [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        public override Task<IActionResult> Delete(int id) =>
+            base.Delete(id);
+
+        
+    }
+
 
     //Extra tools
     public partial class UsersController
