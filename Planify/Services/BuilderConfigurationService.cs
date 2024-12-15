@@ -92,9 +92,9 @@ namespace Planify.Services
                 options.AddPolicy(PolicyNames.Viewer, PoliciesService.GetViewer());
 
                 //Combinaciones
-                options.AddPolicy(PolicyNames.SAorAdmin, PoliciesService.GetSAorAdmin());
-                options.AddPolicy(PolicyNames.RhAdmin_Admin_SA, PoliciesService.GetRhAdmin_Admin_SA());
-                options.AddPolicy(PolicyNames.Rh_RhAdmin_Admin_SA, PoliciesService.Get_Rh_RhAdmin_Admin_SA());
+                options.AddPolicy(PolicyNames.MinimumAdmin, PoliciesService.GetSAorAdmin());
+                options.AddPolicy(PolicyNames.MinimumRhAdmin, PoliciesService.GetRhAdmin_Admin_SA());
+                options.AddPolicy(PolicyNames.MinimumRh, PoliciesService.Get_Rh_RhAdmin_Admin_SA());
             });
         }
 

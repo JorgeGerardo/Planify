@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Planify.Controllers
 {
+
     public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO> : ControllerBase
         where T : DbBaseModel<int>
         where TRepository : IGenericCRUDRepository<T, int>
@@ -18,28 +19,6 @@ namespace Planify.Controllers
         public GenericController(IGenericCRUDRepository<T, int> context) =>
             _Repository = context;
 
-        [HttpGet()]
-        public virtual async Task<IEnumerable<T>> Get() =>
-            await _Repository.GetAll().ToListAsync();
-
-        [HttpGet("No-filtters")]
-        [Authorize(Policy = PolicyNames.SAorAdmin)]
-        public virtual async Task<IEnumerable<T>> GetWithoutFiltters() =>
-            await _Repository.GetAllNoFilters().ToListAsync();
-
-        [HttpGet("deleted")]
-        [Authorize(Policy = PolicyNames.SAorAdmin)]
-        public virtual async Task<IEnumerable<T>> GetEntitiesDeleted() =>
-            await _Repository.GetDeletedEntities().ToListAsync();
-
-
-
-        [HttpGet("{id}")]
-        public virtual async Task<ActionResult<T>> GetById(int id)
-        {
-            T? res = await _Repository.GetById(id);
-            return res is not null ? res : NotFound();
-        }
 
     }
 
@@ -59,12 +38,39 @@ namespace Planify.Controllers
 
     }
 
-    //POST & PUT
 
+    //[Get's]
+    public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
+    {
+        [HttpGet(), Authorize]
+        public virtual async Task<IEnumerable<T>> Get() =>
+            await _Repository.GetAll().ToListAsync();
+
+        [HttpGet("No-filtters")]
+        [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        public virtual async Task<IEnumerable<T>> GetWithoutFiltters() =>
+            await _Repository.GetAllNoFilters().ToListAsync();
+
+        [HttpGet("deleted")]
+        [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        public virtual async Task<IEnumerable<T>> GetEntitiesDeleted() =>
+            await _Repository.GetDeletedEntities().ToListAsync();
+
+
+        [HttpGet("{id}"), Authorize]
+        public virtual async Task<ActionResult<T>> GetById(int id)
+        {
+            T? res = await _Repository.GetById(id);
+            return res is not null ? res : NotFound();
+        }
+
+    }
+
+    //POST & PUT
     public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
     {
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public virtual async Task<IActionResult> Update(int id, TUpdateDTO createDto)
         {
             var entity = await _Repository.GetById(id);
@@ -88,7 +94,7 @@ namespace Planify.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public virtual async Task<IActionResult> Add([FromBody] TCreateDto createDto)
         {
             try {
@@ -109,10 +115,10 @@ namespace Planify.Controllers
 
     }
 
-    //DELETE:
+    //DELETE'S [SA, NA]
     public partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
     {
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public virtual async Task<IActionResult> Delete(int id)
         {
             bool res = await _Repository.SoftDelete(id);

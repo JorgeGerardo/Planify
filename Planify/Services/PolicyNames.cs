@@ -2,9 +2,12 @@
 {
     public static class PolicyNames
     {
-        public const string Rh_RhAdmin_Admin_SA = "Rh_RhAdmin_Admin_SA";
-        public const string RhAdmin_Admin_SA = "SA_Admin_RHADMIN";
-        public const string SAorAdmin = "SAorAdmin";
+        //[combinated]
+        public const string MinimumRh = "Rh_RhAdmin_Admin_SA";
+        public const string MinimumRhAdmin = "SA_Admin_RHADMIN";
+        public const string MinimumAdmin = "SAorAdmin";
+
+        //[individual]
         public const string SA = "sa";
         public const string Admin = "admin";
         public const string Manager = "manager";

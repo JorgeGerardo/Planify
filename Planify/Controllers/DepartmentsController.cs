@@ -29,48 +29,47 @@ namespace Planify.Controllers
 
     }
 
-
-
-    //[Authorize(Policy = PolicyNames.Rh_RhAdmin_Admin_SA)]
+    // [MinimumRh]
     public partial class DepartmentsController
     {
-        [Authorize(Policy = PolicyNames.Rh_RhAdmin_Admin_SA)]
+        [Authorize(Policy = PolicyNames.MinimumRh)]
         public override Task<IEnumerable<Department>> Get() => 
             base.Get();
 
-        [Authorize(Policy = PolicyNames.Rh_RhAdmin_Admin_SA)]
+        [Authorize(Policy = PolicyNames.MinimumRh)]
         public override Task<ActionResult<Department>> GetById(int id) => 
             base.GetById(id);
 
-        [Authorize(Policy = PolicyNames.Rh_RhAdmin_Admin_SA)]
+        [Authorize(Policy = PolicyNames.MinimumRh)]
         public override Task<IActionResult> Update(int id, DepartmentDTO createDto) =>
             base.Update(id, createDto);
 
-        [Authorize(Policy = PolicyNames.Rh_RhAdmin_Admin_SA)]
+        [Authorize(Policy = PolicyNames.MinimumRh)]
         public override Task<IActionResult> Add([FromBody] DepartmentDTO createDto) =>
             base.Add(createDto);
 
-        [Authorize(Policy = PolicyNames.RhAdmin_Admin_SA)]
-        public override Task<IActionResult> Delete(int id) => 
+
+    }
+
+
+    // [MinimumRhAdmin]
+    public partial class DepartmentsController
+    {
+        [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
+        public override Task<IEnumerable<Department>> GetWithoutFiltters() =>
+            base.GetWithoutFiltters();
+
+        [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
+        public override Task<IActionResult> Delete(int id) =>
             base.Delete(id);
 
     }
 
-
-    public partial class DepartmentsController
-    {
-        [Authorize(Policy = PolicyNames.RhAdmin_Admin_SA)]
-        public override Task<IEnumerable<Department>> GetWithoutFiltters() =>
-            base.GetWithoutFiltters();
-
-    }
-
-    //Add-remove employees
-    //[Authorize(Policy = PolicyNames.Sa_Admin_RhAdmin)]
+    //Add-remove employees [MinimumRhAdmin]
     public partial class DepartmentsController
     {
         [HttpPut("add-employees/{departmentId}")]
-        [Authorize(Policy = PolicyNames.RhAdmin_Admin_SA)]
+        [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
         public async Task<ActionResult> AddEmployeesToDeparment(List<int> employeesId, int departmentId)
         {
             Department? dep = await _uow.Departmens.GetById(departmentId);
@@ -91,7 +90,7 @@ namespace Planify.Controllers
         }
 
         [HttpPut("remove-employees/{departmentId}")]
-        [Authorize(Policy = PolicyNames.RhAdmin_Admin_SA)]
+        [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
         public async Task<ActionResult> RemoveEmployeesofDeparment(List<int> employeesId, int departmentId)
         {
             Department? dep = await _uow.Departmens.GetById(departmentId);
@@ -112,9 +111,6 @@ namespace Planify.Controllers
             return NoContent();
         }
 
-
     }
-
-
 
 }

@@ -74,7 +74,7 @@ namespace Planify.Controllers
 
 
         [HttpGet("SA_ADMIN_RH-ADMIN")]
-        [Authorize(Policy = PolicyNames.RhAdmin_Admin_SA)]
+        [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
         public string SA_ADMIN_RHADMIN() => "SA_ADMIN_RH-ADMIN";
 
     }
