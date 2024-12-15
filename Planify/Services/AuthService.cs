@@ -28,7 +28,7 @@ namespace Planify.Services
                     jwt.Issuer,
                     jwt.Audience,
                     claims,
-                    expires: DateTime.UtcNow.AddDays(1),
+                    expires: DateTime.UtcNow.AddDays(10),
                     signingCredentials: signIn
             );
             return new JwtSecurityTokenHandler().WriteToken(Token);
