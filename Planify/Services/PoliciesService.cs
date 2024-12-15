@@ -72,6 +72,7 @@ namespace Planify.Services
                 .RequireAuthenticatedUser()
                 .Build();
 
+        //TODO: Deberías hacer uno que permita SA-ADMIN-Viewer
         // [Combinated]
         public static AuthorizationPolicy GetSAorAdmin() =>
             new AuthorizationPolicyBuilder()

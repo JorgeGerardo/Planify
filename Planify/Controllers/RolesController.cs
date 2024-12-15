@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Planify.Models;
 using Planify.Repositories;
+using Planify.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,11 +29,52 @@ namespace Planify.Controllers
             return currentState;
         }
 
+    }
+
+    public partial class RolesController
+    {
+        [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        public override Task<IEnumerable<Role>> Get() =>
+            base.Get();
+
+        [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        public override Task<ActionResult<Role>> GetById(int id) =>
+            base.GetById(id);
+
+
+        
+
+
+        [Authorize(Policy = PolicyNames.SA)]
+        public override Task<IActionResult> Update(int id, RoleDTO createDto) =>
+            base.Update(id, createDto);
+
+        [Authorize(Policy = PolicyNames.SA)]
+        public override Task<IActionResult> Add([FromBody] RoleDTO createDto) =>
+            base.Add(createDto);
+
+
+        [Authorize(Policy = PolicyNames.SA)]
+        public override Task<IEnumerable<Role>> GetWithoutFiltters() =>
+            base.GetWithoutFiltters();
+
+        [Authorize(Policy = PolicyNames.SA)]
+        public override Task<IActionResult> Delete(int id) =>
+            base.Delete(id);
+
+
+    }
+
+
+    // Own Enpoints [SA]
+    public partial class RolesController
+    {
         [HttpPost("asign-role/{userId}")]
+        [Authorize(Policy = PolicyNames.SA)]
         public async Task<ActionResult> AsignRole(int userId, List<int> rolesId)
         {
             User? user = await _UsersRepository.GetById(userId);
-            
+
             if (user is null)
                 return NotFound("El usuario no existe.");
 
@@ -51,6 +93,7 @@ namespace Planify.Controllers
         }
 
         [HttpPost("unasign-role/{userId}")]
+        [Authorize(Policy = PolicyNames.SA)]
         public async Task<ActionResult> UnasignRole(int userId, List<int> rolesId)
         {
             User? user = await _UsersRepository.GetById(userId);
@@ -71,6 +114,7 @@ namespace Planify.Controllers
             await _UsersRepository.Save();
             return Ok();
         }
+
     }
 
 }
