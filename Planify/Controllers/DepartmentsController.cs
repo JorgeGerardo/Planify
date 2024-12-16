@@ -32,11 +32,11 @@ namespace Planify.Controllers
     // [MinimumRh]
     public partial class DepartmentsController
     {
-        [Authorize(Policy = PolicyNames.MinimumRh)]
+        [Authorize(Policy = PolicyNames.MinimumRhOrViewer)]
         public override Task<IEnumerable<Department>> Get() => 
             base.Get();
 
-        [Authorize(Policy = PolicyNames.MinimumRh)]
+        [Authorize(Policy = PolicyNames.MinimumRhOrViewer)]
         public override Task<ActionResult<Department>> GetById(int id) => 
             base.GetById(id);
 
