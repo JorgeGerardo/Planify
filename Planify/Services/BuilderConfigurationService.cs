@@ -91,10 +91,14 @@ namespace Planify.Services
                 options.AddPolicy(PolicyNames.Rh, PoliciesService.GetHumanResources());
                 options.AddPolicy(PolicyNames.Viewer, PoliciesService.GetViewer());
 
-                //Combinaciones
-                options.AddPolicy(PolicyNames.MinimumAdmin, PoliciesService.GetSAorAdmin());
-                options.AddPolicy(PolicyNames.MinimumRhAdmin, PoliciesService.GetRhAdmin_Admin_SA());
-                options.AddPolicy(PolicyNames.MinimumRh, PoliciesService.Get_Rh_RhAdmin_Admin_SA());
+                // [Combinated]
+                options.AddPolicy(PolicyNames.MinimumAdmin, PoliciesService.GetMinimumAdmin());
+                options.AddPolicy(PolicyNames.MinimumRhAdmin, PoliciesService.GetMinimumRhAdmin());
+                options.AddPolicy(PolicyNames.MinimumRh, PoliciesService.GetMinimumRh());
+                
+                // [Combinated with Viewer]
+                options.AddPolicy(PolicyNames.MinimumRhAdminOrViewer, PoliciesService.Get_MinimumRhAdmin_OrViewer());
+                options.AddPolicy(PolicyNames.MinimumAdminOrViewer, PoliciesService.Get_MinimumAdmin_OrViewer());
             });
         }
 

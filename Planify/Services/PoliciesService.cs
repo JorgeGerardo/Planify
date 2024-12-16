@@ -4,7 +4,8 @@ using System.Security.Claims;
 
 namespace Planify.Services
 {
-    public static class PoliciesService
+    // [alone]
+    public static partial class PoliciesService
     {
         //[sa]
         public static AuthorizationPolicy GetSA() =>
@@ -18,11 +19,6 @@ namespace Planify.Services
         public static AuthorizationPolicy GetAdmin() =>
             new AuthorizationPolicyBuilder()
                 .RequireRole("admin")
-                .RequireClaim("edit", "true")
-                .RequireClaim("soft-delete", "true")
-                .RequireClaim("read", "true")
-                .RequireClaim("create", "true")
-                .RequireClaim("restore", "true")
                 .RequireAuthenticatedUser()
                 .Build();
 
@@ -31,10 +27,6 @@ namespace Planify.Services
         public static AuthorizationPolicy GetPjManager() =>
             new AuthorizationPolicyBuilder()
                 .RequireRole("manager")
-                .RequireClaim("edit", "true")
-                .RequireClaim("soft-delete", "true")
-                .RequireClaim("read", "true")
-                .RequireClaim("create", "true")
                 .RequireAuthenticatedUser()
                 .Build();
 
@@ -44,11 +36,6 @@ namespace Planify.Services
         public static AuthorizationPolicy GetRhAdmin() =>
             new AuthorizationPolicyBuilder()
                 .RequireRole("rh-admin")
-                .RequireClaim("edit", "true")
-                .RequireClaim("soft-delete", "true")
-                .RequireClaim("read", "true")
-                .RequireClaim("create", "true")
-                .RequireClaim("restore", "true")
                 .RequireAuthenticatedUser()
                 .Build();
 
@@ -58,8 +45,6 @@ namespace Planify.Services
         public static AuthorizationPolicy GetHumanResources() =>
             new AuthorizationPolicyBuilder()
                 .RequireRole("rh")
-                .RequireClaim("create", "true")
-                .RequireClaim("read", "true")
                 .RequireAuthenticatedUser()
                 .Build();
 
@@ -68,25 +53,33 @@ namespace Planify.Services
         public static AuthorizationPolicy GetViewer() =>
             new AuthorizationPolicyBuilder()
                 .RequireRole("viewer")
-                .RequireClaim("read", "true")
                 .RequireAuthenticatedUser()
                 .Build();
 
-        //TODO: Deberías hacer uno que permita SA-ADMIN-Viewer
-        // [Combinated]
-        public static AuthorizationPolicy GetSAorAdmin() =>
+    }
+
+
+    // [Combinated]
+    public static partial class PoliciesService
+    {
+        public static AuthorizationPolicy GetMinimumAdmin() =>
             new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .RequireAssertion(context =>
                 {
                     //TODO:Creo que se deberían eliminar los permisos y trabajar solo con roles
-                    if (context.User.HasClaim(c => c.Type is ClaimTypes.Role && c.Value is PolicyNames.SA))
-                        return true;
-                    return IsAdmin(context);
+
+                    string[] validRoles =
+                    { PolicyNames.SA, PolicyNames.Admin};
+
+                    return context.User.Claims
+                        .Where(c => c.Type is ClaimTypes.Role)
+                        .Any(c => validRoles.Contains(c.Value));
+
                 })
                 .Build();
 
-        public static AuthorizationPolicy GetRhAdmin_Admin_SA() =>
+        public static AuthorizationPolicy GetMinimumRhAdmin() =>
             new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .RequireAssertion(context =>
@@ -100,13 +93,13 @@ namespace Planify.Services
                 })
                 .Build();
 
-        public static AuthorizationPolicy Get_Rh_RhAdmin_Admin_SA() =>
+        public static AuthorizationPolicy GetMinimumRh() =>
             new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .RequireAssertion(context =>
                 {
                     string[] validRoles =
-                        { PolicyNames.SA, PolicyNames.Rh, PolicyNames.Admin, PolicyNames.RhAdmin };
+                        {PolicyNames.Rh, PolicyNames.RhAdmin, PolicyNames.Admin, PolicyNames.SA };
 
                     return context.User.Claims
                     .Where(c => c.Type is ClaimTypes.Role)
@@ -114,20 +107,35 @@ namespace Planify.Services
                 })
                 .Build();
 
-        private static bool IsAdmin(AuthorizationHandlerContext context)
-        {
-            if (!context.User.HasClaim(c => c.Type is ClaimTypes.Role && c.Value is PolicyNames.Admin))
-                return false;
 
-            if (context.User.HasClaim(c => c.Type is "edit" && c.Value is "true") &&
-                context.User.HasClaim(c => c.Type is "soft-delete" && c.Value is "true") &&
-                context.User.HasClaim(c => c.Type is "read" && c.Value is "true") &&
-                context.User.HasClaim(c => c.Type is "create" && c.Value is "true") &&
-                context.User.HasClaim(c => c.Type is "restore" && c.Value is "true"))
-                return true;
+        //With Viewer
+        public static AuthorizationPolicy Get_MinimumAdmin_OrViewer() =>
+            new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireAssertion(context =>
+                {
+                    string[] validRoles =
+                    { PolicyNames.Admin, PolicyNames.SA, PolicyNames.Viewer };
 
-            return false;
-        }
+                    return context.User.Claims
+                        .Where(c => c.Type is ClaimTypes.Role)
+                        .Any(c => validRoles.Contains(c.Value));
+                })
+                .Build();
+
+        public static AuthorizationPolicy Get_MinimumRhAdmin_OrViewer() =>
+            new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireAssertion(context =>
+                {
+                    string[] validRoles =
+                    { PolicyNames.RhAdmin, PolicyNames.Admin, PolicyNames.SA, PolicyNames.Viewer };
+
+                    return context.User.Claims
+                        .Where(c => c.Type is ClaimTypes.Role)
+                        .Any(c => validRoles.Contains(c.Value));
+                })
+                .Build();
 
     }
 }

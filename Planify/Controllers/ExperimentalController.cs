@@ -77,5 +77,21 @@ namespace Planify.Controllers
         [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
         public string SA_ADMIN_RHADMIN() => "SA_ADMIN_RH-ADMIN";
 
+
+        [HttpGet("ADMINorSA")]
+        [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        public string ADMIN_SA() => "Admin or sa";
+
+
+
+        [HttpGet("[action]")]
+        [Authorize(Policy = PolicyNames.MinimumAdminOrViewer)]
+        public string Admin_sa_viewer() => "Admin_sa_viewer";
+
+
+        [HttpGet("[action]")]
+        [Authorize(Policy = PolicyNames.MinimumRhAdminOrViewer)]
+        public string RhAdmin_sa_viewer() => "RhAdmin_>>>>_viewer";
+
     }
 }
