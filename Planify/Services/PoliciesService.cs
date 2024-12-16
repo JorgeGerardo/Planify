@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
@@ -72,10 +73,7 @@ namespace Planify.Services
                     string[] validRoles =
                     { PolicyNames.SA, PolicyNames.Admin};
 
-                    return context.User.Claims
-                        .Where(c => c.Type is ClaimTypes.Role)
-                        .Any(c => validRoles.Contains(c.Value));
-
+                    return IsClaimsMatch(validRoles, context.User.Claims);
                 })
                 .Build();
 
@@ -87,9 +85,7 @@ namespace Planify.Services
                     string[] validRoles =
                     { PolicyNames.RhAdmin, PolicyNames.Admin, PolicyNames.SA };
 
-                    return context.User.Claims
-                        .Where(c => c.Type is ClaimTypes.Role)
-                        .Any(c => validRoles.Contains(c.Value));
+                    return IsClaimsMatch(validRoles, context.User.Claims);
                 })
                 .Build();
 
@@ -101,9 +97,7 @@ namespace Planify.Services
                     string[] validRoles =
                         {PolicyNames.Rh, PolicyNames.RhAdmin, PolicyNames.Admin, PolicyNames.SA };
 
-                    return context.User.Claims
-                    .Where(c => c.Type is ClaimTypes.Role)
-                    .Any(c => validRoles.Contains(c.Value));
+                    return IsClaimsMatch(validRoles, context.User.Claims);
                 })
                 .Build();
 
@@ -117,9 +111,7 @@ namespace Planify.Services
                     string[] validRoles =
                     { PolicyNames.Admin, PolicyNames.SA, PolicyNames.Viewer };
 
-                    return context.User.Claims
-                        .Where(c => c.Type is ClaimTypes.Role)
-                        .Any(c => validRoles.Contains(c.Value));
+                    return IsClaimsMatch(validRoles, context.User.Claims);
                 })
                 .Build();
 
@@ -131,11 +123,33 @@ namespace Planify.Services
                     string[] validRoles =
                     { PolicyNames.RhAdmin, PolicyNames.Admin, PolicyNames.SA, PolicyNames.Viewer };
 
-                    return context.User.Claims
-                        .Where(c => c.Type is ClaimTypes.Role)
-                        .Any(c => validRoles.Contains(c.Value));
+                    return IsClaimsMatch(validRoles, context.User.Claims);
+                })
+                .Build();
+
+        public static AuthorizationPolicy Get_MinimumRh_OrViewer() =>
+            new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireAssertion(context =>
+                {
+                    string[] validRoles =
+                    { PolicyNames.Rh, PolicyNames.RhAdmin, PolicyNames.Admin, PolicyNames.SA, PolicyNames.Viewer };
+
+                    return IsClaimsMatch(validRoles, context.User.Claims);
                 })
                 .Build();
 
     }
+
+    // [Tools]
+    public static partial class PoliciesService
+    {
+        private static bool IsClaimsMatch(string[] validRoles, IEnumerable<Claim> claims) =>
+            claims
+            .Where(c => c.Type is ClaimTypes.Role)
+            .Any(c => validRoles.Contains(c.Value));
+
+    }
+
+
 }

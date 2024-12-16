@@ -99,6 +99,7 @@ namespace Planify.Services
                 // [Combinated with Viewer]
                 options.AddPolicy(PolicyNames.MinimumRhAdminOrViewer, PoliciesService.Get_MinimumRhAdmin_OrViewer());
                 options.AddPolicy(PolicyNames.MinimumAdminOrViewer, PoliciesService.Get_MinimumAdmin_OrViewer());
+                options.AddPolicy(PolicyNames.MinimumRhOrViewer, PoliciesService.Get_MinimumRh_OrViewer());
             });
         }
 

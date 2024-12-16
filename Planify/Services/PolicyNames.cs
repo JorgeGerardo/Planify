@@ -8,6 +8,7 @@
         public const string MinimumAdmin = "SAorAdmin";
         public const string MinimumRhAdminOrViewer = "Viewer_Admin_SA";
         public const string MinimumAdminOrViewer = "Admin_SA_Viewer";
+        public const string MinimumRhOrViewer = "Rh_RhAdmin_Admin_SA_Viewer";
 
         //[individual]
         public const string SA = "sa";
