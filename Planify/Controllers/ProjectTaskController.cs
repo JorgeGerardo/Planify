@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Planify.Models;
 using Planify.Repositories;
 using Planify.Repositories.UoW;
+using Planify.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -72,10 +73,45 @@ namespace Planify.Controllers
         }
     }
 
+
+    public partial class ProjectTaskController
+    {
+        //TODO: No se si deberia crear algun rol como desarrollador o trabajador que
+        // sete debajo de Manager en al jerarquía o solo
+        //que este autorizado el usuario. 
+        //[Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
+        [Authorize]
+        public override Task<IEnumerable<ProjectTask>> Get() =>
+            base.Get();
+
+        [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
+        public override Task<ActionResult<ProjectTask>> GetById(int id) =>
+            base.GetById(id);
+
+        [Authorize(Policy = PolicyNames.MinimumManager)]
+        public override Task<IActionResult> Update(int id, ProjectTaskUpdateDTO createDto) =>
+            base.Update(id, createDto);
+
+        [Authorize(Policy = PolicyNames.MinimumManager)]
+        public override Task<IActionResult> Add([FromBody] ProjectTaskCreateDTO createDto) =>
+            base.Add(createDto);
+
+
+        [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        public override Task<IEnumerable<ProjectTask>> GetWithoutFiltters() =>
+            base.GetWithoutFiltters();
+
+        [Authorize(Policy = PolicyNames.MinimumManager)]
+        public override Task<IActionResult> Delete(int id) =>
+            base.Delete(id);
+    }
+
+
     //Assign-Unassign employees
     public partial class ProjectTaskController
     {
         [HttpPatch("assign-employees/{id}")]
+        [Authorize(Policy = PolicyNames.MinimumManager)]
         public async Task<ActionResult> AssignEmployees(int id, List<int> EmployeesIds)
         {
             var task = await UoW.projectTasks.GetById(id);
@@ -95,6 +131,7 @@ namespace Planify.Controllers
         }
 
         [HttpDelete("unassign-employees/{id}")]
+        [Authorize(Policy = PolicyNames.MinimumManager)]
         public async Task<ActionResult> UnassignEmployees(int id, List<int> EmployeesIds)
         {
             var task = await UoW.projectTasks.GetById(id);
@@ -112,8 +149,6 @@ namespace Planify.Controllers
             await UoW.SaveAsync();
             return NoContent();
         }
-
-
 
     }
 
