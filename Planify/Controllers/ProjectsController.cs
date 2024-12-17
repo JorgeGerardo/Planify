@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Planify.Models;
 using Planify.Repositories;
+using Planify.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -23,7 +25,7 @@ namespace Planify.Controllers
         }
     }
 
-    //Create-Update:
+    //Maps:
     public partial class ProjectsController
     {
         //Create:
@@ -64,6 +66,37 @@ namespace Planify.Controllers
             return currentState;
         }
     }
+
+
+    public partial class ProjectsController
+    {
+        [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
+        public override Task<IEnumerable<Project>> Get() =>
+            base.Get();
+
+        [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
+        public override Task<ActionResult<Project>> GetById(int id) =>
+            base.GetById(id);
+
+        [Authorize(Policy = PolicyNames.MinimumManager)]
+        public override Task<IActionResult> Update(int id, ProjectUpdateDTO createDto) =>
+            base.Update(id, createDto);
+
+        [Authorize(Policy = PolicyNames.MinimumManager)]
+        public override Task<IActionResult> Add([FromBody] ProjectCreateDTO createDto) =>
+            base.Add(createDto);
+
+
+        [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        public override Task<IEnumerable<Project>> GetWithoutFiltters() =>
+            base.GetWithoutFiltters();
+
+        [Authorize(Policy = PolicyNames.MinimumManager)]
+        public override Task<IActionResult> Delete(int id) =>
+            base.Delete(id);
+
+    }
+
 
     //Add-remove employees
     public partial class ProjectsController
