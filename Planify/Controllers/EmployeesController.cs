@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Planify.Models;
 using Planify.Repositories;
 using Planify.Repositories.UoW;
+using Planify.Services;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Planify.Controllers
@@ -18,6 +20,7 @@ namespace Planify.Controllers
             UOW = uow;
     }
 
+    //Maps
     public partial class EmployeesController : GenericController<Employee, EmployeeRepository, EmployeeCreateDTO, EmployeeUpdateDTO>
     {
         protected override Employee MapToEntity(EmployeeCreateDTO dto) =>
@@ -87,6 +90,37 @@ namespace Planify.Controllers
 
         protected override Employee MapToUpdateEntity(Employee currentState, EmployeeUpdateDTO dto) =>
             MapToUpdateEntityAsync(currentState, dto).GetAwaiter().GetResult();
+
+    }
+
+    public partial class EmployeesController
+    {
+        [Authorize(Policy = PolicyNames.MinimumRhOrViewer)]
+        public override Task<IEnumerable<Employee>> Get() =>
+            base.Get();
+
+        [Authorize(Policy = PolicyNames.MinimumRhOrViewer)]
+        public override Task<ActionResult<Employee>> GetById(int id) =>
+            base.GetById(id);
+
+
+
+        [Authorize(Policy = PolicyNames.MinimumRh)]
+        public override Task<IActionResult> Update(int id, EmployeeUpdateDTO createDto) =>
+            base.Update(id, createDto);
+
+        [Authorize(Policy = PolicyNames.MinimumRh)]
+        public override Task<IActionResult> Add([FromBody] EmployeeCreateDTO createDto) =>
+            base.Add(createDto);
+
+        [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
+        public override Task<IEnumerable<Employee>> GetWithoutFiltters() =>
+            base.GetWithoutFiltters();
+
+        [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
+        public override Task<IActionResult> Delete(int id) =>
+            base.Delete(id);
+
 
     }
 }
