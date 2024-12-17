@@ -2,13 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Planify.Models;
 using Planify.Repositories;
+using Planify.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Planify.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class PersonsController : GenericController<Person, PersonRepository, PersonDTO, PersonUpdateDTO>
+    public partial class PersonsController : GenericController<Person, PersonRepository, PersonDTO, PersonUpdateDTO>
     {
         public PersonsController(IGenericCRUDRepository<Person, int> _Repository) :
             base(_Repository)
@@ -41,6 +44,39 @@ namespace Planify.Controllers
 
             return currentState;
         }
+
+    }
+
+
+    public partial class PersonsController
+    {
+        [Authorize(Policy = PolicyNames.MinimumRhOrViewer)]
+        public override Task<IEnumerable<Person>> Get() =>
+            base.Get();
+
+        [Authorize(Policy = PolicyNames.MinimumRhOrViewer)]
+        public override Task<ActionResult<Person>> GetById(int id) =>
+            base.GetById(id);
+
+        [Authorize(Policy = PolicyNames.MinimumRh)]
+        public override Task<IActionResult> Update(int id, PersonUpdateDTO createDto) =>
+            base.Update(id, createDto);
+
+        [Authorize(Policy = PolicyNames.MinimumRh)]
+        public override Task<IActionResult> Add([FromBody] PersonDTO createDto) =>
+            base.Add(createDto);
+
+    }
+
+    public partial class PersonsController
+    {
+        [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
+        public override Task<IEnumerable<Person>> GetWithoutFiltters() =>
+            base.GetWithoutFiltters();
+
+        [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
+        public override Task<IActionResult> Delete(int id) =>
+            base.Delete(id);
 
     }
 }
