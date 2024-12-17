@@ -2,10 +2,10 @@
 using Planify.Models;
 using Planify.Services;
 using System;
-using System.Collections.Generic;
 
 namespace Planify.Data
 {
+    // DB Set's
     public partial class ProjectContext : DbContext
     {
         public ProjectContext(DbContextOptions<ProjectContext> options) : base(options) { }

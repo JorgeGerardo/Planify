@@ -27,6 +27,8 @@ namespace Planify.Models
         public TaskStatus Status { get; set; } = TaskStatus.Pending;
         public required Priority Priority { get; set; }
 
+        //TODO: Haz el controlador o agrega un endpoint a ProjectTask para agregar comentarios
+        // (creo que si se debería heredar y que el admin pueda ver los comentarios borrados)
         [JsonIgnore]
         public ICollection<ProjectTaskComentary> Comentaries { get; set; } = new List<ProjectTaskComentary>();
 
