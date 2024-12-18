@@ -223,7 +223,7 @@ namespace Planify.Data
                     .HasMany(u => u.Users)
                     .WithMany(u => u.Roles)
                     .UsingEntity(d => d.HasData(
-                        new { UsersId = 1, RolesId = 1},
+                        new { UsersId = 1, RolesId = 1 },
                         new { UsersId = 2, RolesId = 2 },
                         new { UsersId = 3, RolesId = 3 },
                         new { UsersId = 4, RolesId = 4 },
@@ -301,6 +301,18 @@ namespace Planify.Data
                 entity.Property(p => p.EmployeeId).HasColumnOrder(2);
                 entity.Property(p => p.Comentary).HasColumnOrder(3);
             });
+
+            modelBuilder.Entity<ProjectTaskComentary>().HasData(
+                new ProjectTaskComentary() { Id = 1, Comentary = "Comentario 1", EmployeeId = 1, ProjectTaskId = 1 },
+                new ProjectTaskComentary() { Id = 2, Comentary = "Comentario 2", EmployeeId = 2, ProjectTaskId = 1 },
+                new ProjectTaskComentary() { Id = 3, Comentary = "Comentario 3", EmployeeId = 1, ProjectTaskId = 1 },
+                new ProjectTaskComentary() { Id = 4, Comentary = "Comentario 4", EmployeeId = 2, ProjectTaskId = 1 },
+                new ProjectTaskComentary() { Id = 5, Comentary = "Comentario 5", EmployeeId = 1, ProjectTaskId = 1 },
+                new ProjectTaskComentary() { Id = 6, Comentary = "Comentario 6", EmployeeId = 2, ProjectTaskId = 1 },
+                new ProjectTaskComentary() { Id = 7, Comentary = "Comentario 7", EmployeeId = 1, ProjectTaskId = 1 },
+                new ProjectTaskComentary() { Id = 8, Comentary = "Comentario 8", EmployeeId = 2, ProjectTaskId = 1 },
+                new ProjectTaskComentary() { Id = 9, Comentary = "Comentario 9", EmployeeId = 1, ProjectTaskId = 1 }
+            );
 
         }
 
