@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Planify.Data;
 
@@ -11,9 +12,11 @@ using Planify.Data;
 namespace Planify.Migrations
 {
     [DbContext(typeof(ProjectContext))]
-    partial class ProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20241219063901_AssignTasks")]
+    partial class AssignTasks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -532,7 +535,7 @@ namespace Planify.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(5);
+                        .HasColumnOrder(4);
 
                     b.Property<DateOnly>("EstimatedEndDate")
                         .HasColumnType("date");
@@ -550,16 +553,15 @@ namespace Planify.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(2);
+                        .HasColumnOrder(1);
 
                     b.Property<string>("Priority")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(3);
+                        .HasColumnOrder(2);
 
                     b.Property<int>("ProjectId")
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
+                        .HasColumnType("int");
 
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
@@ -567,7 +569,7 @@ namespace Planify.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnOrder(4);
+                        .HasColumnOrder(3);
 
                     b.HasKey("Id");
 
@@ -579,7 +581,7 @@ namespace Planify.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDateUTC = new DateTime(2024, 12, 19, 6, 43, 36, 502, DateTimeKind.Utc).AddTicks(6724),
+                            CreatedDateUTC = new DateTime(2024, 12, 19, 6, 39, 0, 846, DateTimeKind.Utc).AddTicks(4940),
                             Description = "Realizar ...",
                             EstimatedEndDate = new DateOnly(1, 1, 1),
                             IsCompleted = false,
@@ -594,7 +596,7 @@ namespace Planify.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDateUTC = new DateTime(2024, 12, 19, 6, 43, 36, 502, DateTimeKind.Utc).AddTicks(6728),
+                            CreatedDateUTC = new DateTime(2024, 12, 19, 6, 39, 0, 846, DateTimeKind.Utc).AddTicks(4945),
                             Description = "Ajustar los parámetros del modelo...",
                             EstimatedEndDate = new DateOnly(1, 1, 1),
                             IsCompleted = false,
@@ -609,7 +611,7 @@ namespace Planify.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedDateUTC = new DateTime(2024, 12, 19, 6, 43, 36, 502, DateTimeKind.Utc).AddTicks(6730),
+                            CreatedDateUTC = new DateTime(2024, 12, 19, 6, 39, 0, 846, DateTimeKind.Utc).AddTicks(4946),
                             Description = "Realizar pruebas",
                             EstimatedEndDate = new DateOnly(1, 1, 1),
                             IsCompleted = false,
@@ -680,7 +682,7 @@ namespace Planify.Migrations
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectTaskId = 1,
-                            Time = new TimeOnly(6, 43, 36, 503).Add(TimeSpan.FromTicks(37))
+                            Time = new TimeOnly(6, 39, 0, 846).Add(TimeSpan.FromTicks(8486))
                         },
                         new
                         {
@@ -691,7 +693,7 @@ namespace Planify.Migrations
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectTaskId = 1,
-                            Time = new TimeOnly(6, 43, 36, 503).Add(TimeSpan.FromTicks(46))
+                            Time = new TimeOnly(6, 39, 0, 846).Add(TimeSpan.FromTicks(8495))
                         },
                         new
                         {
@@ -702,7 +704,7 @@ namespace Planify.Migrations
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectTaskId = 1,
-                            Time = new TimeOnly(6, 43, 36, 503).Add(TimeSpan.FromTicks(47))
+                            Time = new TimeOnly(6, 39, 0, 846).Add(TimeSpan.FromTicks(8496))
                         },
                         new
                         {
@@ -713,7 +715,7 @@ namespace Planify.Migrations
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectTaskId = 1,
-                            Time = new TimeOnly(6, 43, 36, 503).Add(TimeSpan.FromTicks(48))
+                            Time = new TimeOnly(6, 39, 0, 846).Add(TimeSpan.FromTicks(8497))
                         },
                         new
                         {
@@ -724,7 +726,7 @@ namespace Planify.Migrations
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectTaskId = 1,
-                            Time = new TimeOnly(6, 43, 36, 503).Add(TimeSpan.FromTicks(49))
+                            Time = new TimeOnly(6, 39, 0, 846).Add(TimeSpan.FromTicks(8498))
                         },
                         new
                         {
@@ -735,7 +737,7 @@ namespace Planify.Migrations
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectTaskId = 1,
-                            Time = new TimeOnly(6, 43, 36, 503).Add(TimeSpan.FromTicks(51))
+                            Time = new TimeOnly(6, 39, 0, 846).Add(TimeSpan.FromTicks(8499))
                         },
                         new
                         {
@@ -746,7 +748,7 @@ namespace Planify.Migrations
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectTaskId = 1,
-                            Time = new TimeOnly(6, 43, 36, 503).Add(TimeSpan.FromTicks(52))
+                            Time = new TimeOnly(6, 39, 0, 846).Add(TimeSpan.FromTicks(8501))
                         },
                         new
                         {
@@ -757,7 +759,7 @@ namespace Planify.Migrations
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectTaskId = 1,
-                            Time = new TimeOnly(6, 43, 36, 503).Add(TimeSpan.FromTicks(53))
+                            Time = new TimeOnly(6, 39, 0, 846).Add(TimeSpan.FromTicks(8502))
                         },
                         new
                         {
@@ -768,7 +770,7 @@ namespace Planify.Migrations
                             IsDeleted = false,
                             LastUpdatedUTC = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ProjectTaskId = 1,
-                            Time = new TimeOnly(6, 43, 36, 503).Add(TimeSpan.FromTicks(54))
+                            Time = new TimeOnly(6, 39, 0, 846).Add(TimeSpan.FromTicks(8503))
                         });
                 });
 

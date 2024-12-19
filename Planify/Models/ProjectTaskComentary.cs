@@ -8,10 +8,10 @@ namespace Planify.Models
     {
         [JsonIgnore]
         public ProjectTask? ProjectTask { get; set; }
-        public int ProjectTaskId { get; set; }
+        public required int ProjectTaskId { get; set; }
         [JsonIgnore]
         public Employee? Author { get; set; }
-        public int EmployeeId { get; set; }
+        public required int EmployeeId { get; set; }
 
         public DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
         public TimeOnly Time { get; set; } = TimeOnly.FromDateTime(DateTime.UtcNow);
@@ -19,5 +19,17 @@ namespace Planify.Models
         [MaxLength(255)]
         [MinLength(1)]
         public required string Comentary { get; set; }
+    }
+
+    public class ProjectTaskComentaryCreateDTO
+    {
+        [MaxLength(255)]
+        [MinLength(1)]
+        public required string Comentary { get; set; }
+
+
+        public required int ProjectTaskId { get; set; }
+        public int EmployeeId { get; set; }
+
     }
 }

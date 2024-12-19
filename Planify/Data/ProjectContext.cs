@@ -2,6 +2,7 @@
 using Planify.Models;
 using Planify.Services;
 using System;
+using System.Collections.Generic;
 
 namespace Planify.Data
 {
@@ -91,6 +92,24 @@ namespace Planify.Data
                         Country = "México",
                         LastNames = "Argon Lazaro",
                         Sate = "Sinaloa"
+                    },
+                    new Person()
+                    {
+                        Id = 3,
+                        Name = "Mariana",
+                        City = "Monterrey",
+                        Country = "México",
+                        LastNames = "Garza",
+                        Sate = "Nuevo Leon"
+                    },
+                    new Person()
+                    {
+                        Id = 4,
+                        Name = "Antonella",
+                        City = "Mexicali",
+                        Country = "México",
+                        LastNames = "Duran",
+                        Sate = "Baja california"
                     }
                 );
 
@@ -178,6 +197,21 @@ namespace Planify.Data
                 .WithMany(p => p.Tasks)
                 .HasForeignKey(pt => pt.ProjectId);
 
+            modelBuilder.Entity<Employee>()
+                .HasMany(e => e.Tasks)
+                .WithMany(t => t.Employees)
+                .UsingEntity(d => d.HasData(
+                        //Actividad 1
+                        new { EmployeesId = 2, TasksId = 1 },
+                        //Actividad 2
+                        new { EmployeesId = 2, TasksId = 2 },
+                        new { EmployeesId = 3, TasksId = 2 },
+                        new { EmployeesId = 4, TasksId = 2 },
+                        //Actividad 3
+                        new { EmployeesId = 2, TasksId = 3 }
+                    ));
+
+
             modelBuilder.Entity<ProjectTask>(entity =>
             {
                 entity.Property(p => p.Priority).HasConversion<string>();
@@ -185,10 +219,11 @@ namespace Planify.Data
 
                 //Order
                 entity.Property(p => p.Id).HasColumnOrder(0);
-                entity.Property(p => p.Name).HasColumnOrder(1);
-                entity.Property(p => p.Priority).HasColumnOrder(2);
-                entity.Property(p => p.Status).HasColumnOrder(3);
-                entity.Property(p => p.Description).HasColumnOrder(4);
+                entity.Property(p => p.ProjectId).HasColumnOrder(1);
+                entity.Property(p => p.Name).HasColumnOrder(2);
+                entity.Property(p => p.Priority).HasColumnOrder(3);
+                entity.Property(p => p.Status).HasColumnOrder(4);
+                entity.Property(p => p.Description).HasColumnOrder(5);
 
                 entity.HasData(
                     new ProjectTask()
@@ -198,6 +233,22 @@ namespace Planify.Data
                         Name = "Actividad 1",
                         Priority = Priority.Critical,
                         Description = "Realizar ...",
+                    },
+                    new ProjectTask()
+                    {
+                        Id = 2,
+                        ProjectId = 1,
+                        Name = "Actividad 2",
+                        Priority = Priority.Medium,
+                        Description = "Ajustar los parámetros del modelo...",
+                    },
+                    new ProjectTask()
+                    {
+                        Id = 3,
+                        ProjectId = 1,
+                        Name = "Actividad 3",
+                        Priority = Priority.Low,
+                        Description = "Realizar pruebas",
                     }
                 );
             });
@@ -272,6 +323,22 @@ namespace Planify.Data
                         PersonId = 2,
                         UserId = 2,
                         HireDate = DateOnly.FromDateTime(new DateTime(2020, 11, 1))
+                    },
+                    new Employee()
+                    {
+                        Id = 3,
+                        Name = "Mariana",
+                        PersonId = 3,
+                        UserId = 3,
+                        HireDate = DateOnly.FromDateTime(new DateTime(2021, 12, 31))
+                    },
+                    new Employee()
+                    {
+                        Id = 4,
+                        Name = "Anita",
+                        PersonId = 4,
+                        UserId = 4,
+                        HireDate = DateOnly.FromDateTime(new DateTime(2018, 12, 31))
                     }
                 );
             });
