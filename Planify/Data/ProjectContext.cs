@@ -187,6 +187,16 @@ namespace Planify.Data
                     }
                 );
             });
+
+            modelBuilder.Entity<Project>()
+                .HasMany(p => p.Employees)
+                .WithMany(e => e.Projects)
+                .UsingEntity(e => e.HasData(
+                    new { EmployeesId = 1, ProjectsId = 1},
+                    new { EmployeesId = 2, ProjectsId = 1},
+                    new { EmployeesId = 3, ProjectsId = 1},
+                    new { EmployeesId = 4, ProjectsId = 1}
+                ));
         }
 
         private void SetProjectTaskTable(ModelBuilder modelBuilder)
