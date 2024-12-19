@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\DepartmentsDeletedController.cs" />
+    <Compile Remove="Models\Permisions.cs" />
   </ItemGroup>
 
   <ItemGroup>

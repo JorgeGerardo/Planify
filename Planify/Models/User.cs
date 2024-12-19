@@ -17,8 +17,6 @@ namespace Planify.Models
         [JsonIgnore]
         public ICollection<Role> Roles { get; set; } = new List<Role>();
 
-        [JsonIgnore]
-        public ICollection<Permisions> Permisions { get; set; } = new List<Permisions>();
     }
 
 

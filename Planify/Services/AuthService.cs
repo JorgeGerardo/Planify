@@ -18,8 +18,6 @@ namespace Planify.Services
             foreach (var role in user.Roles)
                 claims.Add(new Claim(ClaimTypes.Role, role.Name));
 
-            foreach (var permision in user.Permisions)
-                claims.Add(new Claim(permision.Name, "true"));
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key));
             SigningCredentials signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);

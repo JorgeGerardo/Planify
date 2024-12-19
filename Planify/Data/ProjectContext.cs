@@ -18,7 +18,6 @@ namespace Planify.Data
         public DbSet<Department> Departments { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<ProjectTaskComentary> Comentaries { get; set; }
-        public DbSet<Permisions> Permisions { get; set; }
     }
 
     public partial class ProjectContext : DbContext
@@ -36,7 +35,6 @@ namespace Planify.Data
             SetProjectTaskTable(modelBuilder);
             SetQueryFilters(modelBuilder);
             SetProjectTaskComentaryTable(modelBuilder);
-            SetPermisionsTable(modelBuilder);
         }
 
         private void SetQueryFilters(ModelBuilder modelBuilder)
@@ -393,49 +391,55 @@ namespace Planify.Data
 
         }
 
-        private void SetPermisionsTable(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Permisions>().HasData(
-                    new Permisions { Id = 1, Name = "create", Description = "Permiso para crear." },
-                    new Permisions { Id = 2, Name = "read", Description = "Permiso para leer." },
-                    new Permisions { Id = 3, Name = "edit", Description = "Permiso para editar." },
-                    new Permisions { Id = 4, Name = "soft-delete", Description = "Permiso para eliminar." },
-                    new Permisions { Id = 5, Name = "restore", Description = "Permiso para quitar eliminación lógica." }
-            );
 
 
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Permisions)
-                .WithMany(p => p.Users)
-                .UsingEntity(j => j.HasData(
-                    new { UsersId = 2, PermisionsId = 1 },
-                    new { UsersId = 2, PermisionsId = 2 },
-                    new { UsersId = 2, PermisionsId = 3 },
-                    new { UsersId = 2, PermisionsId = 4 },
-                    new { UsersId = 2, PermisionsId = 5 },
-
-
-                    new { UsersId = 3, PermisionsId = 1 },
-                    new { UsersId = 3, PermisionsId = 2 },
-                    new { UsersId = 3, PermisionsId = 3 },
-                    new { UsersId = 3, PermisionsId = 4 },
-
-
-                    new { UsersId = 4, PermisionsId = 1 },
-                    new { UsersId = 4, PermisionsId = 2 },
-                    new { UsersId = 4, PermisionsId = 3 },
-                    new { UsersId = 4, PermisionsId = 4 },
-                    new { UsersId = 4, PermisionsId = 5 },
-
-
-                    new { UsersId = 5, PermisionsId = 1 },
-                    new { UsersId = 5, PermisionsId = 2 },
-
-
-                    new { UsersId = 6, PermisionsId = 2 }
-
-
-                ));
-        }
     }
+    public partial class ProjectContext : DbContext
+    {
+        //private void SetPermisionsTable(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Permisions>().HasData(
+        //            new Permisions { Id = 1, Name = "create", Description = "Permiso para crear." },
+        //            new Permisions { Id = 2, Name = "read", Description = "Permiso para leer." },
+        //            new Permisions { Id = 3, Name = "edit", Description = "Permiso para editar." },
+        //            new Permisions { Id = 4, Name = "soft-delete", Description = "Permiso para eliminar." },
+        //            new Permisions { Id = 5, Name = "restore", Description = "Permiso para quitar eliminación lógica." }
+        //    );
+
+
+        //    modelBuilder.Entity<User>()
+        //        .HasMany(u => u.Permisions)
+        //        .WithMany(p => p.Users)
+        //        .UsingEntity(j => j.HasData(
+        //            new { UsersId = 2, PermisionsId = 1 },
+        //            new { UsersId = 2, PermisionsId = 2 },
+        //            new { UsersId = 2, PermisionsId = 3 },
+        //            new { UsersId = 2, PermisionsId = 4 },
+        //            new { UsersId = 2, PermisionsId = 5 },
+
+
+        //            new { UsersId = 3, PermisionsId = 1 },
+        //            new { UsersId = 3, PermisionsId = 2 },
+        //            new { UsersId = 3, PermisionsId = 3 },
+        //            new { UsersId = 3, PermisionsId = 4 },
+
+
+        //            new { UsersId = 4, PermisionsId = 1 },
+        //            new { UsersId = 4, PermisionsId = 2 },
+        //            new { UsersId = 4, PermisionsId = 3 },
+        //            new { UsersId = 4, PermisionsId = 4 },
+        //            new { UsersId = 4, PermisionsId = 5 },
+
+
+        //            new { UsersId = 5, PermisionsId = 1 },
+        //            new { UsersId = 5, PermisionsId = 2 },
+
+
+        //            new { UsersId = 6, PermisionsId = 2 }
+
+
+        //        ));
+        //}
+    }
+
 }
