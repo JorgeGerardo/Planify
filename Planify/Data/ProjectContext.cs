@@ -182,7 +182,7 @@ namespace Planify.Data
                     new Project()
                     {
                         Id = 1,
-                        Name = "Loheed Martin Communication Software",
+                        Name = "Lockheed Martin Communication Software",
                         ManagerId = 1
                     }
                 );
@@ -382,12 +382,12 @@ namespace Planify.Data
             modelBuilder.Entity<ProjectTaskComentary>().HasData(
                 new ProjectTaskComentary() { Id = 1, Comentary = "Comentario 1", EmployeeId = 1, ProjectTaskId = 1 },
                 new ProjectTaskComentary() { Id = 2, Comentary = "Comentario 2", EmployeeId = 2, ProjectTaskId = 1 },
-                new ProjectTaskComentary() { Id = 3, Comentary = "Comentario 3", EmployeeId = 1, ProjectTaskId = 1 },
-                new ProjectTaskComentary() { Id = 4, Comentary = "Comentario 4", EmployeeId = 2, ProjectTaskId = 1 },
+                new ProjectTaskComentary() { Id = 3, Comentary = "Comentario 3", EmployeeId = 3, ProjectTaskId = 1 },
+                new ProjectTaskComentary() { Id = 4, Comentary = "Comentario 4", EmployeeId = 4, ProjectTaskId = 1 },
                 new ProjectTaskComentary() { Id = 5, Comentary = "Comentario 5", EmployeeId = 1, ProjectTaskId = 1 },
                 new ProjectTaskComentary() { Id = 6, Comentary = "Comentario 6", EmployeeId = 2, ProjectTaskId = 1 },
-                new ProjectTaskComentary() { Id = 7, Comentary = "Comentario 7", EmployeeId = 1, ProjectTaskId = 1 },
-                new ProjectTaskComentary() { Id = 8, Comentary = "Comentario 8", EmployeeId = 2, ProjectTaskId = 1 },
+                new ProjectTaskComentary() { Id = 7, Comentary = "Comentario 7", EmployeeId = 3, ProjectTaskId = 1 },
+                new ProjectTaskComentary() { Id = 8, Comentary = "Comentario 8", EmployeeId = 4, ProjectTaskId = 1 },
                 new ProjectTaskComentary() { Id = 9, Comentary = "Comentario 9", EmployeeId = 1, ProjectTaskId = 1 }
             );
 
