@@ -26,10 +26,5 @@ namespace Planify.Models
         [MaxLength(255)]
         [MinLength(1)]
         public required string Comentary { get; set; }
-
-
-        public required int ProjectTaskId { get; set; }
-        public int EmployeeId { get; set; }
-
     }
 }
