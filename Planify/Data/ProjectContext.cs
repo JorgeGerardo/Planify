@@ -108,6 +108,51 @@ namespace Planify.Data
                         Country = "México",
                         LastNames = "Duran",
                         Sate = "Baja california"
+                    },
+                    new Person()
+                    {
+                        Id = 5,
+                        Name = "Carlos Mario",
+                        City = "Monterrey",
+                        Country = "México",
+                        LastNames = "Dorigan",
+                        Sate = "Nuevo Leon"
+                    },
+                    new Person()
+                    {
+                        Id = 6,
+                        Name = "Samuel Juan",
+                        City = "Culiacán",
+                        Country = "México",
+                        LastNames = "Rodriguez Sandoval",
+                        Sate = "Sinaloa"
+                    },
+                    new Person()
+                    {
+                        Id = 7,
+                        Name = "Sebastian",
+                        City = "Los Mochis",
+                        Country = "México",
+                        LastNames = "Pajarito Lopez",
+                        Sate = "Sinaloa"
+                    },
+                    new Person()
+                    {
+                        Id = 8,
+                        Name = "Brandon",
+                        City = "El Fuerte",
+                        Country = "México",
+                        LastNames = "Perez Sánchez",
+                        Sate = "Sinaloa"
+                    },
+                    new Person()
+                    {
+                        Id = 9,
+                        Name = "Santiago",
+                        City = "Durango",
+                        Country = "México",
+                        LastNames = "Ríos Gutiérrez",
+                        Sate = "Durango"
                     }
                 );
 
@@ -156,6 +201,24 @@ namespace Planify.Data
                         Id = 6,
                         Email = "samueljuan@example.com",
                         HashPassword = AuthService.EncrypBySHA256("samueljuan")
+                    },
+                    new User() //Dev
+                    {
+                        Id = 7,
+                        Email = "sebastian@example.com",
+                        HashPassword = AuthService.EncrypBySHA256("sebastian")
+                    },
+                    new User() //Dev
+                    {
+                        Id = 8,
+                        Email = "brandon@example.com",
+                        HashPassword = AuthService.EncrypBySHA256("brandon")
+                    },
+                    new User() //Dev
+                    {
+                        Id = 9,
+                        Email = "santiago@example.com",
+                        HashPassword = AuthService.EncrypBySHA256("santiago")
                     }
                 );
             });
@@ -275,7 +338,8 @@ namespace Planify.Data
                     new Role { Id = 3, Name = "manager" },
                     new Role { Id = 4, Name = "rh-admin" },
                     new Role { Id = 5, Name = "rh" },
-                    new Role { Id = 6, Name = "viewer" }
+                    new Role { Id = 6, Name = "viewer" },
+                    new Role { Id = 7, Name = "developer" }
                 );
 
                 modelBuilder.Entity<Role>()
@@ -287,7 +351,13 @@ namespace Planify.Data
                         new { UsersId = 3, RolesId = 3 },
                         new { UsersId = 4, RolesId = 4 },
                         new { UsersId = 5, RolesId = 5 },
-                        new { UsersId = 6, RolesId = 6 }
+                        new { UsersId = 6, RolesId = 6 },
+
+                        //Devs:
+                        new { UsersId = 7, RolesId = 7 },
+                        new { UsersId = 8, RolesId = 7 },
+                        new { UsersId = 9, RolesId = 7 }
+
                     ));
 
             });
@@ -319,7 +389,7 @@ namespace Planify.Data
                     new Employee()
                     {
                         Id = 1,
-                        Name = "Jorguito",
+                        Name = "Jorge",
                         PersonId = 1,
                         UserId = 1,
                         HireDate = DateOnly.FromDateTime(new DateTime(2022, 5, 1))
@@ -327,7 +397,7 @@ namespace Planify.Data
                     new Employee()
                     {
                         Id = 2,
-                        Name = "Anita",
+                        Name = "Ana",
                         PersonId = 2,
                         UserId = 2,
                         HireDate = DateOnly.FromDateTime(new DateTime(2020, 11, 1))
@@ -343,10 +413,50 @@ namespace Planify.Data
                     new Employee()
                     {
                         Id = 4,
-                        Name = "Anita",
+                        Name = "Antonella",
                         PersonId = 4,
                         UserId = 4,
                         HireDate = DateOnly.FromDateTime(new DateTime(2018, 12, 31))
+                    },
+                    new Employee()
+                    {
+                        Id = 5,
+                        Name = "Antonella",
+                        PersonId = 5,
+                        UserId = 5,
+                        HireDate = DateOnly.FromDateTime(new DateTime(2017, 5, 1))
+                    },
+                    new Employee()
+                    {
+                        Id = 6,
+                        Name = "Carlos Mario",
+                        PersonId = 6,
+                        UserId = 6,
+                        HireDate = DateOnly.FromDateTime(new DateTime(2021, 1, 1))
+                    },
+                    new Employee()
+                    {
+                        Id = 7,
+                        Name = "Samuel Juan",
+                        PersonId = 7,
+                        UserId = 7,
+                        HireDate = DateOnly.FromDateTime(new DateTime(2022, 6, 29))
+                    },
+                    new Employee()
+                    {
+                        Id = 8,
+                        Name = "Brandon",
+                        PersonId = 8,
+                        UserId = 8,
+                        HireDate = DateOnly.FromDateTime(new DateTime(2023, 2, 27))
+                    },
+                    new Employee()
+                    {
+                        Id = 9,
+                        Name = "Santiago",
+                        PersonId = 9,
+                        UserId = 9,
+                        HireDate = DateOnly.FromDateTime(new DateTime(2024, 2, 10))
                     }
                 );
             });
