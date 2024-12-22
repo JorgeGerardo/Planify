@@ -68,11 +68,7 @@ namespace Planify.Services
                 .RequireAuthenticatedUser()
                 .RequireAssertion(context =>
                 {
-                    //TODO:Creo que se deberían eliminar los permisos y trabajar solo con roles
-
-                    string[] validRoles =
-                    { PolicyNames.SA, PolicyNames.Admin};
-
+                    string[] validRoles = { PolicyNames.SA, PolicyNames.Admin };
                     return IsClaimsMatch(validRoles, context.User.Claims);
                 })
                 .Build();

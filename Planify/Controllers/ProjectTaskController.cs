@@ -80,7 +80,11 @@ namespace Planify.Controllers
         // sete debajo de Manager en al jerarquía o solo
         //que este autorizado el usuario. 
         //[Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
-        [Authorize]
+
+        //TODO: Quiza otro controlador para que los usuarios puedan ver
+        //los proyectos a los que pertenecen
+
+        [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
         public override Task<IEnumerable<ProjectTask>> Get() =>
             base.Get();
 
