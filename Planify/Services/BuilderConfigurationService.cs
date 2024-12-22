@@ -96,12 +96,14 @@ namespace Planify.Services
                 options.AddPolicy(PolicyNames.MinimumRhAdmin, PoliciesService.GetMinimumRhAdmin());
                 options.AddPolicy(PolicyNames.MinimumRh, PoliciesService.GetMinimumRh());
                 options.AddPolicy(PolicyNames.MinimumManager, PoliciesService.GetMinimumManager());
+                options.AddPolicy(PolicyNames.Developer, PoliciesService.GetMinimumDeveloper());
                 
                 // [Combinated with Viewer]
                 options.AddPolicy(PolicyNames.MinimumRhAdminOrViewer, PoliciesService.Get_MinimumRhAdmin_OrViewer());
                 options.AddPolicy(PolicyNames.MinimumAdminOrViewer, PoliciesService.Get_MinimumAdmin_OrViewer());
                 options.AddPolicy(PolicyNames.MinimumRhOrViewer, PoliciesService.Get_MinimumRh_OrViewer());
                 options.AddPolicy(PolicyNames.MinimumManagerOrViewer, PoliciesService.Get_MinimumManager_OrViewer());
+                options.AddPolicy(PolicyNames.MinimumDeveloperOrViewer, PoliciesService.Get_MinimumDeveloper_OrViewer());
             });
         }
 

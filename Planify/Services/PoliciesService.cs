@@ -113,6 +113,18 @@ namespace Planify.Services
                 })
                 .Build();
 
+        public static AuthorizationPolicy GetMinimumDeveloper() =>
+            new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireAssertion(context =>
+                {
+                    string[] validRoles =
+                    { PolicyNames.Developer, PolicyNames.Manager,  PolicyNames.Admin, PolicyNames.SA };
+
+                    return IsClaimsMatch(validRoles, context.User.Claims);
+                })
+                .Build();
+
 
         //With Viewer
         public static AuthorizationPolicy Get_MinimumAdmin_OrViewer() =>
@@ -138,7 +150,7 @@ namespace Planify.Services
                     return IsClaimsMatch(validRoles, context.User.Claims);
                 })
                 .Build();
-        
+
         public static AuthorizationPolicy Get_MinimumManager_OrViewer() =>
             new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
@@ -158,6 +170,18 @@ namespace Planify.Services
                 {
                     string[] validRoles =
                     { PolicyNames.Rh, PolicyNames.RhAdmin, PolicyNames.Admin, PolicyNames.SA, PolicyNames.Viewer };
+
+                    return IsClaimsMatch(validRoles, context.User.Claims);
+                })
+                .Build();
+
+        public static AuthorizationPolicy Get_MinimumDeveloper_OrViewer() =>
+            new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireAssertion(context =>
+                {
+                    string[] validRoles =
+                    { PolicyNames.Developer, PolicyNames.Manager,  PolicyNames.Admin, PolicyNames.SA, PolicyNames.Viewer };
 
                     return IsClaimsMatch(validRoles, context.User.Claims);
                 })
