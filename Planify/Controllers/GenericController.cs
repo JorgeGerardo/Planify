@@ -6,6 +6,7 @@ using Planify.Repositories;
 using Planify.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Planify.Controllers
@@ -43,16 +44,19 @@ namespace Planify.Controllers
     public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
     {
         [HttpGet(), Authorize]
-        public virtual async Task<IEnumerable<T>> Get() =>
-            await _Repository.GetAll().ToListAsync();
+        //TODO: Add paginación
+        public virtual async Task<IEnumerable<T>> Get(int offset = 0, int page = 0) =>
+            await _Repository.GetAll().Skip(page*10).Take(offset).ToListAsync();
 
         [HttpGet("No-filtters")]
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        //TODO: Add paginación
         public virtual async Task<IEnumerable<T>> GetWithoutFiltters() =>
             await _Repository.GetAllNoFilters().ToListAsync();
 
         [HttpGet("deleted-entities")]
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
+        //TODO: Add paginación
         public virtual async Task<IEnumerable<T>> GetEntitiesDeleted() =>
             await _Repository.GetDeletedEntities().ToListAsync();
 
