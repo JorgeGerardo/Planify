@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace Planify.Controllers
 {
+    //TODO: Creo que se debería borrar el modelo y controlador Department
+    // creo que no sirve para nada
     [Route("api/[controller]")]
     [ApiController]
     public partial class DepartmentsController :
