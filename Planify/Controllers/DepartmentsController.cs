@@ -33,8 +33,8 @@ namespace Planify.Controllers
     public partial class DepartmentsController
     {
         [Authorize(Policy = PolicyNames.MinimumRhOrViewer)]
-        public override Task<IEnumerable<Department>> Get() => 
-            base.Get();
+        public override Task<IEnumerable<Department>> Get(int page = 0, int pageSize = 5) => 
+            base.Get(page, pageSize);
 
         [Authorize(Policy = PolicyNames.MinimumRhOrViewer)]
         public override Task<ActionResult<Department>> GetById(int id) => 

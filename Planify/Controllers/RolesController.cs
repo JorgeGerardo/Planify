@@ -34,8 +34,8 @@ namespace Planify.Controllers
     public partial class RolesController
     {
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
-        public override Task<IEnumerable<Role>> Get() =>
-            base.Get();
+        public override Task<IEnumerable<Role>> Get(int page = 0, int pageSize = 5) =>
+            base.Get(page, pageSize);
 
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
         public override Task<ActionResult<Role>> GetById(int id) =>

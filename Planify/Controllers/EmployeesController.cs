@@ -96,8 +96,8 @@ namespace Planify.Controllers
     public partial class EmployeesController
     {
         [Authorize(Policy = PolicyNames.MinimumRhOrViewer)]
-        public override Task<IEnumerable<Employee>> Get() =>
-            base.Get();
+        public override Task<IEnumerable<Employee>> Get(int page = 0, int pageSize = 5) =>
+            base.Get(page, pageSize);
 
         [Authorize(Policy = PolicyNames.MinimumRhOrViewer)]
         public override Task<ActionResult<Employee>> GetById(int id) =>

@@ -85,8 +85,8 @@ namespace Planify.Controllers
         //los proyectos a los que pertenecen
 
         [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
-        public override Task<IEnumerable<ProjectTask>> Get() =>
-            base.Get();
+        public override Task<IEnumerable<ProjectTask>> Get(int page = 0, int pageSize = 5) =>
+            base.Get(page, pageSize);
 
         [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
         public override Task<ActionResult<ProjectTask>> GetById(int id) =>

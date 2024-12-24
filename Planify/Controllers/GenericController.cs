@@ -45,8 +45,8 @@ namespace Planify.Controllers
     {
         [HttpGet(), Authorize]
         //TODO: Add paginación
-        public virtual async Task<IEnumerable<T>> Get(int offset = 0, int page = 0) =>
-            await _Repository.GetAll().Skip(page*10).Take(offset).ToListAsync();
+        public virtual async Task<IEnumerable<T>> Get(int page = 0, int pageSize = 5) =>
+            await _Repository.GetAll().Skip(page * pageSize).Take(pageSize).ToListAsync();
 
         [HttpGet("No-filtters")]
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
