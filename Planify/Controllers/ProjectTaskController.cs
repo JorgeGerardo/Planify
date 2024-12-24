@@ -76,11 +76,6 @@ namespace Planify.Controllers
 
     public partial class ProjectTaskController
     {
-        //TODO: No se si deberia crear algun rol como desarrollador o trabajador que
-        // sete debajo de Manager en al jerarquía o solo
-        //que este autorizado el usuario. 
-        //[Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
-
         //TODO: Quiza otro controlador para que los usuarios puedan ver
         //los proyectos a los que pertenecen
 

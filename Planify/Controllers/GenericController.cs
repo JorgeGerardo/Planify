@@ -44,19 +44,16 @@ namespace Planify.Controllers
     public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
     {
         [HttpGet(), Authorize]
-        //TODO: Add paginación
         public virtual async Task<IEnumerable<T>> Get(int page = 0, int pageSize = 5) =>
             await _Repository.GetAll().Skip(page * pageSize).Take(pageSize).ToListAsync();
 
         [HttpGet("No-filtters")]
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
-        //TODO: Add paginación
         public virtual async Task<IEnumerable<T>> GetWithoutFiltters(int page = 0, int pageSize = 5) =>
             await _Repository.GetAllNoFilters().Skip(page * pageSize).Take(pageSize).ToListAsync();
 
         [HttpGet("deleted-entities")]
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
-        //TODO: Add paginación
         public virtual async Task<IEnumerable<T>> GetDeletedEntities(int page = 0, int pageSize = 5) =>
             await _Repository.GetDeletedEntities().Skip(page*pageSize).Take(pageSize).ToListAsync();
 
