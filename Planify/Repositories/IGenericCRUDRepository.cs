@@ -8,6 +8,7 @@ namespace Planify.Repositories
 {
     public interface IGenericCRUDRepository<T, TID>
     {
+        //TODO: Agrega un método que devuleva la cantidad de elementos (también para eliminados (otro más))
         public string[] _NavigationProperties { get; set; }
         Task<T> Create(T entity);
 
@@ -24,6 +25,10 @@ namespace Planify.Repositories
         Task<bool> SoftDelete(TID id);
         Task<bool> RemoveSoftDelete(TID id);
         Task<bool> HardDelete(TID id);
+
+        //Count
+        Task<int> GetCount();
+        Task<int> GetCountNoFiltters();
 
         Task<int> Save();
     }

@@ -150,6 +150,19 @@ namespace Planify.Controllers
 
             return res ? NoContent() : NotFound();
         }
+
+    }
+
+    public partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
+    {
+        [HttpGet("count"), Authorize]
+        public async Task<int> GetCount() =>
+            await _Repository.GetCount();
+
+        [HttpGet("count-no-filtters"), Authorize]
+        public async Task<int> GetCountNoFiltters() =>
+            await _Repository.GetCountNoFiltters();
+
     }
 
 }

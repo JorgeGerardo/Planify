@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Planify.Data;
 using Planify.Models;
 using System;
@@ -105,11 +106,25 @@ namespace Planify.Repositories
         public async Task<IEnumerable<T>> GetByConditionAsync(Expression<Func<T, bool>> condition) =>
             await _entitiesNav.Where(condition).ToListAsync();
 
-        public IQueryable<T> GetAllNoFilters() => 
+        public IQueryable<T> GetAllNoFilters() =>
             _entitiesNav.IgnoreQueryFilters();
 
-        public IQueryable<T> GetDeletedEntities() => 
+        public IQueryable<T> GetDeletedEntities() =>
             _entitiesNav.IgnoreQueryFilters().Where(e => e.IsDeleted);
 
     }
+
+
+    //Tools
+    public abstract partial class GenericRepository<T, TID>
+    {
+        public Task<int> GetCount() =>
+            Entities.CountAsync();
+
+        public Task<int> GetCountNoFiltters() =>
+            Entities.IgnoreQueryFilters().CountAsync();
+
+    }
+
+
 }
