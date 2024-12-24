@@ -129,7 +129,7 @@ namespace Planify.Controllers
             return NoContent();
         }
 
-        [HttpDelete("unassign-employees/{id}")]
+        [HttpPatch("unassign-employees/{id}")]
         [Authorize(Policy = PolicyNames.MinimumManager)]
         public async Task<ActionResult> UnassignEmployees(int id, List<int> EmployeesIds)
         {

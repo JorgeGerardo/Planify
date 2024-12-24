@@ -101,8 +101,8 @@ namespace Planify.Controllers
     //Add-remove employees
     public partial class ProjectsController
     {
-        [HttpPost("Add-Employee/{id}")]
-        public async Task<ActionResult> AddEmployee(int id, List<int> EmployeesIds)
+        [HttpPatch("Add-Employees/{id}")]
+        public async Task<ActionResult> AddEmployees(int id, List<int> EmployeesIds)
         {
             Project? project = await _repository.GetById(id);
 
@@ -124,8 +124,8 @@ namespace Planify.Controllers
             return NoContent();
         }
 
-        [HttpDelete("Remove-Employee/{id}")]
-        public async Task<ActionResult> RemoveEmployee(int id, List<int> EmployeesIds)
+        [HttpPatch("Remove-Employees/{id}")]
+        public async Task<ActionResult> RemoveEmployees(int id, List<int> EmployeesIds)
         {
             Project? project = await _repository.GetById(id);
 

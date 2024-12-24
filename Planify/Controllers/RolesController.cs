@@ -69,7 +69,7 @@ namespace Planify.Controllers
     // Own Enpoints [SA]
     public partial class RolesController
     {
-        [HttpPost("asign-role/{userId}")]
+        [HttpPatch("asign-role/{userId}")]
         [Authorize(Policy = PolicyNames.SA)]
         public async Task<ActionResult> AsignRole(int userId, List<int> rolesId)
         {
@@ -92,7 +92,7 @@ namespace Planify.Controllers
             return Ok();
         }
 
-        [HttpPost("unasign-role/{userId}")]
+        [HttpPatch("unasign-role/{userId}")]
         [Authorize(Policy = PolicyNames.SA)]
         public async Task<ActionResult> UnasignRole(int userId, List<int> rolesId)
         {

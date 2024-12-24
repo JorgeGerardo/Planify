@@ -70,7 +70,7 @@ namespace Planify.Controllers
     //Add-remove employees [MinimumRhAdmin]
     public partial class DepartmentsController
     {
-        [HttpPut("add-employees/{departmentId}")]
+        [HttpPatch("add-employees/{departmentId}")]
         [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
         public async Task<ActionResult> AddEmployeesToDeparment(List<int> employeesId, int departmentId)
         {
@@ -91,7 +91,7 @@ namespace Planify.Controllers
             return NoContent();
         }
 
-        [HttpPut("remove-employees/{departmentId}")]
+        [HttpPatch("remove-employees/{departmentId}")]
         [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
         public async Task<ActionResult> RemoveEmployeesofDeparment(List<int> employeesId, int departmentId)
         {
