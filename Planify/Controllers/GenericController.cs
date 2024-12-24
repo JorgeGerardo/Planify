@@ -51,8 +51,8 @@ namespace Planify.Controllers
         [HttpGet("No-filtters")]
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
         //TODO: Add paginación
-        public virtual async Task<IEnumerable<T>> GetWithoutFiltters() =>
-            await _Repository.GetAllNoFilters().ToListAsync();
+        public virtual async Task<IEnumerable<T>> GetWithoutFiltters(int page = 0, int pageSize = 5) =>
+            await _Repository.GetAllNoFilters().Skip(page * pageSize).Take(pageSize).ToListAsync();
 
         [HttpGet("deleted-entities")]
         [Authorize(Policy = PolicyNames.MinimumAdmin)]

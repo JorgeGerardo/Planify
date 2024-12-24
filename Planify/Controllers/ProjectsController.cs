@@ -88,8 +88,8 @@ namespace Planify.Controllers
 
 
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
-        public override Task<IEnumerable<Project>> GetWithoutFiltters() =>
-            base.GetWithoutFiltters();
+        public override Task<IEnumerable<Project>> GetWithoutFiltters(int page = 0, int pageSize = 5) =>
+            base.GetWithoutFiltters(page, pageSize);
 
         [Authorize(Policy = PolicyNames.MinimumManager)]
         public override Task<IActionResult> Delete(int id) =>

@@ -55,8 +55,8 @@ namespace Planify.Controllers
 
 
         [Authorize(Policy = PolicyNames.SA)]
-        public override Task<IEnumerable<Role>> GetWithoutFiltters() =>
-            base.GetWithoutFiltters();
+        public override Task<IEnumerable<Role>> GetWithoutFiltters(int page = 0, int pageSize = 5) =>
+            base.GetWithoutFiltters(page, pageSize);
 
         [Authorize(Policy = PolicyNames.SA)]
         public override Task<IActionResult> Delete(int id) =>

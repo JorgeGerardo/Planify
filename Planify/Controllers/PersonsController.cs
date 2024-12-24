@@ -71,8 +71,8 @@ namespace Planify.Controllers
     public partial class PersonsController
     {
         [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
-        public override Task<IEnumerable<Person>> GetWithoutFiltters() =>
-            base.GetWithoutFiltters();
+        public override Task<IEnumerable<Person>> GetWithoutFiltters(int page = 0, int pageSize = 5) =>
+            base.GetWithoutFiltters(page, pageSize);
 
         [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
         public override Task<IActionResult> Delete(int id) =>
