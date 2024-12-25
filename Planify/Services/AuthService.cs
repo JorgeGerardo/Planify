@@ -11,6 +11,7 @@ namespace Planify.Services
 {
     public class AuthService
     {
+        private static int durationToken = 100;
         public static string GenerateToken(User user, JWTConfig jwt)
         {
             List<Claim> claims = GetDefaultClaims(user);
@@ -26,7 +27,7 @@ namespace Planify.Services
                     jwt.Issuer,
                     jwt.Audience,
                     claims,
-                    expires: DateTime.UtcNow.AddDays(10),
+                    expires: DateTime.UtcNow.AddDays(durationToken),
                     signingCredentials: signIn
             );
             return new JwtSecurityTokenHandler().WriteToken(Token);
