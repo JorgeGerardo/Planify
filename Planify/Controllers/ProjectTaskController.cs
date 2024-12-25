@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Planify.Models;
 using Planify.Repositories;
 using Planify.Repositories.UoW;
 using Planify.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Planify.Controllers
@@ -74,10 +76,13 @@ namespace Planify.Controllers
     }
 
 
+    //Set Policies
     public partial class ProjectTaskController
     {
-        //TODO: Quiza otro controlador para que los usuarios puedan ver
-        //los proyectos a los que pertenecen
+        /*TODO: Quiza otro controlador para que los usuarios puedan ver
+        los proyectos a los que pertenecen
+        O quizá... solo debería ser un endpoint
+        */
 
         [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
         public override Task<IEnumerable<ProjectTask>> Get(int page = 0, int pageSize = 5) =>
@@ -151,4 +156,17 @@ namespace Planify.Controllers
 
     }
 
+    public partial class ProjectTaskController
+    {
+        [HttpGet("my-tasks")]
+        public async Task<ActionResult<object>> GetUserTasks(int id)
+        {
+            if (!(Int32.TryParse(HttpContext.User?.Identity?.Name, out int UserId)))
+                return StatusCode(500);
+
+            return await UoW.projectTasks.GetAll()
+                .Where(t => t.Employees.Any(e => e.UserId == UserId))
+                .ToListAsync();
+        }
+    }
 }
