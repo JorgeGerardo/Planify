@@ -79,11 +79,6 @@ namespace Planify.Controllers
     //Set Policies
     public partial class ProjectTaskController
     {
-        /*TODO: Quiza otro controlador para que los usuarios puedan ver
-        los proyectos a los que pertenecen
-        O quizá... solo debería ser un endpoint
-        */
-
         [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
         public override Task<IEnumerable<ProjectTask>> Get(int page = 0, int pageSize = 5) =>
             base.Get(page, pageSize);
@@ -159,7 +154,7 @@ namespace Planify.Controllers
     public partial class ProjectTaskController
     {
         [HttpGet("my-tasks")]
-        public async Task<ActionResult<object>> GetUserTasks(int id)
+        public async Task<ActionResult<List<ProjectTask>>> GetUserTasks(int id)
         {
             if (!(Int32.TryParse(HttpContext.User?.Identity?.Name, out int UserId)))
                 return StatusCode(500);
@@ -168,5 +163,7 @@ namespace Planify.Controllers
                 .Where(t => t.Employees.Any(e => e.UserId == UserId))
                 .ToListAsync();
         }
+
+
     }
 }
