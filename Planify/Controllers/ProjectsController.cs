@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Planify.Models;
 using Planify.Repositories;
 using Planify.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Planify.Controllers
@@ -102,6 +104,7 @@ namespace Planify.Controllers
     public partial class ProjectsController
     {
         [HttpPatch("Add-Employees/{id}")]
+        [Authorize(Policy = PolicyNames.MinimumManager)]
         public async Task<ActionResult> AddEmployees(int id, List<int> EmployeesIds)
         {
             Project? project = await _repository.GetById(id);
@@ -125,6 +128,7 @@ namespace Planify.Controllers
         }
 
         [HttpPatch("Remove-Employees/{id}")]
+        [Authorize(Policy = PolicyNames.MinimumManager)]
         public async Task<ActionResult> RemoveEmployees(int id, List<int> EmployeesIds)
         {
             Project? project = await _repository.GetById(id);
@@ -146,6 +150,30 @@ namespace Planify.Controllers
             await _employeeRepository.Save();
             return NoContent();
         }
+
+    }
+
+    //User projects
+    public partial class ProjectsController
+    {
+        [HttpGet("my-projects")]
+        [Authorize(Policy = PolicyNames.MinimumDeveloper)]
+        public async Task<ActionResult<List<Project>>> GetMyProjects()
+        {
+            if (!(Int32.TryParse(HttpContext.User?.Identity?.Name, out int UserId)))
+                return StatusCode(500);
+
+            return await _repository.GetAll()
+                .Where(p => p.Employees.Any(p => p.Id == UserId))
+                .ToListAsync();
+        }
+
+
+        [HttpGet("user-projects/{userId}")]
+        [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
+        public async Task<ActionResult<List<Project>>> GetUserProjects(int userId) =>
+            await _repository.GetAll()
+                .Where(p => p.Employees.Any(p => p.Id == userId)).ToListAsync();
 
     }
 }
