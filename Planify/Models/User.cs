@@ -9,6 +9,7 @@ namespace Planify.Models
     {
 
         [EmailAddress]
+        [JsonPropertyOrder(-1)]
         public required string Email { get; set; }
         public required string HashPassword { get; set; }
         [JsonIgnore]
