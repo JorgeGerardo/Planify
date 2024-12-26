@@ -35,6 +35,41 @@ namespace Planify.Data
             SetProjectTaskTable(modelBuilder);
             SetQueryFilters(modelBuilder);
             SetProjectTaskComentaryTable(modelBuilder);
+            SetDepartmentTable(modelBuilder);
+        }
+
+        private void SetDepartmentTable(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Department>().HasData(
+                new Department { Id = 1, Name = "RH"},
+                new Department { Id = 2, Name = "DevOps"},
+                new Department { Id = 3, Name = "TI"},
+                new Department { Id = 4, Name = "Finance"}
+            );
+
+            modelBuilder.Entity<Department>()
+                .HasMany(d => d.Employees)
+                .WithMany(e => e.Departments)
+                .UsingEntity(i => i.HasData(
+                    //RH
+                    new { DepartmentsId = 3, EmployeesId = 1 },
+                    new { DepartmentsId = 2, EmployeesId = 1 },
+                    //DevOps
+                    new { DepartmentsId = 1, EmployeesId = 2 },
+                    new { DepartmentsId = 2, EmployeesId = 2 },
+
+                    //DevOps-RH
+                    new { DepartmentsId = 1, EmployeesId = 4 },
+                    new { DepartmentsId = 2, EmployeesId = 4 },
+                    
+                    new { DepartmentsId = 1, EmployeesId = 5 },
+
+                    //TI
+                    new { DepartmentsId = 3, EmployeesId = 7 },
+                    new { DepartmentsId = 3, EmployeesId = 8 },
+                    new { DepartmentsId = 3, EmployeesId = 9 }
+                   )
+                );
         }
 
         private void SetQueryFilters(ModelBuilder modelBuilder)
