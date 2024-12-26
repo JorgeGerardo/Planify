@@ -151,19 +151,65 @@ namespace Planify.Controllers
 
     }
 
+
+    //User tasks
     public partial class ProjectTaskController
     {
-        [HttpGet("my-tasks")]
-        public async Task<ActionResult<List<ProjectTask>>> GetUserTasks(int id)
+        [HttpGet("my-incomplete-tasks")]
+        [Authorize(Policy = PolicyNames.MinimumDeveloper)]
+        public async Task<ActionResult<List<ProjectTask>>> GetMyIncompleteTasks()
         {
             if (!(Int32.TryParse(HttpContext.User?.Identity?.Name, out int UserId)))
                 return StatusCode(500);
 
             return await UoW.projectTasks.GetAll()
-                .Where(t => t.Employees.Any(e => e.UserId == UserId))
+                .Where(t => !t.IsCompleted && t.Employees.Any(e => e.UserId == UserId))
                 .ToListAsync();
         }
 
 
+        [HttpGet("my-complete-tasks")]
+        [Authorize(Policy = PolicyNames.MinimumDeveloper)]
+        public async Task<ActionResult<List<ProjectTask>>> GetMyCompletedTasks()
+        {
+            if (!(Int32.TryParse(HttpContext.User?.Identity?.Name, out int UserId)))
+                return StatusCode(500);
+
+            return await UoW.projectTasks.GetAll()
+                .Where(t => t.IsCompleted && t.Employees.Any(e => e.UserId == UserId))
+                .ToListAsync();
+        }
+
+
+        [HttpGet("user-incomplete-tasks/{userId}")]
+        [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
+        public async Task<ActionResult<List<ProjectTask>>> GetUserIncompleteTasks(int userId)
+        {
+            if (!(Int32.TryParse(HttpContext.User?.Identity?.Name, out int UserId)))
+                return StatusCode(500);
+
+            return await UoW.projectTasks.GetAll()
+                .Where(t => !t.IsCompleted && t.Employees.Any(e => e.UserId == UserId))
+                .ToListAsync();
+        }
+
+
+        [HttpGet("user-completed-tasks/{userId}")]
+        [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
+        public async Task<ActionResult<List<ProjectTask>>> GetUserCompletedTasks(int userId)
+        {
+            if (!(Int32.TryParse(HttpContext.User?.Identity?.Name, out int UserId)))
+                return StatusCode(500);
+
+            return await UoW.projectTasks.GetAll()
+                .Where(t => t.IsCompleted && t.Employees.Any(e => e.UserId == UserId))
+                .ToListAsync();
+        }
+
+
+
+
     }
+
+
 }
