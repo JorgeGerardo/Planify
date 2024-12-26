@@ -181,30 +181,23 @@ namespace Planify.Controllers
         }
 
 
+
         [HttpGet("user-incomplete-tasks/{userId}")]
         [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
-        public async Task<ActionResult<List<ProjectTask>>> GetUserIncompleteTasks(int userId)
-        {
-            if (!(Int32.TryParse(HttpContext.User?.Identity?.Name, out int UserId)))
-                return StatusCode(500);
-
-            return await UoW.projectTasks.GetAll()
-                .Where(t => !t.IsCompleted && t.Employees.Any(e => e.UserId == UserId))
+        public async Task<ActionResult<List<ProjectTask>>> GetUserIncompleteTasks(int userId) =>
+            await UoW.projectTasks.GetAll()
+                .Where(t => !t.IsCompleted && t.Employees.Any(e => e.UserId == userId))
                 .ToListAsync();
-        }
 
 
         [HttpGet("user-completed-tasks/{userId}")]
         [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
-        public async Task<ActionResult<List<ProjectTask>>> GetUserCompletedTasks(int userId)
-        {
-            if (!(Int32.TryParse(HttpContext.User?.Identity?.Name, out int UserId)))
-                return StatusCode(500);
-
-            return await UoW.projectTasks.GetAll()
-                .Where(t => t.IsCompleted && t.Employees.Any(e => e.UserId == UserId))
+        public async Task<ActionResult<List<ProjectTask>>> GetUserCompletedTasks(int userId) =>
+            await UoW.projectTasks.GetAll()
+                .Where(t => t.IsCompleted && t.Employees.Any(e => e.UserId == userId))
                 .ToListAsync();
-        }
+
+
 
 
 
