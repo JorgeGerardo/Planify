@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Planify.Models;
 using Planify.Repositories;
 using Planify.Repositories.UoW;
 using Planify.Services;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Planify.Controllers
@@ -115,4 +118,33 @@ namespace Planify.Controllers
 
     }
 
+    //TODO: Get Users Deparment
+    public partial class DepartmentsController
+    {
+        [HttpGet("user-deparments/{employeeId}")]
+        [Authorize(Policy = PolicyNames.MinimumRhAdminOrViewer)]
+        public async Task<ActionResult<List<Department>>> UserDepartments(int employeeId)
+        {
+            if (!(await _uow.Employees.Exist(employeeId)))
+                return NotFound("El empleado no existe.");
+
+            return await _uow.Departmens.GetAll()
+                .Where(d => d.Employees.Any(e => e.Id == employeeId)).ToListAsync();
+        }
+
+
+        [HttpGet("my-deparments")]
+        [Authorize]
+        public async Task<ActionResult<List<Department>>> GetMyDeparments()
+        {
+            if (!(Int32.TryParse(HttpContext.User?.Identity?.Name, out int UserId)))
+                return StatusCode(500);
+
+            if (!(await _uow.Employees.Exist(UserId)))
+                return NotFound("El empleado no existe.");
+
+            return await _uow.Departmens.GetAll()
+                .Where(d => d.Employees.Any(e => e.Id == UserId)).ToListAsync();
+        }
+    }
 }
