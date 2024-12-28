@@ -20,8 +20,10 @@ BuilderConfigurationService.SetAuthenticationScheme(builder);
 BuilderConfigurationService.SetAuthorizationPolicies(builder);
 
 BuilderConfigurationService.AddSqlServer(builder);
+BuilderConfigurationService.AddCors(builder);
 
 var app = builder.Build();
+app.UseCors("Cors_Angular");
 app.UseAuthentication();
 app.UseAuthorization();
 

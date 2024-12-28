@@ -43,7 +43,18 @@ namespace Planify.Services
             var SqlConnection = builder.Configuration.GetConnectionString("SqlServerCon");
             builder.Services.AddDbContext<ProjectContext>(option => option.UseSqlServer(SqlConnection));
         }
-
+        public static void AddCors(WebApplicationBuilder builder)
+        {
+            builder.Services.AddCors(cors =>
+            {
+                cors.AddPolicy(name: "Cors_Angular",
+                    builder => builder.WithOrigins(@"http://localhost:4200")
+                        .AllowAnyHeader() // Permite cualquier encabezado
+                        .AllowAnyMethod() // Permite cualquier método HTTP
+                        .AllowCredentials() // Permite el envío de cookies o credenciales
+                );
+            });
+        }
     }
 
     //Authentication Scheme Config
@@ -97,7 +108,7 @@ namespace Planify.Services
                 options.AddPolicy(PolicyNames.MinimumRh, PoliciesService.GetMinimumRh());
                 options.AddPolicy(PolicyNames.MinimumManager, PoliciesService.GetMinimumManager());
                 options.AddPolicy(PolicyNames.Developer, PoliciesService.GetMinimumDeveloper());
-                
+
                 // [Combinated with Viewer]
                 options.AddPolicy(PolicyNames.MinimumRhAdminOrViewer, PoliciesService.Get_MinimumRhAdmin_OrViewer());
                 options.AddPolicy(PolicyNames.MinimumAdminOrViewer, PoliciesService.Get_MinimumAdmin_OrViewer());
