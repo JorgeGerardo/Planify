@@ -86,7 +86,7 @@ namespace Planify.Controllers
     {
         [HttpPost("/Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(UserCreateDTO credentials)
+        public async Task<ActionResult<string>> Login(UserCreateDTO credentials)
         {
             string hashPassword = AuthService.EncrypBySHA256(credentials.Password);
             User? existingUser = await _context.Users.Include(p => p.Roles)
