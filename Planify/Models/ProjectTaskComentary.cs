@@ -23,8 +23,8 @@ namespace Planify.Models
 
     public class ProjectTaskComentaryCreateDTO
     {
-        [MaxLength(255)]
-        [MinLength(1)]
+        [MaxLength(255, ErrorMessage = "Los comentarios tienen un límite máximo de 255 caracteres.")]
+        [MinLength(1, ErrorMessage = "No puede enviar un comentario vacío.")]
         public required string Comentary { get; set; }
     }
 }

@@ -23,21 +23,21 @@ namespace Planify.Models
 
     public class UserCreateDTO
     {
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "El email proporcionado no es correcto.")]
         public required string Email { get; set; }
-        [MinLength(8, ErrorMessage = "The password must be 8 characters or more.")]
-        [MaxLength(32, ErrorMessage = "Password must be 32 characters maximum.")]
+        [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
+        [MaxLength(32, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
         public required string Password { get; set; }
 
     }
 
     public class UserUpdateDTO
     {
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "El email proporcionado no es correcto.")]
         public string? Email { get; set; }
 
-        [MinLength(8, ErrorMessage = "The password must be 8 characters or more.")]
-        [MaxLength(32, ErrorMessage = "Password must be 32 characters maximum.")]
+        [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
+        [MaxLength(32, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
         public required string Password { get; set; }
         public string? NewPassword { get; set; }
     }

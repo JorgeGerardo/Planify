@@ -29,7 +29,7 @@ namespace Planify.Models
         public required string Sate { get; set; }
         public required string Country { get; set; }
 
-        [RegularExpression(@"^\+?[0-9]{10,15}$", ErrorMessage = "Invalid phone number format.")]
+        [RegularExpression(@"^\+?[0-9]{10,15}$", ErrorMessage = "Formato inválido para número de telefono .")]
         public string? PhoneNumber { get; set; }
 
     }
@@ -45,7 +45,7 @@ namespace Planify.Models
         public string? Sate { get; set; }
         public string? Country { get; set; }
 
-        [RegularExpression(@"^\+?[0-9]{10,15}$", ErrorMessage = "Invalid phone number format.")]
+        [RegularExpression(@"^\+?[0-9]{10,15}$", ErrorMessage = "Formato inválido para número de telefono .")]
         public string? PhoneNumber { get; set; }
 
     }

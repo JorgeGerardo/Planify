@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Planify.Models
@@ -16,12 +17,16 @@ namespace Planify.Models
 
     public class ProjectCreateDTO
     {
+        [MaxLength(30, ErrorMessage = "El límite para el nombre es de 30 caracteres.")]
+        [MinLength(5, ErrorMessage = "El nombre de tener al menos 5 caracteres.")]
         public required string Name { get; set; }
         public required int ManagerId { get; set; }
     }
 
     public class ProjectUpdateDTO
     {
+        [MaxLength(30, ErrorMessage = "El límite para el nombre es de 30 caracteres.")]
+        [MinLength(5, ErrorMessage = "El nombre de tener al menos 5 caracteres.")]
         public required string Name { get; set; }
         public int? ManagerId { get; set; }
 
