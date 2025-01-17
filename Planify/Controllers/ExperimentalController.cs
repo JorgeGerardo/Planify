@@ -5,6 +5,7 @@ using Planify.Data;
 using Planify.Models;
 using Planify.Repositories;
 using Planify.Services;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -93,5 +94,39 @@ namespace Planify.Controllers
         [Authorize(Policy = PolicyNames.MinimumRhAdminOrViewer)]
         public string RhAdmin_sa_viewer() => "RhAdmin_>>>>_viewer";
 
+    }
+
+
+    public partial class ExperimentalController
+    {
+        [AllowAnonymous]
+        [HttpPost("timeonly")]
+        public void prueba(TimeOnly tiempo)
+        {
+            Console.WriteLine(tiempo);
+            Console.WriteLine("Extra:");
+            Console.WriteLine(tiempo.Hour);
+            Console.WriteLine(tiempo.Minute);
+            Console.WriteLine(tiempo.Second);
+            Console.WriteLine(tiempo.Microsecond);
+            Console.WriteLine(tiempo.Nanosecond);
+        }
+        [AllowAnonymous]
+        [HttpPost("datetimetest")]
+        public void prueba(DateTime fecha)
+        {
+            Console.Clear();
+            Console.WriteLine(fecha);
+            Console.WriteLine("Fecha");
+            Console.WriteLine(fecha.Year);
+            Console.WriteLine(fecha.Month);
+            Console.WriteLine(fecha.Day);
+            Console.WriteLine("Extra:");
+            Console.WriteLine(fecha.Hour);
+            Console.WriteLine(fecha.Minute);
+            Console.WriteLine(fecha.Second);
+            Console.WriteLine(fecha.Microsecond);
+            Console.WriteLine(fecha.Nanosecond);
+        }
     }
 }

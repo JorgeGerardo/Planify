@@ -97,6 +97,12 @@ namespace Planify.Controllers
 
             JWTConfig? jwt = _configuration.GetSection("JWT").Get<JWTConfig>();
 
+
+            //if (jwt is null)
+            //    return StatusCode(500, new { message = "JWT configuration is missing" });
+
+            //string token = AuthService.GenerateToken(existingUser, jwt);
+            //return Ok(new { token });
             return jwt is not null ?
                 Ok(AuthService.GenerateToken(existingUser, jwt)) :
                 StatusCode(500);
