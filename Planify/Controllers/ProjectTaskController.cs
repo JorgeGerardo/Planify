@@ -80,7 +80,7 @@ namespace Planify.Controllers
     public partial class ProjectTaskController
     {
         [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
-        public override Task<IEnumerable<ProjectTask>> Get(int page = 0, int pageSize = 5) =>
+        public override Task<IEnumerable<ProjectTask>> Get(int page = 0, int? pageSize = null) =>
             base.Get(page, pageSize);
 
         [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]

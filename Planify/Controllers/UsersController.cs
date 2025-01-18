@@ -120,7 +120,7 @@ namespace Planify.Controllers
             base.Update(id, createDto);
 
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
-        public override Task<IEnumerable<User>> Get(int page = 0, int pageSize = 5) =>
+        public override Task<IEnumerable<User>> Get(int page = 0, int? pageSize = null) =>
             base.Get(page, pageSize);
 
         [Authorize(Policy = PolicyNames.MinimumAdmin)]

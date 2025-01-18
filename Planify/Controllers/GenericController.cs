@@ -44,8 +44,9 @@ namespace Planify.Controllers
     public abstract partial class GenericController<T, TRepository, TCreateDto, TUpdateDTO>
     {
         [HttpGet(), Authorize]
-        public virtual async Task<IEnumerable<T>> Get(int page = 0, int pageSize = 5) =>
-            await _Repository.GetAll().Skip(page * pageSize).Take(pageSize).ToListAsync();
+        public virtual async Task<IEnumerable<T>> Get(int page = 0, int? pageSize = null) =>
+            await setPagination(page, pageSize).ToListAsync();
+
 
         [HttpGet("No-filtters")]
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
@@ -63,6 +64,18 @@ namespace Planify.Controllers
         {
             T? res = await _Repository.GetById(id);
             return res is not null ? res : NotFound();
+        }
+
+
+        private IQueryable<T> setPagination(int page, int? pageSize = null)
+        {
+            IQueryable<T> query = _Repository.GetAll();
+            query = query.Skip(page);
+
+            if (pageSize is not null)
+                query = query.Take(pageSize.Value);
+
+            return query;
         }
 
     }
