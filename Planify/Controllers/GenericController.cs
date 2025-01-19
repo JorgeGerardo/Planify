@@ -55,8 +55,8 @@ namespace Planify.Controllers
 
         [HttpGet("deleted-entities")]
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
-        public virtual async Task<IEnumerable<T>> GetDeletedEntities(int page = 0, int pageSize = 5) =>
-            await _Repository.GetDeletedEntities().Skip(page*pageSize).Take(pageSize).ToListAsync();
+        public virtual async Task<IEnumerable<T>> GetDeletedEntities(int page = 0, int? pageSize = null) =>
+            await setPagination(page, pageSize, _Repository.GetDeletedEntities()).ToListAsync();
 
 
         [HttpGet("{id}"), Authorize]
