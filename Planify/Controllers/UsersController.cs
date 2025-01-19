@@ -128,7 +128,7 @@ namespace Planify.Controllers
             base.GetById(id);
 
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
-        public override Task<IEnumerable<User>> GetWithoutFiltters(int page = 0, int pageSize = 5) =>
+        public override Task<IEnumerable<User>> GetWithoutFiltters(int page = 0, int? pageSize = null) =>
             base.GetWithoutFiltters(page, pageSize);
 
         [Authorize(Policy = PolicyNames.MinimumAdmin)]

@@ -50,8 +50,8 @@ namespace Planify.Controllers
 
         [HttpGet("No-filtters")]
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
-        public virtual async Task<IEnumerable<T>> GetWithoutFiltters(int page = 0, int pageSize = 5) =>
-            await _Repository.GetAllNoFilters().Skip(page * pageSize).Take(pageSize).ToListAsync();
+        public virtual async Task<IEnumerable<T>> GetWithoutFiltters(int page = 0, int? pageSize = null) =>
+            await setPagination(page, pageSize, _Repository.GetAllNoFilters()).ToListAsync();
 
         [HttpGet("deleted-entities")]
         [Authorize(Policy = PolicyNames.MinimumAdmin)]
@@ -67,9 +67,11 @@ namespace Planify.Controllers
         }
 
 
-        private IQueryable<T> setPagination(int page, int? pageSize = null)
+        private IQueryable<T> setPagination(int page, int? pageSize = null, IQueryable<T>? query = null)
         {
-            IQueryable<T> query = _Repository.GetAll();
+            if (query is null)
+                query = _Repository.GetAll();
+
             query = query.Skip(page);
 
             if (pageSize is not null)

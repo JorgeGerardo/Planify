@@ -114,7 +114,7 @@ namespace Planify.Controllers
             base.Add(createDto);
 
         [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
-        public override Task<IEnumerable<Employee>> GetWithoutFiltters(int page = 0, int pageSize = 5) =>
+        public override Task<IEnumerable<Employee>> GetWithoutFiltters(int page = 0, int? pageSize = null) =>
             base.GetWithoutFiltters(page, pageSize);
 
         [Authorize(Policy = PolicyNames.MinimumRhAdmin)]
