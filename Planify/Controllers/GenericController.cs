@@ -67,12 +67,13 @@ namespace Planify.Controllers
         }
 
 
+        private const int DEFAULT_PAGE_SIZE = 10;
         private IQueryable<T> setPagination(int page, int? pageSize = null, IQueryable<T>? query = null)
         {
             if (query is null)
                 query = _Repository.GetAll();
 
-            query = query.Skip(page);
+            query = query.Skip((pageSize ?? DEFAULT_PAGE_SIZE) * page);
 
             if (pageSize is not null)
                 query = query.Take(pageSize.Value);
