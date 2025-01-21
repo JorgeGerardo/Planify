@@ -76,14 +76,14 @@ namespace Planify.Controllers
             User? user = await _UsersRepository.GetById(userId);
 
             if (user is null)
-                return NotFound("El usuario no existe.");
+                return NotFound(new ProblemDetails { Detail = "El usuario no existe." });
 
             foreach (var roleId in rolesId)
             {
                 Role? role = await _Repository.GetById(roleId);
 
                 if (role is null)
-                    return NotFound("Un role especificado no existe, actualice la página e intente de nuevo.");
+                    return NotFound(new ProblemDetails { Detail = "Un role especificado no existe, actualice la página e intente de nuevo." });
 
                 user.Roles.Add(role);
             }
@@ -99,14 +99,14 @@ namespace Planify.Controllers
             User? user = await _UsersRepository.GetById(userId);
 
             if (user is null)
-                return NotFound("El usuario no existe.");
+                return NotFound(new ProblemDetails { Detail = "El usuario no existe." });
 
             foreach (var roleId in rolesId)
             {
                 Role? role = await _Repository.GetById(roleId);
 
                 if (role is null)
-                    return NotFound("Un role especificado no existe, actualice la página e intente de nuevo.");
+                    return NotFound(new ProblemDetails { Detail = "Un role especificado no existe, actualice la página e intente de nuevo." });
 
                 user.Roles.Remove(role);
             }
