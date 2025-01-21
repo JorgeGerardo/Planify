@@ -20,10 +20,10 @@ namespace Planify.Models
     }
 
     ///////////////////////////////// [Create DTO] ////////////////////////////////////////////////////
-    public class PersonDTO
+    public class PersonCreateDTO
     {
         public required string Name { get; set; }
-        public DateOnly BornDate { get; set; }
+        public required DateOnly BornDate { get; set; }
         public required string LastNames { get; set; }
         public required string City { get; set; }
         public required string Sate { get; set; }

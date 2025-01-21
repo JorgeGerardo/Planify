@@ -37,7 +37,7 @@ namespace Planify.Models
         public string? Email { get; set; }
 
         [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
-        [MaxLength(32, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
+        [MaxLength(32, ErrorMessage = "La contraseña debe tener cómo máximo 32 caracteres.")]
         public required string Password { get; set; }
         public string? NewPassword { get; set; }
     }

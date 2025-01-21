@@ -97,7 +97,9 @@ namespace Planify.Controllers
             try { MapToUpdateEntity(entity, createDto); }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                //TODO: El problema es enviar un objeto en las respuestas, elimina el json
+                //TODO: Un buen manejo de los errores en el backend
+                return BadRequest(new ProblemDetails() { Detail = e.Message});
             }
 
             _Repository.Updated(entity);

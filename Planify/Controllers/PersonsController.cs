@@ -11,13 +11,13 @@ namespace Planify.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public partial class PersonsController : GenericController<Person, PersonRepository, PersonDTO, PersonUpdateDTO>
+    public partial class PersonsController : GenericController<Person, PersonRepository, PersonCreateDTO, PersonUpdateDTO>
     {
         public PersonsController(IGenericCRUDRepository<Person, int> _Repository) :
             base(_Repository)
         { }
 
-        protected override Person MapToEntity(PersonDTO dto)
+        protected override Person MapToEntity(PersonCreateDTO dto)
         {
             return new Person
             {
@@ -63,7 +63,7 @@ namespace Planify.Controllers
             base.Update(id, createDto);
 
         [Authorize(Policy = PolicyNames.MinimumRh)]
-        public override Task<IActionResult> Add([FromBody] PersonDTO createDto) =>
+        public override Task<IActionResult> Add([FromBody] PersonCreateDTO createDto) =>
             base.Add(createDto);
 
     }
