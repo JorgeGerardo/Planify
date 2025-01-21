@@ -97,7 +97,6 @@ namespace Planify.Controllers
             try { MapToUpdateEntity(entity, createDto); }
             catch (Exception e)
             {
-                //TODO: El problema es enviar un objeto en las respuestas, elimina el json
                 //TODO: Un buen manejo de los errores en el backend
                 return BadRequest(new ProblemDetails() { Detail = e.Message});
             }
@@ -122,13 +121,13 @@ namespace Planify.Controllers
                 await _Repository.Save();
 
                 if (newEntity is null)
-                    return StatusCode(500, "Error creating entity.");
+                    return StatusCode(500, new ProblemDetails { Detail = "Error creating entity."});
 
                 return CreatedAtAction(nameof(GetById), new { newEntity.Id }, newEntity);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ProblemDetails { Detail = e.Message});
             }
         }
 
