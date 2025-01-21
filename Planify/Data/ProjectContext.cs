@@ -115,7 +115,8 @@ namespace Planify.Data
                         City = "Guadalajara",
                         Country = "México",
                         LastNames = "Gerardo Rojo",
-                        Sate = "Sinaloa"
+                        Sate = "Sinaloa",
+                        BornDate = new DateOnly(1985, 5, 23),
                     },
                     new Person()
                     {
@@ -124,7 +125,8 @@ namespace Planify.Data
                         City = "Culiacan",
                         Country = "México",
                         LastNames = "Argon Lazaro",
-                        Sate = "Sinaloa"
+                        Sate = "Sinaloa",
+                        BornDate = new DateOnly(1990, 3, 14),
                     },
                     new Person()
                     {
@@ -133,7 +135,8 @@ namespace Planify.Data
                         City = "Monterrey",
                         Country = "México",
                         LastNames = "Garza",
-                        Sate = "Nuevo Leon"
+                        Sate = "Nuevo Leon",
+                        BornDate = new DateOnly(1992, 8, 12),
                     },
                     new Person()
                     {
@@ -142,7 +145,8 @@ namespace Planify.Data
                         City = "Mexicali",
                         Country = "México",
                         LastNames = "Duran",
-                        Sate = "Baja california"
+                        Sate = "Baja california",
+                        BornDate = new DateOnly(1988, 6, 30),
                     },
                     new Person()
                     {
@@ -151,7 +155,8 @@ namespace Planify.Data
                         City = "Monterrey",
                         Country = "México",
                         LastNames = "Dorigan",
-                        Sate = "Nuevo Leon"
+                        Sate = "Nuevo Leon",
+                        BornDate = new DateOnly(1983, 9, 25),
                     },
                     new Person()
                     {
@@ -160,7 +165,8 @@ namespace Planify.Data
                         City = "Culiacán",
                         Country = "México",
                         LastNames = "Rodriguez Sandoval",
-                        Sate = "Sinaloa"
+                        Sate = "Sinaloa",
+                        BornDate = new DateOnly(1995, 1, 18),
                     },
                     new Person()
                     {
@@ -169,7 +175,8 @@ namespace Planify.Data
                         City = "Los Mochis",
                         Country = "México",
                         LastNames = "Pajarito Lopez",
-                        Sate = "Sinaloa"
+                        Sate = "Sinaloa",
+                        BornDate = new DateOnly(2000, 11, 5),
                     },
                     new Person()
                     {
@@ -178,7 +185,8 @@ namespace Planify.Data
                         City = "El Fuerte",
                         Country = "México",
                         LastNames = "Perez Sánchez",
-                        Sate = "Sinaloa"
+                        Sate = "Sinaloa",
+                        BornDate = new DateOnly(1998, 7, 16),
                     },
                     new Person()
                     {
@@ -187,7 +195,8 @@ namespace Planify.Data
                         City = "Durango",
                         Country = "México",
                         LastNames = "Ríos Gutiérrez",
-                        Sate = "Durango"
+                        Sate = "Durango",
+                        BornDate = new DateOnly(1999, 2, 28),
                     }
                 );
 
