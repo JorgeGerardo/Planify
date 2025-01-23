@@ -27,15 +27,15 @@ namespace Planify.Controllers
         {
             string? userId = HttpContext.User?.Identity?.Name;
             if (userId is null)
-                return NotFound("Usuario no encontrado.");
+                return NotFound(new ProblemDetails { Detail = "Usuario no encontrado."});
 
             ProjectTask? projectTask = await uow.projectTasks.GetById(taskId);
             if (projectTask is null)
-                return NotFound("La tarea no existe.");
+                return NotFound(new ProblemDetails { Detail = "La tarea no existe."});
 
             bool employeeIsIn = projectTask.Employees.Any(c => c.Id.ToString().Equals(userId));
             if (!employeeIsIn)
-                return BadRequest($"El usuario {userId} no tiene asignada esta tarea.");
+                return BadRequest(new ProblemDetails { Detail = $"El usuario {userId} no tiene asignada esta tarea."});
 
             ProjectTaskComentary newComentary = new ProjectTaskComentary
             {
@@ -45,9 +45,8 @@ namespace Planify.Controllers
             };
             projectTask.Comentaries.Add(newComentary);
 
-
             await uow.SaveAsync();
-            return NoContent();
+            return CreatedAtAction(nameof(Get), new { newComentary.Id }, newComentary);
         }
 
 
@@ -60,7 +59,7 @@ namespace Planify.Controllers
             // Search comentary:
             var commentary = await uow.projectTasksComentaries.GetById(comentaryId);
             if (commentary is null)
-                return NotFound("El comentario no existe");
+                return NotFound(new ProblemDetails { Detail = "El comentario no existe" });
 
             (bool isAuthorized, string? error) = await CanDelete(userId, commentary);
             if (!isAuthorized)
@@ -71,7 +70,8 @@ namespace Planify.Controllers
             return NoContent();
         }
 
-
+        //TODO: Creo que deberías hacer un endpoint que devuelva todos los comentarios de una
+        //tarea en especifico
         [HttpGet("{id}"), Authorize(Policy = PolicyNames.MinimumDeveloperOrViewer)]
         public async Task<ActionResult<ProjectTaskComentary>> Get(int id)
         {
