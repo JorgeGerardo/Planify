@@ -101,13 +101,15 @@ namespace Planify.Services
                 options.AddPolicy(PolicyNames.RhAdmin, PoliciesService.GetRhAdmin());
                 options.AddPolicy(PolicyNames.Rh, PoliciesService.GetHumanResources());
                 options.AddPolicy(PolicyNames.Viewer, PoliciesService.GetViewer());
+                //TODO: No se si se debería eliminar las politicas individuales y falta la de Developer
+                //options.AddPolicy(PolicyNames.Developer, PoliciesService.GetMinimumDeveloper());
 
                 // [Combinated]
                 options.AddPolicy(PolicyNames.MinimumAdmin, PoliciesService.GetMinimumAdmin());
                 options.AddPolicy(PolicyNames.MinimumRhAdmin, PoliciesService.GetMinimumRhAdmin());
                 options.AddPolicy(PolicyNames.MinimumRh, PoliciesService.GetMinimumRh());
                 options.AddPolicy(PolicyNames.MinimumManager, PoliciesService.GetMinimumManager());
-                options.AddPolicy(PolicyNames.Developer, PoliciesService.GetMinimumDeveloper());
+                options.AddPolicy(PolicyNames.MinimumDeveloper, PoliciesService.GetMinimumDeveloper());
 
                 // [Combinated with Viewer]
                 options.AddPolicy(PolicyNames.MinimumRhAdminOrViewer, PoliciesService.Get_MinimumRhAdmin_OrViewer());

@@ -59,7 +59,7 @@ namespace Planify.Controllers
             if (!exist)
                 throw new Exception("El proyecto especificado no existe.");
 
-            currentState.Name = dto.Name;
+            currentState.Name = dto.Name ?? currentState.Name;
             currentState.Description = dto.Description ?? currentState.Description;
 
             currentState.StartDate = dto.StartDate ?? currentState.StartDate;
@@ -68,8 +68,17 @@ namespace Planify.Controllers
 
             currentState.CompleteDate = dto.CompleteDate ?? currentState.CompleteDate;
             currentState.Priority = dto.Priority ?? currentState.Priority;
-            currentState.Status = dto.Status;
-            currentState.IsCompleted = dto.IsCompleted;
+            currentState.Status = dto.Status ?? currentState.Status;
+
+
+            if (dto.IsCompleted is not null && dto.IsCompleted is true)
+                currentState.Status = Models.TaskStatus.Completed;
+
+            if (dto.Status == Models.TaskStatus.Completed)
+                currentState.IsCompleted = true;
+
+            
+            currentState.IsCompleted = dto.IsCompleted ?? currentState.IsCompleted;
 
             return currentState;
         }
@@ -114,14 +123,16 @@ namespace Planify.Controllers
         public async Task<ActionResult> AssignEmployees(int id, List<int> EmployeesIds)
         {
             var task = await UoW.projectTasks.GetById(id);
-            if (task == null) return NotFound("La tarea no se encontró.");
+            if (task == null) return NotFound(new ProblemDetails { Detail = "La tarea no se encontró." });
 
             foreach (var employeeId in EmployeesIds)
             {
                 Employee? e = await UoW.Employees.GetById(employeeId);
                 if (e is null)
-                    return NotFound($"El usuario con el id {employeeId} no existe. " +
-                        $"Ningún cambio fue realizado.");
+                    return NotFound(new ProblemDetails
+                    { Detail = $"El usuario con el id {employeeId} no existe. " +
+                        $"Ningún cambio fue realizado."
+                    });
                 task.Employees.Add(e);
             }
 
@@ -134,14 +145,16 @@ namespace Planify.Controllers
         public async Task<ActionResult> UnassignEmployees(int id, List<int> EmployeesIds)
         {
             var task = await UoW.projectTasks.GetById(id);
-            if (task is null) return NotFound("La tarea no se encontró.");
+            if (task is null) return NotFound(new ProblemDetails { Detail = "La tarea no se encontró." });
 
             foreach (var employeeId in EmployeesIds)
             {
                 Employee? e = await UoW.Employees.GetById(employeeId);
                 if (e == null)
-                    return NotFound($"El usuario con el id {employeeId} no existe. " +
-                        $"Ningún cambio fue realizado.");
+                    return NotFound(new ProblemDetails
+                    { Detail = $"El usuario con el id {employeeId} no existe. " +
+                        $"Ningún cambio fue realizado."
+                    });
                 task.Employees.Remove(e);
             }
 

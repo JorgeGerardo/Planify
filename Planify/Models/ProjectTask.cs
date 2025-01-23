@@ -71,9 +71,9 @@ namespace Planify.Models
     {
         [MaxLength(30, ErrorMessage = "El límite para el nombre es de 30 caracteres.")]
         [MinLength(5, ErrorMessage = "El nombre de tener al menos 5 caracteres.")]
-        public required string Name { get; set; }
+        public string? Name { get; set; }
         public required int ProjectId { get; set; }
-        public required bool IsCompleted { get; set; }
+        public bool? IsCompleted { get; set; }
         [MaxLength(255, ErrorMessage = "La descripción de la tarea no puede exceder el límite de 255 caracteres.")]
         [MinLength(20, ErrorMessage = "La descripción debe tener al menos 20 caracteres." )]
         public string? Description { get; set; }
@@ -83,8 +83,7 @@ namespace Planify.Models
 
         public TimeOnly? CompleteDate { get; set; }
 
-        //TODO: Revisa que esto no genere un problema
-        public TaskStatus Status { get; set; } = TaskStatus.Pending;
+        public TaskStatus? Status { get; set; }
         public Priority? Priority { get; set; }
 
     }

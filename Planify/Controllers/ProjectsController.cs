@@ -110,7 +110,7 @@ namespace Planify.Controllers
             Project? project = await _repository.GetById(id);
 
             if (project is null)
-                return NotFound("El proyecto no existe");
+                return NotFound(new ProblemDetails { Detail = "El proyecto no existe" });
 
             List<Employee> employees = new List<Employee>();
             foreach (var employeeId in EmployeesIds)
@@ -118,7 +118,8 @@ namespace Planify.Controllers
                 Employee? employee = await _employeeRepository.GetById(employeeId);
 
                 if (employee is null)
-                    return BadRequest($"El empleado con el id {employeeId} no existe.");
+                    return BadRequest(new ProblemDetails 
+                    { Detail = $"El empleado con el id {employeeId} no existe." });
 
                 project.Employees.Add(employee);
             }
@@ -134,7 +135,7 @@ namespace Planify.Controllers
             Project? project = await _repository.GetById(id);
 
             if (project is null)
-                return NotFound("El proyecto no existe");
+                return NotFound(new ProblemDetails { Detail = "El proyecto no existe"});
 
             List<Employee> employees = new List<Employee>();
             foreach (var employeeId in EmployeesIds)
@@ -142,7 +143,8 @@ namespace Planify.Controllers
                 Employee? employee = await _employeeRepository.GetById(employeeId);
 
                 if (employee is null)
-                    return BadRequest($"El empleado con el id {employeeId} no existe.");
+                    return BadRequest(new ProblemDetails 
+                    { Detail = $"El empleado con el id {employeeId} no existe." });
 
                 project.Employees.Remove(employee);
             }
