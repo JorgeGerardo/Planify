@@ -5,6 +5,7 @@ using Planify.Models;
 using Planify.Repositories.UoW;
 using Planify.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ namespace Planify.Controllers
         }
 
 
-        [HttpDelete("{taskId}"), Authorize(Policy = PolicyNames.MinimumDeveloper)]
+        [HttpDelete("{comentaryId}"), Authorize(Policy = PolicyNames.MinimumDeveloper)]
         public async Task<ActionResult> DeleteComentary(int comentaryId)
         {
             if (!(Int32.TryParse(HttpContext.User?.Identity?.Name, out int userId)))
@@ -70,13 +71,21 @@ namespace Planify.Controllers
             return NoContent();
         }
 
-        //TODO: Creo que deberías hacer un endpoint que devuelva todos los comentarios de una
-        //tarea en especifico
         [HttpGet("{id}"), Authorize(Policy = PolicyNames.MinimumDeveloperOrViewer)]
         public async Task<ActionResult<ProjectTaskComentary>> Get(int id)
         {
             ProjectTaskComentary? projectTask = await uow.projectTasksComentaries.GetById(id);
             return projectTask is null ? NotFound() : Ok(projectTask);
+        }
+
+        [HttpGet("tasks-commentaries/{taskId}"), Authorize(Policy = PolicyNames.MinimumDeveloperOrViewer)]
+        public async Task<ActionResult<List<ProjectTaskComentary>>> GetTaskCommentaries(int taskId)
+        {
+            var commentary = await uow.projectTasks.GetById(taskId);
+            if (commentary is null)
+                return NotFound(new ProblemDetails { Detail = "El comentario no existe" });
+
+            return commentary.Comentaries.ToList();
         }
 
     }
