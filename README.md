@@ -1,6 +1,6 @@
 # Planify API
 
-**Planify API** es la base de datos y backend realizado en ASP.NET para una aplicación web diseñada para la gestión de proyectos y tareas. Esta API permite que futuros proyectos frontend puedan manejar y administrar la gestión de proyectos. Es recomendable que las aplicaciones frontend sean del tipo RBAC (Control de acceso basado en roles) dado que es parte fundamental del diseño de la API.
+**Planify API** es la base de datos y backend realizado en **ASP.NET** para una aplicación web diseñada para la gestión de proyectos y tareas. Esta API permite que futuros proyectos frontend puedan manejar y administrar la gestión de proyectos. Es recomendable que las aplicaciones frontend sean del tipo **RBAC** (Control de acceso basado en roles) dado que es parte fundamental del diseño de la API.
 Actualmen
 
 
@@ -13,14 +13,14 @@ Actualmen
 
 ## Características técnicas
 
-- Autenticación y autorización: Uso de políticas personalizadas con soporte para JWT (Bearer Tokens).
-- ORM: Uso de Entity Framework Core para la definición de la base de datos (Code First) y datos precargados (HasData).
-- Manejo de errores: Implementación de ProblemDetails para la estandarización de las respuestas de error.
-- Manejo de la concurrencia pesimista revisando si los datos han sido modifica.
+- Autenticación y autorización: Uso de políticas personalizadas con soporte para **JWT** (Bearer Tokens).
+- ORM: Uso de Entity Framework Core para la definición de la base de datos (**Code First**) y datos precargados (HasData).
+- Manejo de errores: Implementación de **ProblemDetails** para la estandarización de las respuestas de error.
+- Manejo de la **concurrencia pesimista** revisando si los datos han sido modifica.
 
 ### Arquitectura
-- Uso del patrón de diseño Repository para centralizar y abstraer el acceso a los datos.
-- Uso de Unidades de trabajo (Unit of Work) para operaciones que involucren transacciones con múltiples tablas.
+- Uso del patrón de diseño **Repository** para centralizar y abstraer el acceso a los datos.
+- Uso de Unidades de trabajo (**Unit of Work**) para operaciones que involucren transacciones con múltiples tablas.
 - Abstracción de todos los EndPoints en un controlador genérico que abstrae los métodos CRUD y con herramientas adicionales.
 
 
