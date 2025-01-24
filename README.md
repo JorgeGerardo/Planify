@@ -17,6 +17,7 @@ Actualmen
 - ORM: Uso de Entity Framework Core para la definición de la base de datos (**Code First**) y datos precargados (HasData).
 - Manejo de errores: Implementación de **ProblemDetails** para la estandarización de las respuestas de error.
 - Manejo de la **concurrencia pesimista** revisando si los datos han sido modifica.
+- Las consultas permiten agregar parámetros para hacer uso de **paginación**.
 
 ### Arquitectura
 - Uso del patrón de diseño **Repository** para centralizar y abstraer el acceso a los datos.
