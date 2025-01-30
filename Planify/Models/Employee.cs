@@ -30,8 +30,9 @@ namespace Planify.Models
 
     public class EmployeeUpdateDTO
     {
-        public int UserId { get; set; }
-        public int PersonId { get; set; }
+        //TODO: Se cambiaron a required
+        public required int UserId { get; set; }
+        public required int PersonId { get; set; }
         public DateOnly? HireDate { get; set; }
         public string? Name { get; set; }
     }
