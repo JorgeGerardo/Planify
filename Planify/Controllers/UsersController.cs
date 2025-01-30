@@ -5,9 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Planify.Data;
 using Planify.Models;
 using Planify.Repositories;
+using Planify.Repositories.UoW;
 using Planify.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Planify.Controllers
@@ -18,15 +20,18 @@ namespace Planify.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly ProjectContext _context;
+        private readonly IUserManagementUoW _userManagement_uow;
 
         public UsersController(
             IGenericCRUDRepository<User, int> _Repository,
             IConfiguration configuration,
-            ProjectContext context)
+            ProjectContext context,
+            IUserManagementUoW userManagement_uow)
         : base(_Repository)
         {
             _configuration = configuration;
             _context = context;
+            _userManagement_uow = userManagement_uow;
         }
     }
 
@@ -106,6 +111,26 @@ namespace Planify.Controllers
             return jwt is not null ?
                 Ok(AuthService.GenerateToken(existingUser, jwt)) :
                 StatusCode(500);
+        }
+
+
+        [HttpGet("my-credentials"), Authorize]
+        public async Task<ActionResult<SessionData?>> getCredentials()
+        {
+            if (!(Int32.TryParse(HttpContext.User?.Identity?.Name, out int UserId)))
+                return StatusCode(500);
+            
+            User? user = await _userManagement_uow.Users.GetById(UserId);
+            Employee? employe = await _userManagement_uow.Employees.GetById(UserId);
+
+            if (user is null)
+                return NotFound();
+
+            return new SessionData {
+                Email = user.Email,
+                Name = employe?.Name ?? null,
+                Roles = user.Roles.Select(r => r.Name)
+            };
         }
     }
 
