@@ -20,6 +20,6 @@ namespace Planify.Models
 
         [ConcurrencyCheck]
         public DateTime? LastUpdatedUTC { get; set; }
-        public DateTime? CreateDateUTC { get; set; } = DateTime.UtcNow;
+        public DateTime CreateDateUTC { get; set; } = DateTime.UtcNow;
     }
 }

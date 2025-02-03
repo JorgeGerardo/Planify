@@ -27,4 +27,18 @@ namespace Planify.Models
         [MinLength(1, ErrorMessage = "No puede enviar un comentario vacío.")]
         public required string Comentary { get; set; }
     }
+
+    public class CommentaryView
+    {
+        public required int Id { get; set; }
+        public required int ProjectTaskId { get; set; }
+        public required DateOnly Date { get; set; }
+        public required TimeOnly Time { get; set; }
+        public required string Commentary { get; set; }
+        public required DateTime CreateDateUtc { get; set; }
+        public required string AuthorName { get; set; }
+        public required int EmployeeId { get; set; }
+
+
+    }
 }

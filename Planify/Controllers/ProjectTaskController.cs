@@ -166,6 +166,7 @@ namespace Planify.Controllers
 
 
     //User tasks
+    //TODO: Add pagination:
     public partial class ProjectTaskController
     {
         [HttpGet("my-incomplete-tasks")]
@@ -210,9 +211,55 @@ namespace Planify.Controllers
                 .Where(t => t.IsCompleted && t.Employees.Any(e => e.UserId == userId))
                 .ToListAsync();
 
+        [HttpGet("employees-of-task/{taskId}")]
+        [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
+        public async Task<ActionResult<List<Employee>>> GetEmployeesOfTask(int taskId)
+        {
+            ProjectTask? task = await this.UoW.projectTasks.GetById(taskId);
 
+            if (task is null)
+                return NotFound(new ProblemDetails { Detail = "Task is not exist" });
 
+            return Ok(task.Employees);
+        }
 
+        [HttpGet("commentaries-of-task/{taskId}")]
+        [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
+        public async Task<ActionResult<List<Employee>>> GetCommentariesOfTask(int taskId)
+        {
+            ProjectTask? task = await this.UoW.projectTasks.GetById(taskId);
+
+            if (task is null)
+                return NotFound(new ProblemDetails { Detail = "Task is not exist" });
+
+            List<CommentaryView> Comments = new List<CommentaryView>();
+
+            foreach (var comment in task.Comentaries)
+            {
+                string authorName;
+                if (comment.Author is null)
+                {
+                    Employee? author = await UoW.Employees.GetById(comment.EmployeeId);
+                    authorName = author?.Name ?? "Anonimo";
+                }
+                else
+                    authorName = comment.Author.Name;
+
+                Comments.Add(new CommentaryView
+                {
+                    AuthorName = authorName,
+                    Commentary = comment.Comentary,
+                    CreateDateUtc = comment.CreateDateUTC,
+                    Date = comment.Date,
+                    EmployeeId = comment.EmployeeId,
+                    Id = comment.Id,
+                    ProjectTaskId = comment.ProjectTaskId,
+                    Time = comment.Time
+                });
+            }
+
+            return Ok(Comments);
+        }
 
 
     }
