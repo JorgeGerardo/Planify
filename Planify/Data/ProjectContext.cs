@@ -340,6 +340,7 @@ namespace Planify.Data
                 entity.Property(p => p.Status).HasColumnOrder(4);
                 entity.Property(p => p.Description).HasColumnOrder(5);
 
+                //TODO: Add StartDate and check models requirements
                 entity.HasData(
                     new ProjectTask()
                     {

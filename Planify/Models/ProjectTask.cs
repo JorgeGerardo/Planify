@@ -20,7 +20,10 @@ namespace Planify.Models
 
         //Dates:
         public DateTime CreatedDateUTC { get; set; } = DateTime.UtcNow;
+        //TODO: Maybe be required:
         public DateOnly StartDate { get; set; }
+
+        //TODO: Change DateOnly to DateTime
         public DateOnly EstimatedEndDate { get; set; }
         public TimeOnly? CompleteDate { get; set; }
 

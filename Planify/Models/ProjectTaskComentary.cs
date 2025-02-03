@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Planify.Models
 {
+    //TODO: Fix the name
     public class ProjectTaskComentary : DbBaseModel<int>
     {
         [JsonIgnore]
@@ -21,6 +22,7 @@ namespace Planify.Models
         public required string Comentary { get; set; }
     }
 
+    //TODO: Fix the name
     public class ProjectTaskComentaryCreateDTO
     {
         [MaxLength(255, ErrorMessage = "Los comentarios tienen un límite máximo de 255 caracteres.")]
