@@ -23,7 +23,7 @@ namespace Planify.Models
         public required DateOnly StartDate { get; set; }
 
         //TODO: Change DateOnly to DateTime
-        public DateOnly EstimatedEndDate { get; set; }
+        public required DateTime EstimatedEndDate { get; set; }
         public TimeOnly? CompleteDate { get; set; }
 
 
@@ -59,8 +59,8 @@ namespace Planify.Models
         public required Priority Priority { get; set; }
 
         //Dates:
-        public DateOnly StartDate { get; set; }
-        public DateOnly EstimatedEndDate { get; set; }
+        public required DateOnly StartDate { get; set; }
+        public required DateTime EstimatedEndDate { get; set; }
 
         [MaxLength(255, ErrorMessage = "La descripción de la tarea no puede exceder el límite de 255 caracteres.")]
         [MinLength(20, ErrorMessage = "La descripción debe tener al menos 20 caracteres.")]
@@ -81,7 +81,7 @@ namespace Planify.Models
         public string? Description { get; set; }
 
         public DateOnly? StartDate { get; set; }
-        public DateOnly? EstimatedEndDate { get; set; }
+        public DateTime? EstimatedEndDate { get; set; }
 
         public TimeOnly? CompleteDate { get; set; }
 
