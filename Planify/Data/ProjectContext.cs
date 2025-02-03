@@ -348,7 +348,8 @@ namespace Planify.Data
                         ProjectId = 1,
                         Name = "Actividad 1",
                         Priority = Priority.Critical,
-                        Description = "Realizar ...",
+                        Description = "Realizar todas las pruebas unitarias correspondientes y pruebas de integración para garantizar la calidad de nuestro software",
+                        StartDate = new DateOnly(2025, 2, 2)
                     },
                     new ProjectTask()
                     {
@@ -357,6 +358,7 @@ namespace Planify.Data
                         Name = "Actividad 2",
                         Priority = Priority.Medium,
                         Description = "Ajustar los parámetros del modelo...",
+                        StartDate = new DateOnly(2025, 2, 27)
                     },
                     new ProjectTask()
                     {
@@ -365,6 +367,7 @@ namespace Planify.Data
                         Name = "Actividad 3",
                         Priority = Priority.Low,
                         Description = "Realizar pruebas",
+                        StartDate = new DateOnly(2025, 2, 2)
                     }
                 );
             });
