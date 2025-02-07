@@ -122,11 +122,12 @@ namespace Planify.Controllers
             
             User? user = await _userManagement_uow.Users.GetById(UserId);
             Employee? employe = await _userManagement_uow.Employees.GetById(UserId);
-
+            
             if (user is null)
                 return NotFound();
 
             return new SessionData {
+                id = user.Id,
                 Email = user.Email,
                 Name = employe?.Name ?? null,
                 Roles = user.Roles.Select(r => r.Name)
