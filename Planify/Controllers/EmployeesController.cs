@@ -51,6 +51,7 @@ namespace Planify.Controllers
                 User = user,
                 HireDate = dto.HireDate,
                 UserId = dto.UserId,
+                Gender = dto.Gender,
             };
         }
 
@@ -84,6 +85,7 @@ namespace Planify.Controllers
 
             currentState.Name = dto.Name ?? currentState.Name;
             currentState.HireDate = dto.HireDate ?? currentState.HireDate;
+            currentState.Gender = dto.Gender ?? currentState.Gender;
 
             return currentState;
         }

@@ -19,6 +19,8 @@ namespace Planify.Models
         public ICollection<Project> Projects { get; set; } = new List<Project>();
         [JsonIgnore]
         public ICollection<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
+
+        public Gender? Gender { get; set; }
     }
 
     public class EmployeeCreateDTO
@@ -27,15 +29,16 @@ namespace Planify.Models
         public required int PersonId { get; set; }
         public required DateOnly HireDate { get; set; }
         public required string Name { get; set; }
+        public required Gender Gender { get; set; }
     }
 
     public class EmployeeUpdateDTO
     {
-        //TODO: Se cambiaron a required
         public required int UserId { get; set; }
         public required int PersonId { get; set; }
         public DateOnly? HireDate { get; set; }
         public string? Name { get; set; }
+        public Gender? Gender { get; set; }
     }
 
     public enum Gender
