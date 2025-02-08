@@ -44,6 +44,9 @@ namespace Planify.Controllers
 
         protected async override Task<User> MapToEntityAsync(UserCreateDTO dto)
         {
+            //TODO: Deberias agregar una url para la foto de perfil de cada usuario
+            // y que al crearlo solicite a la api una imagen aleatoria y guardar la url
+            //TODO2: Quiza deberias agregar el genero también
             bool emailIsRegistered = await _Repository.ExistAsync(u => u.Email.Equals(dto.Email));
 
             if (emailIsRegistered)

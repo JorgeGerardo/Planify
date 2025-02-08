@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 namespace Planify.Models
 {
+    //TODO: Add gender field
     public class Employee : BaseModel<int>
     {
         [JsonIgnore]
@@ -37,5 +38,8 @@ namespace Planify.Models
         public string? Name { get; set; }
     }
 
-
+    public enum Gender
+    {
+        Male, Female
+    }
 }
