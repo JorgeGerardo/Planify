@@ -431,6 +431,8 @@ namespace Planify.Data
 
             modelBuilder.Entity<Employee>(entity =>
             {
+                entity.Property(p => p.Gender).HasConversion<string>();
+
                 entity.Property(p => p.Id).HasColumnOrder(0);
                 entity.Property(p => p.Name).HasColumnOrder(1);
                 entity.Property(p => p.UserId).HasColumnOrder(2);
