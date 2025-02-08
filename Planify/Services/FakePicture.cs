@@ -8,7 +8,7 @@ namespace Planify.Services
 {
     public static class FakePicture
     {
-        private static string UrlApi = @"https://randomuser.me/sapi";
+        private static string UrlApi = @"https://randomuser.me/api";
         public static async Task<string?> GetFakePictureUrl(Gender gender)
         {
             using (var http = new HttpClient())
