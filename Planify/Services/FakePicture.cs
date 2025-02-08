@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Planify.Services
 {
-    public class FakePicture
+    public static class FakePicture
     {
-        private string UrlApi = @"https://randomuser.me/sapi";
-        public async Task<string?> GetFakePictureUrl(Gender gender)
+        private static string UrlApi = @"https://randomuser.me/sapi";
+        public static async Task<string?> GetFakePictureUrl(Gender gender)
         {
             using (var http = new HttpClient())
             {
@@ -28,7 +28,7 @@ namespace Planify.Services
             }
         }
 
-        private string setGenderParametter(Gender gender)
+        private static string setGenderParametter(Gender gender)
         {
             string UrlParrams = "/?gender=";
             if (gender == Gender.Male) return UrlParrams += "male";
