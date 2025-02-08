@@ -19,8 +19,10 @@ namespace Planify.Models
         public ICollection<Project> Projects { get; set; } = new List<Project>();
         [JsonIgnore]
         public ICollection<ProjectTask> Tasks { get; set; } = new List<ProjectTask>();
-
+        //TODO: Quita el nullable:
         public Gender? Gender { get; set; }
+        //TODO: Quita el nullable:
+        public string? UrlProfileImage { get; set; }
     }
 
     public class EmployeeCreateDTO
@@ -30,6 +32,8 @@ namespace Planify.Models
         public required DateOnly HireDate { get; set; }
         public required string Name { get; set; }
         public required Gender Gender { get; set; }
+        //TODO: No debería existir, lo agregas tu desde el backend no desde el frontend
+        //public required string UrlProfileImage { get; set; }
     }
 
     public class EmployeeUpdateDTO
@@ -39,6 +43,7 @@ namespace Planify.Models
         public DateOnly? HireDate { get; set; }
         public string? Name { get; set; }
         public Gender? Gender { get; set; }
+        //public string? UrlProfileImage { get; set; }
     }
 
     public enum Gender

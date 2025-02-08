@@ -52,6 +52,7 @@ namespace Planify.Controllers
                 HireDate = dto.HireDate,
                 UserId = dto.UserId,
                 Gender = dto.Gender,
+                UrlProfileImage = await FakePicture.GetFakePictureUrl(dto.Gender),
             };
         }
 
