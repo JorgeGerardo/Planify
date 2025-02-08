@@ -446,7 +446,8 @@ namespace Planify.Data
                         Name = "Jorge",
                         PersonId = 1,
                         UserId = 1,
-                        HireDate = DateOnly.FromDateTime(new DateTime(2022, 5, 1))
+                        HireDate = DateOnly.FromDateTime(new DateTime(2022, 5, 1)),
+                        Gender = Gender.Male,
                     },
                     new Employee()
                     {
@@ -454,7 +455,8 @@ namespace Planify.Data
                         Name = "Ana",
                         PersonId = 2,
                         UserId = 2,
-                        HireDate = DateOnly.FromDateTime(new DateTime(2020, 11, 1))
+                        HireDate = DateOnly.FromDateTime(new DateTime(2020, 11, 1)),
+                        Gender = Gender.Female,
                     },
                     new Employee()
                     {
@@ -462,7 +464,8 @@ namespace Planify.Data
                         Name = "Mariana",
                         PersonId = 3,
                         UserId = 3,
-                        HireDate = DateOnly.FromDateTime(new DateTime(2021, 12, 31))
+                        HireDate = DateOnly.FromDateTime(new DateTime(2021, 12, 31)),
+                        Gender = Gender.Female,
                     },
                     new Employee()
                     {
@@ -470,7 +473,8 @@ namespace Planify.Data
                         Name = "Antonella",
                         PersonId = 4,
                         UserId = 4,
-                        HireDate = DateOnly.FromDateTime(new DateTime(2018, 12, 31))
+                        HireDate = DateOnly.FromDateTime(new DateTime(2018, 12, 31)),
+                        Gender = Gender.Female,
                     },
                     new Employee()
                     {
@@ -478,7 +482,8 @@ namespace Planify.Data
                         Name = "Antonella",
                         PersonId = 5,
                         UserId = 5,
-                        HireDate = DateOnly.FromDateTime(new DateTime(2017, 5, 1))
+                        HireDate = DateOnly.FromDateTime(new DateTime(2017, 5, 1)),
+                        Gender = Gender.Female,
                     },
                     new Employee()
                     {
@@ -486,7 +491,8 @@ namespace Planify.Data
                         Name = "Carlos Mario",
                         PersonId = 6,
                         UserId = 6,
-                        HireDate = DateOnly.FromDateTime(new DateTime(2021, 1, 1))
+                        HireDate = DateOnly.FromDateTime(new DateTime(2021, 1, 1)),
+                        Gender = Gender.Male,
                     },
                     new Employee()
                     {
@@ -494,7 +500,8 @@ namespace Planify.Data
                         Name = "Samuel Juan",
                         PersonId = 7,
                         UserId = 7,
-                        HireDate = DateOnly.FromDateTime(new DateTime(2022, 6, 29))
+                        HireDate = DateOnly.FromDateTime(new DateTime(2022, 6, 29)),
+                        Gender = Gender.Male,
                     },
                     new Employee()
                     {
@@ -502,7 +509,8 @@ namespace Planify.Data
                         Name = "Brandon",
                         PersonId = 8,
                         UserId = 8,
-                        HireDate = DateOnly.FromDateTime(new DateTime(2023, 2, 27))
+                        HireDate = DateOnly.FromDateTime(new DateTime(2023, 2, 27)),
+                        Gender = Gender.Male,
                     },
                     new Employee()
                     {
@@ -510,7 +518,8 @@ namespace Planify.Data
                         Name = "Santiago",
                         PersonId = 9,
                         UserId = 9,
-                        HireDate = DateOnly.FromDateTime(new DateTime(2024, 2, 10))
+                        HireDate = DateOnly.FromDateTime(new DateTime(2024, 2, 10)),
+                        Gender = Gender.Male,
                     }
                 );
             });
