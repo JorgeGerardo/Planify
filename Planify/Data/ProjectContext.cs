@@ -2,7 +2,6 @@
 using Planify.Models;
 using Planify.Services;
 using System;
-using System.Collections.Generic;
 
 namespace Planify.Data
 {
@@ -151,7 +150,7 @@ namespace Planify.Data
                     new Person()
                     {
                         Id = 5,
-                        Name = "Carlos Mario",
+                        Name = "Alexandra",
                         City = "Monterrey",
                         Country = "México",
                         LastNames = "Dorigan",
@@ -237,8 +236,8 @@ namespace Planify.Data
                     new User() //rh
                     {
                         Id = 5,
-                        Email = "carlosmario@example.com",
-                        HashPassword = AuthService.EncrypBySHA256("carlosmario")
+                        Email = "alexandra@example.com",
+                        HashPassword = AuthService.EncrypBySHA256("alexandra")
                     },
                     new User() //viewer
                     {
@@ -448,6 +447,7 @@ namespace Planify.Data
                         UserId = 1,
                         HireDate = DateOnly.FromDateTime(new DateTime(2022, 5, 1)),
                         Gender = Gender.Male,
+                        UrlProfileImage = @"https://randomuser.me/api/portraits/men/97.jpg",
                     },
                     new Employee()
                     {
@@ -457,6 +457,7 @@ namespace Planify.Data
                         UserId = 2,
                         HireDate = DateOnly.FromDateTime(new DateTime(2020, 11, 1)),
                         Gender = Gender.Female,
+                        UrlProfileImage = @"https://randomuser.me/api/portraits/women/95.jpg",
                     },
                     new Employee()
                     {
@@ -466,6 +467,7 @@ namespace Planify.Data
                         UserId = 3,
                         HireDate = DateOnly.FromDateTime(new DateTime(2021, 12, 31)),
                         Gender = Gender.Female,
+                        UrlProfileImage = @"https://randomuser.me/api/portraits/women/80.jpg",
                     },
                     new Employee()
                     {
@@ -475,33 +477,37 @@ namespace Planify.Data
                         UserId = 4,
                         HireDate = DateOnly.FromDateTime(new DateTime(2018, 12, 31)),
                         Gender = Gender.Female,
+                        UrlProfileImage = @"https://randomuser.me/api/portraits/women/96.jpg",
                     },
                     new Employee()
                     {
                         Id = 5,
-                        Name = "Antonella",
+                        Name = "Alexandra",
                         PersonId = 5,
                         UserId = 5,
                         HireDate = DateOnly.FromDateTime(new DateTime(2017, 5, 1)),
                         Gender = Gender.Female,
+                        UrlProfileImage = @"https://randomuser.me/api/portraits/women/88.jpg",
                     },
                     new Employee()
                     {
                         Id = 6,
-                        Name = "Carlos Mario",
+                        Name = "Samuel Juan",
                         PersonId = 6,
                         UserId = 6,
-                        HireDate = DateOnly.FromDateTime(new DateTime(2021, 1, 1)),
+                        HireDate = DateOnly.FromDateTime(new DateTime(2022, 6, 29)),
                         Gender = Gender.Male,
+                        UrlProfileImage = @"https://randomuser.me/api/portraits/men/88.jpg",
                     },
                     new Employee()
                     {
                         Id = 7,
-                        Name = "Samuel Juan",
+                        Name = "Sebastian",
                         PersonId = 7,
                         UserId = 7,
-                        HireDate = DateOnly.FromDateTime(new DateTime(2022, 6, 29)),
+                        HireDate = DateOnly.FromDateTime(new DateTime(2018, 4, 23)),
                         Gender = Gender.Male,
+                        UrlProfileImage = @"https://randomuser.me/api/portraits/men/88.jpg",
                     },
                     new Employee()
                     {
@@ -511,6 +517,7 @@ namespace Planify.Data
                         UserId = 8,
                         HireDate = DateOnly.FromDateTime(new DateTime(2023, 2, 27)),
                         Gender = Gender.Male,
+                        UrlProfileImage = @"https://randomuser.me/api/portraits/men/71.jpg",
                     },
                     new Employee()
                     {
@@ -520,6 +527,7 @@ namespace Planify.Data
                         UserId = 9,
                         HireDate = DateOnly.FromDateTime(new DateTime(2024, 2, 10)),
                         Gender = Gender.Male,
+                        UrlProfileImage = @"https://randomuser.me/api/portraits/men/46.jpg",
                     }
                 );
             });
@@ -566,53 +574,6 @@ namespace Planify.Data
 
 
 
-    }
-    public partial class ProjectContext : DbContext
-    {
-        //private void SetPermisionsTable(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Permisions>().HasData(
-        //            new Permisions { Id = 1, Name = "create", Description = "Permiso para crear." },
-        //            new Permisions { Id = 2, Name = "read", Description = "Permiso para leer." },
-        //            new Permisions { Id = 3, Name = "edit", Description = "Permiso para editar." },
-        //            new Permisions { Id = 4, Name = "soft-delete", Description = "Permiso para eliminar." },
-        //            new Permisions { Id = 5, Name = "restore", Description = "Permiso para quitar eliminación lógica." }
-        //    );
-
-
-        //    modelBuilder.Entity<User>()
-        //        .HasMany(u => u.Permisions)
-        //        .WithMany(p => p.Users)
-        //        .UsingEntity(j => j.HasData(
-        //            new { UsersId = 2, PermisionsId = 1 },
-        //            new { UsersId = 2, PermisionsId = 2 },
-        //            new { UsersId = 2, PermisionsId = 3 },
-        //            new { UsersId = 2, PermisionsId = 4 },
-        //            new { UsersId = 2, PermisionsId = 5 },
-
-
-        //            new { UsersId = 3, PermisionsId = 1 },
-        //            new { UsersId = 3, PermisionsId = 2 },
-        //            new { UsersId = 3, PermisionsId = 3 },
-        //            new { UsersId = 3, PermisionsId = 4 },
-
-
-        //            new { UsersId = 4, PermisionsId = 1 },
-        //            new { UsersId = 4, PermisionsId = 2 },
-        //            new { UsersId = 4, PermisionsId = 3 },
-        //            new { UsersId = 4, PermisionsId = 4 },
-        //            new { UsersId = 4, PermisionsId = 5 },
-
-
-        //            new { UsersId = 5, PermisionsId = 1 },
-        //            new { UsersId = 5, PermisionsId = 2 },
-
-
-        //            new { UsersId = 6, PermisionsId = 2 }
-
-
-        //        ));
-        //}
     }
 
 }
