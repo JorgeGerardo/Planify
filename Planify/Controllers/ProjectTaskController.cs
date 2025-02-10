@@ -92,7 +92,7 @@ namespace Planify.Controllers
         public override Task<IEnumerable<ProjectTask>> Get(int page = 0, int? pageSize = null) =>
             base.Get(page, pageSize);
 
-        [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
+        [Authorize(Policy = PolicyNames.MinimumDeveloperOrViewer)]
         public override Task<ActionResult<ProjectTask>> GetById(int id) =>
             base.GetById(id);
 
@@ -122,6 +122,7 @@ namespace Planify.Controllers
         [Authorize(Policy = PolicyNames.MinimumManager)]
         public async Task<ActionResult> AssignEmployees(int id, List<int> EmployeesIds)
         {
+            //TODO: Deberías verificar que el empleado pertenezca al proyecto
             var task = await UoW.projectTasks.GetById(id);
             if (task == null) return NotFound(new ProblemDetails { Detail = "La tarea no se encontró." });
 
@@ -129,6 +130,8 @@ namespace Planify.Controllers
             {
                 Employee? e = await UoW.Employees.GetById(employeeId);
                 if (e is null)
+                    //TODO: El mensaje no es el usuario sino el empleado
+                    //TODO: Cambia los mensajes a inglés
                     return NotFound(new ProblemDetails
                     { Detail = $"El usuario con el id {employeeId} no existe. " +
                         $"Ningún cambio fue realizado."
@@ -212,7 +215,7 @@ namespace Planify.Controllers
                 .ToListAsync();
 
         [HttpGet("employees-of-task/{taskId}")]
-        [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
+        [Authorize(Policy = PolicyNames.MinimumDeveloperOrViewer)]
         public async Task<ActionResult<List<Employee>>> GetEmployeesOfTask(int taskId)
         {
             ProjectTask? task = await this.UoW.projectTasks.GetById(taskId);
@@ -223,11 +226,16 @@ namespace Planify.Controllers
             return Ok(task.Employees);
         }
 
+        //TODO : Deberías verificar si el usuario pertenece a la tarea
+        // antes de proporcionar la informacion
+        //TODO2: Un servicio que te diga si el usuario tiene un rol
+        //TODO3: Un servicio que te diga si el usuario pertenece a un proyecto, tarea, etc.
+        // (desconozco si sería la mejor práctica)
         [HttpGet("commentaries-of-task/{taskId}")]
-        [Authorize(Policy = PolicyNames.MinimumManagerOrViewer)]
-        public async Task<ActionResult<List<Employee>>> GetCommentariesOfTask(int taskId)
+        [Authorize(Policy = PolicyNames.MinimumDeveloperOrViewer)]
+        public async Task<ActionResult<List<CommentaryView>>> GetCommentariesOfTask(int taskId)
         {
-            ProjectTask? task = await this.UoW.projectTasks.GetById(taskId);
+            ProjectTask? task = await UoW.projectTasks.GetById(taskId);
 
             if (task is null)
                 return NotFound(new ProblemDetails { Detail = "Task is not exist" });
@@ -237,13 +245,17 @@ namespace Planify.Controllers
             foreach (var comment in task.Comentaries)
             {
                 string authorName;
+                string? urlProfileImage = null;
                 if (comment.Author is null)
                 {
-                    Employee? author = await UoW.Employees.GetById(comment.EmployeeId);
-                    authorName = author?.Name ?? "Anonimo";
+                    Employee?  Author = await UoW.Employees.GetById(comment.EmployeeId);
+                    authorName = Author?.Name ?? "Anonimo";
+                    urlProfileImage = Author?.UrlProfileImage ?? null;
                 }
                 else
                     authorName = comment.Author.Name;
+
+                urlProfileImage = (await UoW.Employees.GetById(comment.EmployeeId))?.UrlProfileImage;
 
                 Comments.Add(new CommentaryView
                 {
@@ -254,7 +266,8 @@ namespace Planify.Controllers
                     EmployeeId = comment.EmployeeId,
                     Id = comment.Id,
                     ProjectTaskId = comment.ProjectTaskId,
-                    Time = comment.Time
+                    Time = comment.Time,
+                    UrlProfileImage = urlProfileImage,
                 });
             }
 

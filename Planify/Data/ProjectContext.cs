@@ -253,6 +253,7 @@ namespace Planify.Data
                     },
                     new User() //Dev
                     {
+                        //TODO: Password must be have 8 characters or more
                         Id = 8,
                         Email = "brandon@example.com",
                         HashPassword = AuthService.EncrypBySHA256("brandon")

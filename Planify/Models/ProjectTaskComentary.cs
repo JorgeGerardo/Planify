@@ -40,7 +40,6 @@ namespace Planify.Models
         public required DateTime CreateDateUtc { get; set; }
         public required string AuthorName { get; set; }
         public required int EmployeeId { get; set; }
-
-
+        public required string? UrlProfileImage { get; set; }
     }
 }
